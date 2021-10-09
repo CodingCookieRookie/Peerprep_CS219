@@ -1,1 +1,6 @@
 /backend/users/node_modules
+/backend/users/.env
+backend/users/.DS_Store
+backend/.DS_Store
+../../.DS_Store
+.DS_Store
