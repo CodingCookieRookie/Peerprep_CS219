@@ -1,29 +1,30 @@
 // import logo from './logo.svg';
-import './App.css';
-// import Header from './Components/header';
-import Landing from './Pages/Home/landing';
+import "./App.css";
+import { Footer } from "./Components/Footer/footer";
+import Landing from "./Pages/Home/landing";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { useState } from "react";
+import Login from "./Pages/Login/login";
 
 const App = () => {
+  const [token, setToken] = useState();
+
+  // if (!token) {
+  //   return <Login setToken={()  => setToken} />
+  // }
+
   return (
-    <Landing></Landing>
-    // <div>
-    // <Header></Header>
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.tsx</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    // </div>
-  )
-}
+    <div>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/">
+            <Landing />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+      <Footer />
+    </div>
+  );
+};
 
 export default App;
