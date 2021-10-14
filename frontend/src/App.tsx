@@ -4,7 +4,6 @@ import { Footer } from "./Components/Footer/footer";
 import Landing from "./Pages/Home/landing";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { useState } from "react";
-import Login from "./Pages/Login/login";
 
 const App = () => {
   const [token, setToken] = useState();
