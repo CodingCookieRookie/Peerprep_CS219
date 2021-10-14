@@ -6,150 +6,335 @@
 	},
 	"item": [
 		{
-			"name": "User home",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get all users",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/user/user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"user",
-						"user"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get 1 user with username",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3001/user/username",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"user",
-						"username"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create new user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"Wei Yue\",\n    \"email\": \"weiyue@u.nus.edu\",\n    \"password\": \"password\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "User",
+			"item": [
+				{
+					"name": "User home",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/api/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:3001/user/user",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"user",
-						"user"
-					]
+				{
+					"name": "Get all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/api/user/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Wei Yue\",\n    \"email\": \"weiyue@u.nus.edu\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 1 user with username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/api/user/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"strongpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/login/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"login",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Update user",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"password\": \"strongpassword\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get 1 user profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/api/user/profile/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"profile",
+								"Wei%20Yue"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:3001/user/Wei Yue",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"user",
-						"Wei Yue"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete User",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Create a new user profile",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Wei Yue\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:3001/user/Wei Yue",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3001",
-					"path": [
-						"user",
-						"Wei Yue"
-					]
+				{
+					"name": "Delete user profile",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5001/api/user/profile/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"profile",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new interview",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"partnerUsername\": \"John\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/profile/interview/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"profile",
+								"interview",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete interview history",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"61679bbf3edf3dbb01c9ce15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5001/api/user/profile/interview/Wei%20Yue",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"user",
+								"profile",
+								"interview",
+								"Wei%20Yue"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

@@ -2,8 +2,8 @@ const cors = require("cors");
 const router = require("express").Router();
 router.all("*", cors());
 
-// Import usersController
-const userController = require("./controllers/userController");
+// Import userController
+const userController = require("../controllers/userController");
 
 router
     .route("/user/user/")
@@ -15,5 +15,9 @@ router
     .get(userController.view)
     .put(userController.update)
     .delete(userController.delete);
+
+router
+    .route("/user/login/:username")
+    .post(userController.login);
 
 module.exports = router;
