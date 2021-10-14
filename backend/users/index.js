@@ -19,15 +19,16 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Error connecting to db"));
 db.once("open", console.error.bind(console, "Db connected successfully"));
 
-const userRouter = require("./userRoutes");
-const userController = require("./controllers/userController");
+const userRouter = require("./routes/userRoutes");
+const profileRouter = require("./routes/profileRoutes");
 
-app.get("/user", (req, res) =>
+app.get("/api/user", (req, res) =>
   res.status(200).json({ message: "User microservice is working!" })
 );
-app.use("/", userRouter);
+app.use("/api", userRouter);
+app.use("/api", profileRouter);
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5001;
 
 app.listen(port, () =>
   console.log(`Server listening at http://localhost:${port}`)

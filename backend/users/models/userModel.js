@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         required: true
     }
 })
+
 var User = module.exports = mongoose.model('User', userSchema)
 module.exports.get = function (callback, limit) {
     User.find(callback).limit(limit);
