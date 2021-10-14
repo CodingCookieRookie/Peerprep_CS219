@@ -9,20 +9,20 @@ const Landing = (props: any) => {
       <Header></Header>
       {/* landing content */}
       <section className="centering">
-        <div className="container center">
+        <div className="container landing-center">
           <img className="img-style" src={logo} alt="logo" />
           <h1>PeerPrep</h1>
           <p>
             Acing technical interviews, <strong>together</strong>
           </p>
-          <Button href="#signup" variant="outline-primary" size="sm">
+          <Button href="/signup" variant="outline-primary" size="sm">
             Sign up here!
           </Button>
         </div>
         <hr />
-        <h2 className="center">Details</h2>
+        <h2 className="landing-center">Details</h2>
         <div>
-          <Accordion className="centering" flush>
+          <Accordion className="p-4" flush>
             <Accordion.Item eventKey="0">
               <Accordion.Header>What do I gain out of this?</Accordion.Header>
               <Accordion.Body>

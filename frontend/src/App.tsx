@@ -3,27 +3,39 @@ import "./App.css";
 import { Footer } from "./Components/Footer/footer";
 import Landing from "./Pages/Home/landing";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
-import { useState } from "react";
+import { useEffect } from "react";
 import Login from "./Pages/Login/login";
+import SignUp from "./Pages/SignUp/signup";
+
+const loader = document.querySelector(".preloader");
+const showLoader = () => loader != null && loader.classList.remove("preloader");
+const addClass = () => loader != null && loader.classList.add("loader-hide");
 
 const App = () => {
-  const [token, setToken] = useState();
-
-  // if (!token) {
-  //   return <Login setToken={()  => setToken} />
-  // }
+  useEffect(() => {
+    showLoader();
+    addClass();
+  }, []);
 
   return (
-    <div>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/">
-            <Landing />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+    <>
+      <div>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/">
+              <Landing />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/signup">
+              <SignUp />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
