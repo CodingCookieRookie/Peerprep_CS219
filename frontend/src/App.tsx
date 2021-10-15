@@ -3,7 +3,6 @@ import "./App.css";
 import { Footer } from "./Components/Footer/footer";
 import Landing from "./Pages/Home/landing";
 import Interview from "./Pages/Interview/interview";
-import Editor from "./Components/Editor/editor"
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { useState } from "react";
 

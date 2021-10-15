@@ -3,7 +3,8 @@ import io from 'socket.io-client';
 import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Editor from "../../Components/Editor/editor"
+import Editor from "../../Components/Editor/editor";
+import Chat from "../../Components/Chat/chat";
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -63,8 +64,60 @@ const Interview = () => {
           </Button>
         </div>
         <div className="interview-panel" style={{paddingTop: '20px'}}>
-          <Editor />
-          {/* <Chat /> */}
+            <Card style={{display: 'flex', flex: 7 }}>
+              <CardContent style={{width: '9in'}}>
+                <Editor />
+              </CardContent>
+            </Card>
+            <Card style={{ display: 'flex', flex: 3 }}>
+              <CardContent
+                style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
+              >
+                <h3>Chat</h3>
+                <div
+                  // className={classes.chatMessageContainer}
+                  id="chat-message-container"
+                >
+                  {/* {messages.map((m, i) => (
+                    <div
+                      key={i}
+                      className={
+                        m.sender === user.nickname
+                          ? 'chat-bubble-right'
+                          : 'chat-bubble-left'
+                      } */}
+                    {/* >
+                      <Typography
+                        variant="caption"
+                        style={{ textTransform: 'capitalize' }}
+                        color="textSecondary"
+                      >
+                        {m.sender}
+                      </Typography>
+                      <Chip label={m.msg} />
+                    </div>
+                  ))} */}
+                </div>
+                <div className="chat-text-field">
+                  <TextField
+                    fullWidth
+                    // value={sendingMsg}
+                    type="text"
+                    name="message"
+                    placeholder="Message"
+                    // onChange={(e) => setSendingMsg(e.target.value)}
+                    // onKeyUp={(e) => (e.key === 'Enter' ? handleSend() : null)}
+                  />
+                  <Button
+                    // onClick={handleSend}
+                    type="submit"
+                    style={{ marginRight: '10px' }}
+                  >
+                    Send
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
         </div>
       </Container>
   );

@@ -16,17 +16,17 @@ const io = require('socket.io')(http, {
 });
 
 const redis = require("redis");
-const client = redis.createClient({
-  host: "redis-cluster.ppg54m.0001.apse1.cache.amazonaws.com",
-  port: 6379
-});
-client.on("connect", () => console.log("Connected to Redis"));
-client.on("error", function (error) {
-  console.error(error);
-});
+// const client = redis.createClient({
+//   host: ",
+//   port: 6379
+// });
+// client.on("connect", () => console.log("Connected to Redis"));
+// client.on("error", function (error) {
+//   console.error(error);
+// });
 
 app.get("/editor/ping", (req, res) => {
-  res.status(200).json({ message: "pong", data: "Editor microservice is working" });
+  res.status(200).json({ message: "success", data: "Editor microservice is working" });
 });
 
 const { genQuestion, retrieveQuestion } = require("./question-generator");
@@ -57,7 +57,7 @@ app.get("/editor/end-session", (req, res) => {
 });
 
 io.on("connection", socket => {
-  socket.on("newMessage", msg => {
+  socket.on("new-message", msg => {
     io.emit(msg.sessionId, msg.payload);
   });
 });
