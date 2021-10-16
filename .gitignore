@@ -3,6 +3,8 @@
 /backend/users/node_modules
 /backend/users/package-lock.json
 /backend/users/.env
+backend/users/.DS_Store
+backend/.DS_Store
 
 ## message ms
 /backend/message/node_modules
@@ -20,3 +22,6 @@
 /frontend/package-lock.json
 /frontend/yarn.lock
 /frotnend/.env
+
+../../.DS_Store
+.DS_Store
