@@ -1,9 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 const dbUsername = process.env.DBUSERNAME;
@@ -14,34 +12,21 @@ if (!dbUsername || !dbPassword) {
   );
   process.exit(1);
 }
-const uri = `mongodb+srv://${dbUsername}:${dbPassword}@peerprep.bzetx.mongodb.net/peerprep?retryWrites=true&w=majority`;
+
+const uri = `mongodb+srv://team23:${dbPassword}@team23.77voc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Error connecting to db"));
 db.once("open", console.error.bind(console, "Db connected successfully"));
 
-const userController = require("./controllers/user-controller");
-const profileController = require("./controllers/profile-controller");
+const userRouter = require("./routes/userRoutes");
+const profileRouter = require("./routes/profileRoutes");
 
-app.get("/user", (req, res) =>
-  res.status(200).json({ message: "ok", data: "User microservice is working!" })
+app.get("/api/user", (req, res) =>
+  res.status(200).json({ message: "User microservice is working!" })
 );
-
-app.route("/user/user/").get(userController.index).post(userController.new);
-
-app.route("/user/login/:email").post(userController.login);
-
-app
-  .route("/user/profile/interview/:user_id")
-  .post(profileController.startInterview)
-  .put(profileController.endInterview);
-app.route("/user/profile/:user_id").get(profileController.get);
-
-app
-  .route("/user/edit/:user_id")
-  .get(userController.view)
-  .put(userController.update)
-  .delete(userController.delete);
+app.use("/api", userRouter);
+app.use("/api", profileRouter);
 
 const port = process.env.PORT || 5001;
 
