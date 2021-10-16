@@ -2,10 +2,12 @@
 import "./App.css";
 import { Footer } from "./Components/Footer/footer";
 import Landing from "./Pages/Home/landing";
+import Interview from "./Pages/Interview/interview";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { useEffect } from "react";
 import Login from "./Pages/Login/login";
 import SignUp from "./Pages/SignUp/signup";
+
 
 const loader = document.querySelector(".preloader");
 const showLoader = () => loader != null && loader.classList.remove("preloader");
@@ -30,6 +32,9 @@ const App = () => {
             </Route>
             <Route path="/signup">
               <SignUp />
+            </Route>
+            <Route path="/interview">
+            <Interview />
             </Route>
           </Switch>
         </BrowserRouter>
