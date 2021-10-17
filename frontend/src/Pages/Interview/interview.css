@@ -1,0 +1,6 @@
+.interview-panel {
+    /* display: flex; */
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+}
