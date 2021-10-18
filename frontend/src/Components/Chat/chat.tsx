@@ -2,15 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import "./chat.css";
 
 const Chat = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("");
 
   return (
     <form>
-        <input/>
+      <input />
 
-        <button>
-            Send
-        </button>
+      <button>Send</button>
     </form>
   );
 };
