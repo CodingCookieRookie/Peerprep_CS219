@@ -1,7 +1,7 @@
 FROM node:12
-WORKDIR /usr/src/users
-COPY package*.json ./
+WORKDIR /usr/src/match
+COPY package.json ./
 RUN npm install
 COPY . .
-EXPOSE 5001
+EXPOSE 5003
 CMD ["node", "index.js"]
