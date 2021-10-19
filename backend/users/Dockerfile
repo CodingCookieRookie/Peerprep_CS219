@@ -1,7 +1,7 @@
 FROM node:12
-WORKDIR /usr/src/chat
+WORKDIR /usr/src/users
 COPY package*.json ./
 RUN npm install
 COPY index.js .
-EXPOSE 5002
+EXPOSE 5001
 CMD ["node", "index.js"]

@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  users:
+    build: ./users
+    ports:
+      - "5000:5000"
+  message:
+    build: ./message
+    ports:
+      - "5002:5002"
