@@ -8,10 +8,10 @@ const Header = (props: any) => {
         <Navbar.Brand href="#">PeerPrep</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse className="justify-content-end">
-          <Button href="#login" variant="outline-success">
+          <Button className="m-1" href="/login" variant="outline-success">
             Login
           </Button>
-          <Button href="#signup" variant="outline-primary">
+          <Button className="ml-1" href="/signup" variant="outline-primary">
             Sign up
           </Button>
         </Navbar.Collapse>
