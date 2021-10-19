@@ -6,7 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import { CardContent } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import QuestionEasy from "../../questions/question-easy";
+import Question from "../../Components/Question/question";
+import * as qns from "../../questions/question-easy";
 import "./interview.css";
 
 const Interview = () => {
@@ -61,7 +62,7 @@ const Interview = () => {
                 style={{ display: 'flex', flex: 1, flexDirection: 'column' }}
               >
                 <div className="interview-question-container">
-                  <QuestionEasy />
+                  <Question title={qns.title} description={qns.description} image={qns.image} testInput={qns.testInput} testOutput={qns.testOutput}/>
                 </div>
               </CardContent>
             </Card>

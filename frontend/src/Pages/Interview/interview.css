@@ -14,14 +14,10 @@
     padding-bottom: 32;
   }
 .interview-question-container {
-    min-height: 4.92in;
+    height: 4.92in;
+
     overflow-y: auto;
     flex-grow: 1;
-}
-.chat-message-container {
-    overflow-y: 'auto';
-    flex-grow: 1;
-    min-height: 0;
 }
 .interview-context {
     max-height: 'calc(100% - 132px)';
