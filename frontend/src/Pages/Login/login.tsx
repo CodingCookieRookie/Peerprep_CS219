@@ -1,4 +1,11 @@
-import { Button, Container, Form, InputGroup, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Container,
+  Form,
+  InputGroup,
+  Spinner,
+} from "react-bootstrap";
 import { Key, PersonCircle } from "react-bootstrap-icons";
 import login from "../../assets/login.svg";
 import "./login.css";
@@ -68,107 +75,123 @@ const Login = ({ history }) => {
   return (
     <>
       <Container>
-        <h1 className="text-center">Login</h1>
-        <img
-          className="center-block rounded mx-auto img-fluid p-5 w-50"
-          src={login}
-          alt="login"
-        />
-        <Formik
-          validationSchema={schema}
-          onSubmit={(e) => submitHandler(e)} // use this prop later for API post
-          initialValues={{
-            username: "",
-            password: "",
-            validateOnMount: true,
-          }}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            values,
-            touched,
-            isValid,
-            errors,
-            dirty,
-          }) => (
-            <Form className="form" onSubmit={handleSubmit} noValidate>
-              {!spin ? (
-                <div>
-                  <Form.Group className="mb-2 pb-2" controlId="formUsername">
-                    <Form.Label>Username</Form.Label>
-                    <InputGroup hasValidation>
-                      <InputGroup.Text id="inputGroupPrepend">
-                        <PersonCircle />
-                      </InputGroup.Text>
-                      <Form.Control
-                        type="text"
-                        placeholder="Username"
-                        aria-describedby="inputGroupPrepend"
-                        name="username"
-                        value={values.username}
-                        onChange={handleChange}
-                        isValid={touched.username && !errors.username}
-                        isInvalid={!!errors.username}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.username}
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
+        <Card>
+          <Card.Body>
+            <h1 className="text-center">Login</h1>
+            <img
+              className="position-relative start-50 translate-middle-x img-fluid p-5 w-50"
+              src={login}
+              alt="login"
+            />
+            <Formik
+              validationSchema={schema}
+              onSubmit={(e) => submitHandler(e)} // use this prop later for API post
+              initialValues={{
+                username: "",
+                password: "",
+                validateOnMount: true,
+              }}
+            >
+              {({
+                handleSubmit,
+                handleChange,
+                handleBlur,
+                values,
+                touched,
+                isValid,
+                errors,
+                dirty,
+              }) => (
+                <Form className="form" onSubmit={handleSubmit} noValidate>
+                  {!spin ? (
+                    <div>
+                      <Form.Group
+                        className="mb-2 pb-2"
+                        controlId="formUsername"
+                      >
+                        <Form.Label>Username</Form.Label>
+                        <InputGroup hasValidation>
+                          <InputGroup.Text id="inputGroupPrepend">
+                            <PersonCircle />
+                          </InputGroup.Text>
+                          <Form.Control
+                            type="text"
+                            placeholder="Username"
+                            aria-describedby="inputGroupPrepend"
+                            name="username"
+                            value={values.username}
+                            onChange={handleChange}
+                            isValid={touched.username && !errors.username}
+                            isInvalid={!!errors.username}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.username}
+                          </Form.Control.Feedback>
+                        </InputGroup>
+                      </Form.Group>
 
-                  <Form.Group className="mb-3 pb-3" controlId="formPassword">
-                    <Form.Label>Password</Form.Label>
-                    <InputGroup hasValidation>
-                      <InputGroup.Text id="inputGroupPrepend">
-                        <Key />
-                      </InputGroup.Text>
-                      <Form.Control
-                        type="text"
-                        placeholder="Password"
-                        aria-describedby="inputGroupPrepend"
-                        name="password"
-                        onChange={handleChange}
-                        value={values.password}
-                        isValid={touched.password && !errors.password}
-                        isInvalid={!!errors.password}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.password}
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-                  {errorMsg !== "" ? (
-                    <FailureAlert errorMsg={errorMsg} />
+                      <Form.Group
+                        className="mb-3 pb-3"
+                        controlId="formPassword"
+                      >
+                        <Form.Label>Password</Form.Label>
+                        <InputGroup hasValidation>
+                          <InputGroup.Text id="inputGroupPrepend">
+                            <Key />
+                          </InputGroup.Text>
+                          <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            aria-describedby="inputGroupPrepend"
+                            name="password"
+                            onChange={handleChange}
+                            value={values.password}
+                            isValid={touched.password && !errors.password}
+                            isInvalid={!!errors.password}
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.password}
+                          </Form.Control.Feedback>
+                        </InputGroup>
+                        <Form.Text className="text-muted">
+                          New to Peerprep?{" "}
+                          <a href="/signup">
+                            {" "}
+                            Register your account here now!{" "}
+                          </a>
+                        </Form.Text>
+                      </Form.Group>
+                      {errorMsg !== "" ? (
+                        <FailureAlert errorMsg={errorMsg} />
+                      ) : (
+                        <> </>
+                      )}
+                    </div>
                   ) : (
-                    <> </>
+                    <div>
+                      <Spinner
+                        className="p-4 mb-5 top"
+                        variant="primary"
+                        animation={"border"}
+                      />
+                    </div>
                   )}
-                </div>
-              ) : (
-                <div>
-                  <Spinner
-                    className="p-4 mb-5 top"
+                  <Button
+                    className="me-2"
                     variant="primary"
-                    animation={"border"}
-                  />
-                </div>
+                    type="submit"
+                    disabled={!isValid || !dirty}
+                  >
+                    Login
+                  </Button>
+                  <Button variant="secondary" href="/">
+                    Back to Home
+                  </Button>
+                </Form>
               )}
-              <Button
-                className="me-2"
-                variant="primary"
-                type="submit"
-                disabled={!isValid || !dirty}
-                // href="/"
-              >
-                Login
-              </Button>
-              <Button variant="secondary" href="/">
-                Back to Home
-              </Button>
-            </Form>
-          )}
-        </Formik>
+            </Formik>
+          </Card.Body>
+        </Card>
       </Container>
     </>
   );
