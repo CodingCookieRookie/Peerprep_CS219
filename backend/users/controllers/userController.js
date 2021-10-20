@@ -44,7 +44,7 @@ exports.view = function (req, res) {
 };
 
 // POST (Create new user)
-exports.new = function (req, res) {
+exports.new = async function (req, res) {
     User.findOne({ username: req.body.username }, function (err, user) {
         if (user != null) {
             // Already exist user with that username
@@ -163,30 +163,66 @@ exports.delete = function (req, res) {
         }
     );
 };
-
+/* To be deleted if authController is ok.
 // LOGIN
-exports.login = function (req, res) {
-    User.findOne(
-        { username: req.params.username, password: req.body.password },
-        function (err, user) {
-            if (err) {
-                return res.status(500).json({
-                    message: err.message,
-                });
-            }
-            if (!user) {
-                return res.status(404).json({
-                    message: "Invalid user credentials",
-                });
-            } else {
-                return res.status(200).json({
-                    message:
-                        "User " +
-                        req.params.username +
-                        " successfully logged in",
-                    data: user,
-                });
-            }
+exports.login = async function (req, res) {
+
+    try {
+        // Get user input
+        const { username, password } = req.body;
+    
+        // Validate user input
+        if (!(username && password)) {
+          res.status(400).send({ 
+            message: "Fill in all fields." 
+          });
         }
-    );
+        // Check if user exist in our database
+        const user = await User.findOne({ username: username });
+  
+        // Authorisation success
+        if (user && (await bcrypt.compare(password, user.password))) {
+          // Create token
+          const token = jwt.sign(
+              { user_id: user._id },
+              process.env.ACCESS_TOKEN_SECRET,
+              { expiresIn: "3d" }
+          );
+          // remove user password
+          let data = user.toObject()
+          delete data.password
+    
+          // user
+          return res.status(200).json({ token: token, user: data });
+        }
+        return res.status(400).send({ message: "Invalid credentials." });
+      } catch (err) {
+        console.log(err);
+        return res.status(500)
+      }
+
+    // User.findOne(
+    //     { username: req.params.username, password: req.body.password },
+    //     function (err, user) {
+    //         if (err) {
+    //             return res.status(500).json({
+    //                 message: err.message,
+    //             });
+    //         }
+    //         if (!user) {
+    //             return res.status(404).json({
+    //                 message: "Invalid user credentials",
+    //             });
+    //         } else {
+    //             return res.status(200).json({
+    //                 message:
+    //                     "User " +
+    //                     req.params.username +
+    //                     " successfully logged in",
+    //                 data: user,
+    //             });
+    //         }
+    //     }
+    // );
 };
+*/

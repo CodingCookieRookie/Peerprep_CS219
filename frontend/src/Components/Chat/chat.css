@@ -23,3 +23,8 @@
   display: flex;
   padding-top: 16px;
 }
+
+.ql-editor {
+  width: 5in;
+  min-height: 5.5in;
+}
