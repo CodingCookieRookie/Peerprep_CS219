@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  user:
+    build: 
+      context: ./backend/users
+    ports:
+    - 5001:5001
+  
+  message:
+    build:
+      context: ./backend/message
+    ports:
+    - 5002:5002
+
+  editor:
+    build:
+      context: ./backend/editor
+    ports:
+    - 5003:5003
+  
+  match:
+    build:
+      context: ./backend/match
+    ports:
+    - 5004:5004
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+    - 8080:8080
+    depends_on:
+    - user message editor match
+  
+volumes:
+  peerprep:
