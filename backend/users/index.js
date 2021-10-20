@@ -36,28 +36,19 @@ const authRouter = require("./routes/authRoutes");
 app.use("/api", authRouter);
 
 // Define verification mechanism for all non-auth endpoints
-const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
-
-  if (!token) {
-    return res.status(401).json({ message: "Token is required for authentication."});
-  }
-  try {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-  } catch (err) {
-      return res.status(401).json({ message: "Invalid/Expired token."});
-  }
-  return next();
-};
+let verifyToken = require('./util/auth').verifyToken
 
 // User API 
 const userRouter = require("./routes/userRoutes");
-app.use("/api", verifyToken, userRouter);
+app.use("/api/", verifyToken, userRouter);
 
 // Profile API
 const profileRouter = require("./routes/profileRoutes");
-app.use("/api", verifyToken, profileRouter);
+app.use("/api/", verifyToken, profileRouter);
+
+// Friend API
+const friendRouter = require("./routes/friendRoutes");
+app.use("/api/user-friend", verifyToken, friendRouter);
 
 const port = process.env.PORT || 5001;
 
