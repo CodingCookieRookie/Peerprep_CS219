@@ -1,14 +1,17 @@
-version: "3.9"
+version: "3"
 services:
   users:
+    image: users
     build: ./users
     ports:
       - "5001:5001"
   message:
+    image: message
     build: ./message
     ports:
       - "5002:5002"
   match:
+      image: match
       build: ./match
       ports:
         - "5003:5003"
