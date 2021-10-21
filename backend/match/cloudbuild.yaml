@@ -8,7 +8,7 @@ steps:
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/match:$COMMIT_SHA', '.']
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/match:$COMMIT_SHA', './backend/match']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/cs3219-team23-328712/match:$COMMIT_SHA']
