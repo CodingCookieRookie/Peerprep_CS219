@@ -6,7 +6,7 @@ const port = process.env.PORT || 5002
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5002",
     methods: ["GET", "POST"]
   },
   path: '/chat/new',
@@ -17,8 +17,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 
-app.get('/chat/check', (req, res) => 
-  res.status(200).json({message: 'ok', data: 'Chat microservice is working!'}));
+app.get('/', (req, res) => {
+  res.status(200).json({status: 'ok', data: 'Chat Microservice is running.'})
+})
+
+app.get('/api/message/', (req, res) => 
+  res.status(200).json({status: 'ok', data: 'Chat microservice is working!'}));
 
 io.on('connection', socket => {
   console.log(`Server side socket id = ${socket.id}`);

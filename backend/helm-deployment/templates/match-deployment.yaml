@@ -24,7 +24,7 @@ spec:
         io.kompose.service: match
     spec:
       containers:
-        - image: alvinchee98/match
+        - image: gcr.io/cs3219-team23-328712/match:latest
           imagePullPolicy: IfNotPresent
           name: match
           ports:

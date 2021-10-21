@@ -15,4 +15,5 @@ services:
       build: ./match
       ports:
         - "5003:5003"
-      
+
+# required to rebuild yaml files with helm 
