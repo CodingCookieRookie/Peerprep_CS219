@@ -50,7 +50,8 @@ exports.new = async (req, res) => {
 
     const newFriend = new Friend({
         user_id: userId,
-        friend_id: friendId
+        friend_id: friendId,
+        friend_username: friend.username
     })
 
     newFriend.save((err) => {

@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+
 // Define verification mechanism for all non-auth endpoints
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization']
@@ -6,6 +8,7 @@ const verifyToken = (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "Token is required for authentication."});
     }
+    
     try {
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     } catch (err) {
