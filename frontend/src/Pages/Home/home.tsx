@@ -4,18 +4,42 @@ import home from "../../assets/home-welcome.svg";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
-import { Row, Col, Card, Button } from "react-bootstrap";
-import { Cursor } from "react-bootstrap-icons";
+import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
+import { Cursor, PersonSquare } from "react-bootstrap-icons";
+import { DEV_API_URL } from "../../api";
 
 const Home = (props: any) => {
   const [username, setUsername] = useState("");
-  // const [userData, setUserData] = useState();
+  const [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
+
+  const getFriends = async (token) => {
+    await fetch(DEV_API_URL + "/user-friend/", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        "Authorization": "Bearer " + token
+      },
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        if (res.status === 200) {
+          setfriendData(result.data);
+        } else {
+          setfriendData(result.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
 
+    getFriends(userInfo.token);
     // No record of session login
     if (!userInfo) {
       history.push("/");
@@ -24,6 +48,7 @@ const Home = (props: any) => {
       const data = userInfo.user.username;
       setUsername(data);
     }
+    
   }, [cookies.userInfo, history]);
 
   const difficultyData = [
@@ -35,7 +60,7 @@ const Home = (props: any) => {
   return (
     <div className="content">
       <Header isSignedIn={true}></Header>
-      <div className="p-5 mx-5">
+      <div className="home">
         <section className="pb-1 mb-2">
           <h1 className="text-primary">Welcome, {username} </h1>
           <h4>
@@ -94,9 +119,9 @@ const Home = (props: any) => {
                 <Card border="light">
                   <Card.Header>Get me PeerPrepped now!</Card.Header>
                   <Card.Body className="d-grid gap-2">
-                    {difficultyData.map((item) => {
+                    {difficultyData.map((item, idx) => {
                       return (
-                        <Button className="my-2" variant={item[1]}>
+                        <Button className="my-2" variant={item[1]} key={idx} >
                           <Cursor className="mb-1 me-1" />
                           {item[0]}
                           <br />
@@ -105,12 +130,28 @@ const Home = (props: any) => {
                     })}
                   </Card.Body>
                 </Card>
+                <Card>
+                  <Card.Header>Friend List</Card.Header>
+                  <Card.Body className="d-grid gap-2">
+                    <ListGroup>
+                    {friendData.map((item, idx) => {
+                      return (
+                        <ListGroup.Item action variant="primary" className="my-2" key={idx} >
+                          <PersonSquare className="mb-1 me-2" />
+                          {"  " + item.friend_username}
+                          <br />
+                        </ListGroup.Item>
+                      );
+                    })}
+                    </ListGroup>
+                  </Card.Body>
+                </Card>
               </Card.Body>
             </Card>
           </Col>
         </Row>
         {/* </Container> */}
-        <section className="centering">
+        {/* <section className="centering">
           <div className="container landing-center">
             <img className="home-img-style mb-4" src={home} alt="logo" />
             <h1>PeerPrep</h1>
@@ -118,7 +159,7 @@ const Home = (props: any) => {
               Acing technical interviews, <strong>together</strong>
             </p>
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );
