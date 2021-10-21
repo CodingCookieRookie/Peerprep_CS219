@@ -3,6 +3,11 @@
   width: 500px;
 }
 
+.home {
+  padding-inline: 150px;
+  padding-block: 50px;
+}
+
 .home-img-style:hover {
   -webkit-transform: scale(1.1);
   -ms-transform: scale(1.1);
