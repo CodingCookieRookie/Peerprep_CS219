@@ -18,3 +18,5 @@ steps:
   args: ['run', 'deploy', 'users', '--image', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA', '--region', 'asia-east1']
 images:
 - gcr.io/cs3219-team23-328712/users:$COMMIT_SHA
+options:
+  logging: CLOUD_LOGGING_ONLY
