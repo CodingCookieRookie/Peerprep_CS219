@@ -11,12 +11,6 @@ services:
       context: ./backend/message
     ports:
     - 5002:5002
-
-  editor:
-    build:
-      context: ./backend/editor
-    ports:
-    - 5003:5003
   
   match:
     build:
