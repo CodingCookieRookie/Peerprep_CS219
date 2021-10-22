@@ -2,10 +2,20 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+
+// use cors
+let cors = require('cors');
+
 let bodyParser = require('body-parser')
+app.use(cors());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(express.json())
 
 const dbUsername = process.env.DBUSERNAME;
@@ -30,6 +40,11 @@ app.get("/api/user", (req, res) =>
   res.status(200).json({ message: "User microservice is working!" })
 );
 
+// User Microservice API status check at root level
+app.get("/", (req, res) => 
+  res.status(200).json({ status: "ok", message: "User microservice is working!"})
+)
+
 // Auth API
 const authRouter = require("./routes/authRoutes");
 app.use("/api", authRouter);
@@ -52,5 +67,5 @@ app.use("/api/user-friend", verifyToken, friendRouter);
 const port = process.env.PORT || 5001;
 
 app.listen(port, () =>
-  console.log(`Server listening at http://localhost:${port}`)
+  console.log(`Server listening to port ${port}`)
 );
