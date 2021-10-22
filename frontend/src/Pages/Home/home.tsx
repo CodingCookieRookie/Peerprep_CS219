@@ -8,7 +8,7 @@ import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
 import { DEV_API_URL , PROD_API_URL} from "../../api";
 
-const API_URL = PROD_API_URL ?? DEV_API_URL;
+const API_URL = PROD_API_URL || DEV_API_URL;
 
 const Home = (props: any) => {
   const [username, setUsername] = useState("");

@@ -21,7 +21,7 @@ import { Formik } from "formik";
 import { DEV_API_URL, PROD_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 
-const API_URL = PROD_API_URL ?? DEV_API_URL;
+const API_URL = PROD_API_URL || DEV_API_URL;
 
 const SignUp = () => {
   const [spin, setSpin] = useState(false);

@@ -17,7 +17,7 @@ import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 
-const API_URL = PROD_API_URL ?? DEV_API_URL;
+const API_URL = PROD_API_URL || DEV_API_URL;
 
 const Login = ({ history }) => {
   const [spin, setSpin] = useState(false);

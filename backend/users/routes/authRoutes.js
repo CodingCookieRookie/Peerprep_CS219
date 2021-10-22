@@ -1,6 +1,5 @@
 const cors = require("cors");
 const router = require("express").Router();
-router.all("*", cors());
 
 // Import authcontroller
 const authController = require("../controllers/authController");
