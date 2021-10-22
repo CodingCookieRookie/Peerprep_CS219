@@ -6,7 +6,9 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import { DEV_API_URL } from "../../api";
+import { DEV_API_URL , PROD_API_URL} from "../../api";
+
+const API_URL = PROD_API_URL ?? DEV_API_URL;
 
 const Home = (props: any) => {
   const [username, setUsername] = useState("");
@@ -15,7 +17,7 @@ const Home = (props: any) => {
   const history = useHistory();
 
   const getFriends = async (token) => {
-    await fetch(DEV_API_URL + "/user-friend/", {
+    await fetch(API_URL + "/user-friend/", {
       method: "GET",
       headers: {
         Accept: "application/json",

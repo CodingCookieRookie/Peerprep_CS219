@@ -18,8 +18,10 @@ import {
 import "./signup.css";
 import * as yup from "yup";
 import { Formik } from "formik";
-import { DEV_API_URL } from "../../api";
+import { DEV_API_URL, PROD_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
+
+const API_URL = PROD_API_URL ?? DEV_API_URL;
 
 const SignUp = () => {
   const [spin, setSpin] = useState(false);
@@ -31,7 +33,7 @@ const SignUp = () => {
   const submitHandler = async (e) => {
     setSpin(true);
     console.log(e);
-    await fetch(DEV_API_URL + "/auth/register", {
+    await fetch(API_URL + "/auth/register", {
       method: "POST",
       headers: {
         Accept: "application/json",
