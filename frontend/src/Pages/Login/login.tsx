@@ -12,10 +12,12 @@ import "./login.css";
 import * as yup from "yup";
 import { Formik } from "formik";
 import { useState } from "react";
-import { DEV_API_URL } from "../../api";
+import { DEV_API_URL, PROD_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
+
+const API_URL = PROD_API_URL ?? DEV_API_URL;
 
 const Login = ({ history }) => {
   const [spin, setSpin] = useState(false);
@@ -38,7 +40,7 @@ const Login = ({ history }) => {
   const submitHandler = async (e) => {
     setSpin(true);
 
-    await fetch(DEV_API_URL + "/auth/login", {
+    await fetch(API_URL + "/auth/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
