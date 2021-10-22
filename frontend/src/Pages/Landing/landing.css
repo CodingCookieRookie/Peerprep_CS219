@@ -1,0 +1,28 @@
+.centering {
+  padding: 30px;
+}
+.section {
+  min-height: calc(100vh - 40px);
+}
+.landing-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 8em;
+  text-align: center;
+  padding: 30px;
+}
+.img-style {
+  height: 400px;
+  width: 370px;
+}
+.img-style:hover {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+/* .container {
+  margin-bottom: -300px;
+} */

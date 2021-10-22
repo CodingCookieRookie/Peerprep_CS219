@@ -1,0 +1,22 @@
+# cloudbuild.yaml
+
+steps:
+### Build & Deploy User Microservice
+
+# SERVICE_NAME = users
+# IMAGE_NAME = users
+
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA', './backend/users']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'users', '--image', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA', '--region', 'asia-east1']
+images:
+- gcr.io/cs3219-team23-328712/users:$COMMIT_SHA
+options:
+  logging: CLOUD_LOGGING_ONLY

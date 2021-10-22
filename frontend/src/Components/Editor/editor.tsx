@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState, useContext } from "react";
-import { io as io, Socket } from "socket.io-client";
+import { useCallback, useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
-import ReactQuill from 'react-quill';
+import ReactQuill from "react-quill";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 import "./editor.css";
 
 const TOOLBAR_OPTIONS = [

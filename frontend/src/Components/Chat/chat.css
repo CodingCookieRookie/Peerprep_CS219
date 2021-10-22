@@ -1,4 +1,30 @@
+.chat-message-container {
+  max-height: 4in;
+  line-height: 1.5em;
+  min-height: 4.5em;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.chat-left {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 16px;
+  align-items: flex-start
+}
+.chat-right {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 16px;
+  align-items: flex-end;
+}
+
+.chat-text-field {
+  display: flex;
+  padding-top: 16px;
+}
+
 .ql-editor {
-    width: 5in;
-    min-height: 5.5in;
-  }
+  width: 5in;
+  min-height: 5.5in;
+}

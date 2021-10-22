@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: users
+  name: users
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: users
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: users
+    spec:
+      containers:
+        - image: gcr.io/cs3219-team23-328712/users:latest
+          imagePullPolicy: IfNotPresent
+          name: users
+          ports:
+            - containerPort: 5001
+          resources: {}
+      restartPolicy: Always
+status: {}

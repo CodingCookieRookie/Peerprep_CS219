@@ -2,11 +2,25 @@ import Header from "../../Components/Header/header";
 import "./landing.css";
 import logo from "../../assets/collaboration.svg";
 import { Accordion, Button } from "react-bootstrap";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
-const Landing = (props: any) => {
+const Landing = () => {
+  const history = useHistory();
+  const [cookies] = useCookies(["userInfo"]);
+
+  useEffect(() => {
+    const userInfo = cookies.userInfo;
+
+    if (userInfo) {
+      history.push("/home");
+    }
+  }, [cookies.userInfo, history]);
+
   return (
     <div className="content">
-      <Header></Header>
+      <Header isSignedIn={false}></Header>
       {/* landing content */}
       <section className="centering">
         <div className="container landing-center">
