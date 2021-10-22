@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
-import ReactQuill from "react-quill";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "react-quill/dist/quill.snow.css";
@@ -19,13 +18,12 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 
-
 const Editor = () => {
   const [socket, setSocket] = useState<any>("");
-  // const socket = useSocketIo();
   const [quill, setQuill] = useState<any>();
   const { interviewId: interviewId } = useParams<any>();
 
+  // connect to editor MS
   useEffect(() => {
     const s = io("http://localhost:4001");
     setSocket(s);
@@ -35,14 +33,30 @@ const Editor = () => {
     };
   }, []);
 
+  // to create editor
   useEffect(() => {
-    if (socket == null || quill == null ) return
-    socket.once("load-editor", document => {
-      quill.setContents(document)
-      quill.enable()
-    })
+    if (socket == null || quill == null) return;
+    socket.once("load-editor", (editor) => {
+      quill.setContents(editor);
+      quill.enable();
+    });
+    socket.emit("get-editor", interviewId);
   }, [socket, quill, interviewId]);
 
+  // to save editor
+  useEffect(() => {
+    if (socket == null || quill == null) return;
+    const interval = setInterval(() => {
+      console.log(quill.getContents())
+      socket.emit("save-editor", quill.getContents());
+    }, 2000)
+    
+    return () => {
+      clearInterval(interval)
+    }
+  }, [socket, quill]);
+
+  // to send changes
   useEffect(() => {
     if (socket == null || quill == null) return;
 
@@ -57,11 +71,12 @@ const Editor = () => {
     };
   }, [socket, quill]);
 
+  // to receive changes
   useEffect(() => {
     if (socket == null || quill == null) return;
 
     const handler = (delta) => {
-      quill.updateContents(delta)
+      quill.updateContents(delta);
     };
     socket.on("receive-changes", handler);
 
@@ -70,28 +85,22 @@ const Editor = () => {
     };
   }, [socket, quill]);
 
-  // return (
-  //   <div>
-  //     <ReactQuill theme="snow" value={value} onChange={setValue} />
-  //   </div>
-  // );
-  const wrapperRef = useCallback(wrapper => {
-    if (wrapper == null) return
+  // editor box
+  const wrapperRef = useCallback((wrapper) => {
+    if (wrapper == null) return;
 
-    wrapper.innerHTML = ""
-    const editor = document.createElement("div")
-    wrapper.append(editor)
+    wrapper.innerHTML = "";
+    const editor = document.createElement("div");
+    wrapper.append(editor);
     const q = new Quill(editor, {
       theme: "snow",
       modules: { toolbar: TOOLBAR_OPTIONS },
-    })
-    // q.disable()
-    // q.setText("Loading...")
-    setQuill(q)
-  }, [])
-  return <div className="container" ref={wrapperRef}></div>
+    });
+    q.disable();
+    q.setText("Loading...");
+    setQuill(q);
+  }, []);
+  return <div className="container" ref={wrapperRef}></div>;
 };
-
-
 
 export default Editor;
