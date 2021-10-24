@@ -6,11 +6,14 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import { DEV_API_URL , PROD_API_URL} from "../../api";
+import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL } from "../../api";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
+const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 
 const Home = (props: any) => {
+  const [spin, setSpin] = useState(false);
+  
   const [username, setUsername] = useState("");
   const [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
@@ -58,6 +61,28 @@ const Home = (props: any) => {
     ["Medium", "primary"],
     ["Hard", "danger"],
   ];
+
+  const navInterviewPage = (difficulty:string) => {
+    await fetch(MATCH_API_URL + "/API_ENDPOINT_TODO/", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        "Authorization": "Bearer " + token
+      },
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        if (res.status === 200) {
+          
+        } else {
+          
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <div className="content">
@@ -123,7 +148,7 @@ const Home = (props: any) => {
                   <Card.Body className="d-grid gap-2">
                     {difficultyData.map((item, idx) => {
                       return (
-                        <Button className="my-2" variant={item[1]} key={idx} >
+                        <Button className="my-2" variant={item[1]} key={idx} onClick={() => navInterviewPage(item[0])}>
                           <Cursor className="mb-1 me-1" />
                           {item[0]}
                           <br />
