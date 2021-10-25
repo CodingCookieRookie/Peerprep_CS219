@@ -16,6 +16,11 @@ backend/.DS_Store
 /backend/editor/package-lock.json
 /backend/editor/.env
 
+## editor ms
+/backend/match/node_modules
+/backend/match/package-lock.json
+/backend/match/.env
+
 # Frontend
 /frontend/node_modules
 /frontend/build
