@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
 // Connect to Mongoose and set connection variable
 const uri = `mongodb+srv://${dbUsername}:${dbPassword}@team23.77voc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-var db = mongoose.connectionr
+var db = mongoose.connection
 
 // Added check for DB connection
 if(!db) {
