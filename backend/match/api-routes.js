@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
 // Import contact controller
 var matchController = require('./matchController');
 
-router.route('/users/:match')
+router.route('/matches')
     .get(matchController.match)
     .post(matchController.new)
     .put(matchController.update)
