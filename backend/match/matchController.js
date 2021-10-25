@@ -134,47 +134,32 @@ exports.update = function (req, res) {
 
 // Handle delete match of user
 // Note does not delete any match. But delete a match's match
+// Should be called before finding match / done with interview
+// Existing match acts as a second layer to wantsMatch (If have existing match then will not match)
 exports.delete = function (req, res) {
-    Match.findOne({username: req.username}, function (err, match) {   // If have same xp
+    Match.findOne({username: req.body.username}, function (err, match) {   // If have same xp
         if (!match || err) {
             res.json({
                 status: "failed",
-                message: 'All users have match or there were no close match',
+                message: 'Cannot find user',
                 data: match
             });
         } else {
             match.match = "";
-            res.json({
-                message: 'Delete of match partner successful',
-                data: match
+            match.save(function (err) {
+                if (err) {
+                    res.status(400).json({
+                        message: "Save error on deleting match: " + err.message,
+                    });
+                } else {
+                    res.json({  // any res.json call should end the call
+                        status: "Success",
+                        message: 'Deleted user match',
+                        data: match
+                    });
+                }
             });
         }
        
     });
 };
-
-// exports.delete = function (req, res) {
-//     Match.findOneAndRemove({username: req.params.username}, function (err, match) {
-//         if (err) {
-//             res.json({
-//                 status: "failed",
-//                 message: 'Contact details not deleted!',
-//                 data: contact
-//             });
-//         } else {
-//             if (contact) {
-//                 res.json({
-//                     status: "success",
-//                     message: 'Contact deleted!',
-//                     data: contact
-//                 });
-//             } else {
-//                 res.json({
-//                     status: "failed",
-//                     message: 'Contact details can not be found!',
-//                     data: contact
-//                 });
-//             }
-//         }
-//     });
-// };
