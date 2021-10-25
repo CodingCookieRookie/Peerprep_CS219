@@ -20,25 +20,36 @@ exports.match = function (req, res) {
     });
 };
 
-/* For testing */
 exports.new = function (req, res) {
     var match = new Match();
     match.username = req.body.username;
     match.xp = req.body.xp;
     match.match = req.body.match;
-    console.log(match.username);
-    console.log(req.body);
+    match.wantsMatch = req.body.wantsMatch;
+    console.log("user: " + match.username);
+    console.log("xp: " + match.xp);
+    console.log("wants: " + match.wantsMatch);
+    if (match.wantsMatch) {
+        console.log ("wants"); 
+    } else {
+        console.log("dont want");
+    }
     if (req.body.username == null) {
         res.json({
             status: "failed",
-            message: 'All users have match or there were no close match',
+            message: 'Need to add username',
             data: match
         });
     } else {
         match.save(function (err) {
             // Check for validation error
             if (err)
-                res.json(err);
+            {
+                res.json({
+                    message: 'One of the required fields not satisfied',
+                    data: err
+                });
+            }
             else
                 res.json({
                     message: 'New match created!',
@@ -77,7 +88,16 @@ exports.update = function (req, res) {
                     console.log("name: " + currentUserName);
                     for (index in matches) {
                         console.log("potential name: " + matches[index].username);
-                        if (matches[index].username != currentUserName && Math.abs(matches[index].xp - currentUserXP) < diff) {
+                        if (matches[index].username != currentUserName && Math.abs(matches[index].xp - currentUserXP) < diff 
+                        && matches[index].wantsMatch) {
+                        matches[index].match = currentUserName;
+                        matches[index].save(function (err) {
+                            if (err) {
+                                res.status(400).json({
+                                    message: "Save error on potential user: " + err.message,
+                                });
+                            }
+                        });
                         // If found a potential match, update user's match
                             Match.findOne({username: currentUserName}, function (err, match) {
                                 if (!match || err) {
