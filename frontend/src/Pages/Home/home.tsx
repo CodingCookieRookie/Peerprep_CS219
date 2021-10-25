@@ -63,25 +63,27 @@ const Home = (props: any) => {
   ];
 
   const navInterviewPage = (difficulty:string) => {
-    await fetch(MATCH_API_URL + "/API_ENDPOINT_TODO/", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        "Authorization": "Bearer " + token
-      },
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        if (res.status === 200) {
+    // await fetch(MATCH_API_URL + "/API_ENDPOINT_TODO/", {
+    //   method: "GET",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-type": "application/json; charset=utf-8",
+    //     "Authorization": "Bearer " + token
+    //   },
+    // })
+    //   .then(async (res) => {
+    //     var result = await res.json();
+    //     if (res.status === 200) {
           
-        } else {
+    //     } else {
           
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    history.push('/interview');
   }
 
   return (
