@@ -59,23 +59,25 @@ exports.new = function (req, res) {
     }
 };
 
+// Before match -> Should call to delete match first -> Call match update to find match
+// Because match updates always try to find someone without a match
 
 //Only works for unique username due to findOne
 //Currently only updates one of the pair
 exports.update = function (req, res) {
     // req should be current user's match details -> update current user's match to another suitable user with similar xp
-    Match.findOne({username: req.body.username}, function (err, match) {
-        if (!match || err) {
+    Match.findOne({username: req.body.username}, function (err, currentMatch) {
+        if (!currentMatch || err) {
             console.log("cannot find");
             console.log(req.body.username);
             res.json({
                 status: "failed",
                 message: 'Cannot find current user',
-                data: match
+                data: currentMatch
             });
         } else {
-            const currentUserName = match.username;
-            const currentUserXP = match.xp;
+            const currentUserName = currentMatch.username;
+            const currentUserXP = currentMatch.xp;
             Match.find({match: ""}, function (err, matches) {   // If have same xp
                 if (!matches || err) {
                     res.json({
@@ -87,9 +89,9 @@ exports.update = function (req, res) {
                     var potentialExist = false;
                     console.log("name: " + currentUserName);
                     for (index in matches) {
-                        console.log("potential name: " + matches[index].username);
                         if (matches[index].username != currentUserName && Math.abs(matches[index].xp - currentUserXP) < diff 
                         && matches[index].wantsMatch) {
+                        console.log("potential name: " + matches[index].username);
                         matches[index].match = currentUserName;
                         matches[index].save(function (err) {
                             if (err) {
@@ -98,39 +100,28 @@ exports.update = function (req, res) {
                                 });
                             }
                         });
-                        // If found a potential match, update user's match
-                            Match.findOne({username: currentUserName}, function (err, match) {
-                                if (!match || err) {
-                                    res.json({
-                                        status: "failed",
-                                        message: 'Cannot find current user',
-                                        data: match
-                                    });
-                                } else {
-                                    match.match = matches[index].username;
-                                    match.save(function (err) {
-                                        if (err) {
-                                            res.status(400).json({
-                                                message: "Save error: " + err.message,
-                                            });
-                                        } else {
-                                            res.json({
-                                                status: "Success",
-                                                message: 'Found a match and saved first successfully',
-                                                data: match
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                            return;
-                         } 
+                        currentMatch.match = matches[index].username;
+                        currentMatch.save(function (err) {
+                            if (err) {
+                                res.status(400).json({
+                                    message: "Save error on current user: " + err.message,
+                                });
+                            } else {
+                                res.json({  // any res.json call should end the call
+                                    status: "Success",
+                                    message: 'Found both matches and saved both successfully',
+                                    data: "Current user: " + currentUserName + " Matched user: " + matches[index].username
+                                });
+                            }
+                        });
+                        return;
+                        } 
                     }
                     if(!potentialExist) {
                         res.json({
                             status: "Fail",
                             message: 'Cannot find a match',
-                            data: matches
+                            data: currentUserName
                         });
                     }
                 }
