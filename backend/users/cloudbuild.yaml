@@ -9,14 +9,17 @@ steps:
 # Install
 - name: 'gcr.io/cloud-builders/npm'
   args: ['install']
+  dir: 'backend/users'
 
 # Build
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build', '--if-present']
+  dir: 'backend/users'
 
 # Test
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'test']
+  dir: 'backend/users'
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
