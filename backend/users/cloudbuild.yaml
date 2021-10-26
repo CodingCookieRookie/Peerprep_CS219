@@ -19,7 +19,7 @@ steps:
 # Test
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'test']
-  env: ['DBUSERNAME=admin', 'DBPASSWORD=password', 'CLOUD_DATABASE_URL=mongodb+srv://usersms-dev:1234@team23.77voc.mongodb.net/development?retryWrites=true&w=majority', 'ACCESS_TOKEN_SECRET=21c9aa63fb5ae198d6aa7e03e8bc82ed576716ffdd782056db9312e54bb15450ef79909df9c75ae1f922dcd55341ce107eeb86c252728ec3ea716cfc642107a1']
+  env: ['DBUSERNAME=admin', 'DBPASSWORD=password', 'CLOUD_DATABASE_URL=mongodb+srv://usersms-dev:1234@team23.77voc.mongodb.net/development?retryWrites=true&w=majority', 'DEV_ACCESS_TOKEN_SECRET=21c9aa63fb5ae198d6aa7e03e8bc82ed576716ffdd782056db9312e54bb15450ef79909df9c75ae1f922dcd55341ce107eeb86c252728ec3ea716cfc642107a1']
   dir: 'backend/users'
 
 # Build the container image
