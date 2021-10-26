@@ -72,7 +72,7 @@ describe("Registration unit tests", () => {
         User.deleteOne({username: users[0].username}, (error) => {
             // console.log(error)
         })
-    })
+    }).timeout(5000);
 });
 
 // LOGIN tests
@@ -85,7 +85,7 @@ describe("Login unit tests", () => {
             .end(() => {
                 done()
             })
-    });
+    }).timeout(5000);
 
 
     it('Login successfully', (done) => {
@@ -141,9 +141,8 @@ describe("Login unit tests", () => {
 
 
     after('Clear data', () => {
-        this.timeout(5000);
         User.deleteOne({username: users[0].username}, (error) => {
             // console.log(error)
         })
-    })
+    }).timeout(5000)
 });
