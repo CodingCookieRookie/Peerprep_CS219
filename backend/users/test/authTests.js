@@ -30,7 +30,7 @@ describe("Registration unit tests", () => {
                 result.body.data.email.should.equal(users[0].email);
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('Fail to create a account due to missing fields', (done) => {
         chai.request(app)
@@ -42,7 +42,7 @@ describe("Registration unit tests", () => {
                 result.body.message.should.equal('Fill in all fields.');
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('Fail to create a account due to incorrect email', (done) => {
         chai.request(app)
@@ -54,7 +54,7 @@ describe("Registration unit tests", () => {
                 result.body.message.should.equal('Please use an email that starts with ".edu"');
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('Fail to create a duplicate account', (done) => {
         chai.request(app)
@@ -66,7 +66,7 @@ describe("Registration unit tests", () => {
                 result.body.message.should.equal('There exists a current account with this username. Please login or change your username.');
                 done();
             });
-    });
+    }).timeout(5000);
 
     after('Clear data', () => {
         User.deleteOne({username: users[0].username}, (error) => {
@@ -101,7 +101,7 @@ describe("Login unit tests", () => {
                 result.body.user.email.should.equal(users[0].email);
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('Fail to login due to missing fields', (done) => {
         chai.request(app)
@@ -113,7 +113,7 @@ describe("Login unit tests", () => {
                 result.body.message.should.equal('Fill in all fields.');
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('Fail to create a account due to non-existent account', (done) => {
         chai.request(app)
@@ -125,7 +125,7 @@ describe("Login unit tests", () => {
                 result.body.message.should.equal('User account not recorded in system.');
                 done();
             });
-    });
+    }).timeout(5000);
 
     it('Fail to create a account due to incorrect password', (done) => {
         chai.request(app)
@@ -137,10 +137,11 @@ describe("Login unit tests", () => {
                 result.body.message.should.equal('Invalid credentials.');
                 done();
             });
-    });
+    }).timeout(5000);
 
 
     after('Clear data', () => {
+        this.timeout(5000);
         User.deleteOne({username: users[0].username}, (error) => {
             // console.log(error)
         })
