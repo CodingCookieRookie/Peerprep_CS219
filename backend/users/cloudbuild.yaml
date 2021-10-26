@@ -19,6 +19,7 @@ steps:
 # Test
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'test']
+  env: ['DBUSERNAME=admin', 'DBPASSWORD=password']
   dir: 'backend/users'
 
 # Build the container image
