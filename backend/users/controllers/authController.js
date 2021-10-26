@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
     
         // Validate user input
         if (!(username && password)) {
-          res.status(400).send({ 
+          return res.status(400).send({ 
             message: "Fill in all fields." 
           });
         }
@@ -80,7 +80,7 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ username: username });
         
         if (!user) {
-            res.status(400).json({ message: "User account not recorded in system." });
+            return res.status(400).json({ message: "User account not recorded in system." });
         }
         // Authorisation success
         if (user && (await bcrypt.compare(password, user.password))) {

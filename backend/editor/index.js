@@ -1,67 +1,42 @@
 require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const mongoose = require("mongoose");
+const Editor = require("./models/editorModel");
 
-const http = require("http");
-const server = http.createServer(app);
-const io = require('socket.io')(http, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+const uri = process.env.CLOUD_DATABASE_URL || process.env.LOCAL_DATABASE_URL;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const io = require("socket.io")(4001, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    },
 });
 
-const redis = require("redis");
-// const client = redis.createClient({
-//   host: ",
-//   port: 6379
-// });
-// client.on("connect", () => console.log("Connected to Redis"));
-// client.on("error", function (error) {
-//   console.error(error);
-// });
+// socket to communicate with client
+io.on("connection", (socket) => {
+    socket.on("get-editor", async (interviewId) => {
+        const editor = await findOrCreateEditor(interviewId);
+        socket.join(interviewId);
+        socket.emit("load-editor", editor.data);
 
-app.get("/editor/ping", (req, res) => {
-  res.status(200).json({ message: "success", data: "Editor microservice is working" });
+        socket.on("send-changes", (delta) => {
+            socket.broadcast.to(interviewId).emit("receive-changes", delta);
+        });
+      
+        socket.on("save-editor", async data => {
+          await Editor.findByIdAndUpdate(interviewId, { data })
+        })
+    });
 });
 
-const { genQuestion, retrieveQuestion } = require("./question-generator");
-app.get("/editor/question", (req, res) => {
-  const { sessionId, difficulty } = req.query;
-  console.log(req.query);
-  if (!sessionId) {
-    res.status(400).json("No parameters");
-  }
-  client.get(sessionId, (err, redisRes) => {
-    if (redisRes === null) {
-      const obj = genQuestion(difficulty);
-      client.set(sessionId, obj.key, redis.print);
-      res.status(200).json(obj.questionObj);
+// creates a new editor if editor does not exist else fetches back the same editor
+async function findOrCreateEditor(id) {
+    if (id == null) return;
+
+    const editor = await Editor.findById(id);
+    if (editor) {
+        return editor;
     } else {
-      const qn = retrieveQuestion(redisRes, difficulty);
-      res.status(200).json(qn);
+        return await Editor.create({ _id: id, data: "" });
     }
-  });
-});
-
-app.get("/editor/end-session", (req, res) => {
-  const sessionId = req.query.sessionId;
-  client.del(sessionId, (err, redisRes) => {
-    console.log("Deleted ", sessionId);
-    res.status(200).json("Deleted session");
-  });
-});
-
-io.on("connection", socket => {
-  socket.on("new-message", msg => {
-    io.emit(msg.sessionId, msg.payload);
-  });
-});
-const port = process.env.PORT || 4001;
-server.listen(port, () => {
-  console.log(`Editor ms listening on port ${port}...`);
-});
+}

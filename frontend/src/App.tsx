@@ -3,11 +3,12 @@ import "./App.css";
 import { Footer } from "./Components/Footer/footer";
 import Landing from "./Pages/Landing/landing";
 import Interview from "./Pages/Interview/interview";
-import { Route, BrowserRouter } from "react-router-dom";
+import { Route, BrowserRouter, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import Login from "./Pages/Login/login";
 import SignUp from "./Pages/SignUp/signup";
 import Home from "./Pages/Home/home";
+// import { v4 as uuidV4 } from "uuid";
 
 const loader = document.querySelector(".preloader");
 const showLoader = () => loader != null && loader.classList.remove("preloader");
@@ -23,32 +24,34 @@ const App = () => {
     <>
       <div>
         <BrowserRouter>
-
-          <Route
-            exact path="/"
+          {/* <Switch> */}
+          <Route 
+            exact path="/" 
             component={() => <Landing />} 
           />
-
           <Route
             path="/login"
             component={({ history }) => <Login history={history} />}
           />
-
-          <Route
-            path="/signup" 
+          <Route 
+            path="/signup"
             component={() => <SignUp />} 
           />
-
           <Route
             path="/home"
             component={({ history }) => <Home history={history} />}
           />
+          {/* interview id shall replace uuid */}
+          {/* <Route path="/interview" exact>
+            <Redirect to={`/interview/${uuidV4()}`} />
+          </Route> */}
+          {/* <Route
+            path="/interview/:interviewId"
+            component={() => <Interview />}
+          /> */}
+          {/* <Route path="/interview/" component={() => <Interview />} /> */}
 
-          <Route
-            path="/interview"
-            component={({ history }) => <Interview history={history} />} 
-          />
-
+          {/* </Switch> */}
         </BrowserRouter>
       </div>
       <Footer />
