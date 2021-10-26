@@ -6,6 +6,14 @@ steps:
 # SERVICE_NAME = users
 # IMAGE_NAME = users
 
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+
+# Test
+- name: 'gcr.io/cloud-builders/npm/test'
+  args: ['run', 'test']
+
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA', './backend/users']
