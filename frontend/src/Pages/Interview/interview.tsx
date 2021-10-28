@@ -6,11 +6,22 @@ import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import { CardContent } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 import Question from "../../Components/Question/question";
 import * as qns from "../../questions/question-easy";
 import "./interview.css";
 
 const Interview = (props:any) => {
+
+  const [cookies] = useCookies(["userInfo"]);
+
+  useEffect(() => {
+    const userInfo = cookies.userInfo;
+    console.log(`userInfo.username = ${userInfo.user.username}`);
+  });
+
   const onClickEndSession = () => {
     console.log("End session");
   };
@@ -71,7 +82,7 @@ const Interview = (props:any) => {
               style={{ display: "flex", flex: 1, flexDirection: "column" }}
             >
               <h3>Chat</h3>
-              <Chat username="TO_ADD_USERNAME" sessionId="TO_ADD_SESSION_ID" />
+              <Chat username={cookies.userInfo.user.username} sessionId="TO_ADD_SESSION_ID" />
             </CardContent>
           </Card>
         </div>
