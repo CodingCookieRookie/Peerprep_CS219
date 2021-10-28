@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import ReactScrollToBottom from "react-scroll-to-bottom";
 import io from 'socket.io-client';
 import {Button, TextField, Chip, Typography} from '@material-ui/core';
+import { DEV_MSG_API_URL, PROD_MSG_API_URL } from "../../api";
 import "./chat.css";
+
+const CHAT_API_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
 
 const Chat = (props: any) => {
   const sessionId = props.sessionId;
@@ -13,7 +16,7 @@ const Chat = (props: any) => {
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
-    const s = io("http://localhost:5002", {
+    const s = io(CHAT_API_URL, {
       path: '/chat/new',
       forceNew: true,
     });

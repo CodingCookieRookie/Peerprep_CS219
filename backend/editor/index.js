@@ -7,7 +7,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const io = require("socket.io")(4001, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"],
     },
 });

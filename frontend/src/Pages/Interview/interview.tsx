@@ -10,7 +10,7 @@ import Question from "../../Components/Question/question";
 import * as qns from "../../questions/question-easy";
 import "./interview.css";
 
-const Interview = () => {
+const Interview = (props:any) => {
   const onClickEndSession = () => {
     console.log("End session");
   };

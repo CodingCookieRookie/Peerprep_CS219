@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import Login from "./Pages/Login/login";
 import SignUp from "./Pages/SignUp/signup";
 import Home from "./Pages/Home/home";
-// import { v4 as uuidV4 } from "uuid";
+import { v4 as uuidV4 } from "uuid";
 
 const loader = document.querySelector(".preloader");
 const showLoader = () => loader != null && loader.classList.remove("preloader");
@@ -42,13 +42,15 @@ const App = () => {
             component={({ history }) => <Home history={history} />}
           />
           {/* interview id shall replace uuid */}
-          {/* <Route path="/interview" exact>
+          <Route 
+            path="/interview" exact
+          >
             <Redirect to={`/interview/${uuidV4()}`} />
-          </Route> */}
-          {/* <Route
+          </Route>
+          <Route
             path="/interview/:interviewId"
             component={() => <Interview />}
-          /> */}
+          />
           {/* <Route path="/interview/" component={() => <Interview />} /> */}
 
           {/* </Switch> */}

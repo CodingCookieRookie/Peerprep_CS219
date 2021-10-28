@@ -4,9 +4,10 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 5002
 const http = require('http').createServer(app);
+
 const io = require('socket.io')(http, {
   cors: {
-    origin: "http://localhost:5002",
+    origin: "*",
     methods: ["GET", "POST"]
   },
   path: '/chat/new',
