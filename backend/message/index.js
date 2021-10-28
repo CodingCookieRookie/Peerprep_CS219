@@ -10,7 +10,6 @@ const io = require('socket.io')(http, {
     origin: "*",
     methods: ["GET", "POST"]
   },
-  path: '/chat/new',
 });
 
 app.use(cors());

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 
-const RegistrationModal = (prop: { status: boolean; errorMsg: string }) => {
+const EndInterviewModal = (prop: { status: boolean; errorMsg: string }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -50,4 +50,4 @@ const RegistrationModal = (prop: { status: boolean; errorMsg: string }) => {
   );
 };
 
-export default RegistrationModal;
+export default EndInterviewModal;

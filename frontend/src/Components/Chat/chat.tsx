@@ -16,10 +16,7 @@ const Chat = (props: any) => {
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
-    const s = io(CHAT_API_URL, {
-      path: '/chat/new',
-      forceNew: true,
-    });
+    const s = io(CHAT_API_URL);
     if (connected === false) {
       setMessages((history) => [...history, {sender: 'system', text: '-- Connected --'}])
     }

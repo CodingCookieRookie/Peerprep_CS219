@@ -25,7 +25,7 @@ const Editor = () => {
 
   // connect to editor MS
   useEffect(() => {
-    const s = io("http://localhost:4001");
+    const s = io("https://editor-6i7ougacoq-de.a.run.app");
     setSocket(s);
 
     return () => {
