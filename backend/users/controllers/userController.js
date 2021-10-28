@@ -73,9 +73,6 @@ exports.new = async function (req, res) {
         // insert a match into match database
         const response = await fetch(MATCH_API_URL + '/matches', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.t
-            headers: {
-            'Content-Type': 'application/json'
-            },
             body: JSON.stringify({
                 username: newUser.username
             })
