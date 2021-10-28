@@ -80,6 +80,7 @@ exports.new = async function (req, res) {
                 data: newUser,
             });
         });
+    });
              
 };
 

@@ -22,6 +22,7 @@ import { DEV_API_URL, PROD_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
+const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 
 const SignUp = () => {
   const [spin, setSpin] = useState(false);
@@ -56,7 +57,15 @@ const SignUp = () => {
           return result.message;
         }
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        await fetch(MATCH_API_URL + '/matches', {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json; charset=utf-8"
+          }
+        })
+      })
       .catch((err) => {
         console.log(err);
       });

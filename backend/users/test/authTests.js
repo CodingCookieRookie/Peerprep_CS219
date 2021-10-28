@@ -5,7 +5,6 @@ var app = require('../index');
 const users = require('../dummy/users').users;
 const accounts = require('../dummy/users').accounts;
 const User = require('../models/userModel');
-const { after } = require('mocha');
 const AUTH_API = {
     register: '/api/auth/register',
     login: '/api/auth/login'
