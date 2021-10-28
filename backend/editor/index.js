@@ -2,10 +2,11 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const Editor = require("./models/editorModel");
 
-const uri = process.env.CLOUD_DATABASE_URL || process.env.LOCAL_DATABASE_URL;
+const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || 'http://localhost:5003');
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const io = require("socket.io")(4001, {
+const io = require("socket.io")(5003, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"],

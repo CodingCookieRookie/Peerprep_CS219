@@ -18,8 +18,8 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', 'editor', '--image', 'gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA', '--region', 'asia-east1']
-  
+
 images:
 - gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: CLOUD_LOGGING_ONLYd
