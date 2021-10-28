@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
+const MATCH_API_URL = process.env.PROD_MATCH_API_URL || (process.env.DEV_MATCH_API_URL || 'http://localhost:5003/api')
 
 function validateEmail(email) {
     // regex to check if email ends with ".edu"
@@ -68,18 +69,38 @@ exports.new = async function (req, res) {
             email: req.body.email,
             password: req.body.password,
         });
-        newUser.save(function (err) {
-            if (err) {
-                return res.status(400).json({
-                    message: err.message,
-                });
-            }
-            return res.status(201).json({
-                message: "New user created!",
-                data: newUser,
-            });
+
+        // insert a match into match database
+        const response = await fetch(MATCH_API_URL + '/matches', {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.t
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: newUser.username
+            })
         });
-    });
+
+        if (res.json.status == 'success') { // match inserted
+            newUser.save(function (err) {
+                if (err) {
+                    return res.status(400).json({
+                        message: err.message,
+                    });
+                }
+                return res.status(201).json({
+                    message: "New user created!",
+                    data: newUser,
+                });
+            });
+        } else {
+            return res.status(400).json({
+                message: res.json.message,
+                status: "failed"
+            });
+        }
+        
+        
 };
 
 // PUT (Edit a user's details)

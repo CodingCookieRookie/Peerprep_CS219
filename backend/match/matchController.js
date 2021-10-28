@@ -42,12 +42,14 @@ exports.new = function (req, res) {
             if (err)
             {
                 res.json({
+                    status: "failed",
                     message: 'One of the required fields not satisfied',
                     data: err
                 });
             }
             else
                 res.json({
+                    status: "success",
                     message: 'New match created!',
                     data: match
                 });
