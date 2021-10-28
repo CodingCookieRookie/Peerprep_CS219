@@ -4,12 +4,14 @@ const jwt = require('jsonwebtoken')
 const User = require("../models/userModel");
 const Friend = require("../models/friendModel");
 
+const accessToken = process.env.ACCESS_TOKEN_SECRET || process.env.DEV_ACCESS_TOKEN_SECRET;
+
 // use session JWT token to get userId
 function getUserId(header) {
     var userId;
     const token = header && header.split(' ')[1]
     try {
-        userId = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).user_id;
+        userId = jwt.verify(token, accessToken).user_id;
     } catch (err) {
         throw Error(err);
     }

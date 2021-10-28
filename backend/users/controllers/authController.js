@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
+const accessToken = process.env.ACCESS_TOKEN_SECRET || process.env.DEV_ACCESS_TOKEN_SECRET;
+
 function validateEmail(email) {
     // regex to check if email ends with ".edu"
     const re =
@@ -87,7 +89,7 @@ exports.login = async (req, res) => {
           // Create token
           const token = jwt.sign(
               { user_id: user._id },
-              process.env.ACCESS_TOKEN_SECRET,
+              accessToken,
               { expiresIn: "3d" }
           );
           // remove user password

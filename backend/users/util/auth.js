@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 
+const accessToken = process.env.ACCESS_TOKEN_SECRET || process.env.DEV_ACCESS_TOKEN_SECRET;
+
 // Define verification mechanism for all non-auth endpoints
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization']
@@ -10,7 +12,7 @@ const verifyToken = (req, res, next) => {
     }
     
     try {
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      jwt.verify(token, accessToken);
     } catch (err) {
         return res.status(401).json({ message: "Invalid/Expired token."});
     }
