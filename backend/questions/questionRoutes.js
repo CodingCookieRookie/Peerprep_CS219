@@ -15,4 +15,8 @@ router
     // .put(questionController.update)
     .delete(questionController.delete);
 
+router
+    .route("/questions/difficulty/:level")
+    .get(questionController.level)
+
 module.exports = router;
