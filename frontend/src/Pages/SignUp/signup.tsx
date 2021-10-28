@@ -18,7 +18,7 @@ import {
 import "./signup.css";
 import * as yup from "yup";
 import { Formik } from "formik";
-import { DEV_API_URL, PROD_API_URL } from "../../api";
+import { DEV_API_URL, PROD_API_URL, PROD_MATCH_API_URL, DEV_MATCH_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
@@ -49,22 +49,35 @@ const SignUp = () => {
       .then(async (res) => {
         var result = await res.json();
         if (res.status === 201) {
-          setErrorMsg("");
-          handleShow();
+          await fetch(MATCH_API_URL + '/matches', {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify({
+              username: e.username
+            })
+          }).then(async (postRes) => {
+            const postResult = await postRes.json();
+            if (postResult.message === 'New match created!' || postResult.status === 'success') {
+              setErrorMsg('');
+              handleShow();
+              return result;
+            } else {
+              setErrorMsg(postResult.message);
+              return postResult.message;
+            }
+
+          })
           return result;
         } else {
           setErrorMsg(result.message);
           return result.message;
         }
       })
-      .then((res) => {
-        await fetch(MATCH_API_URL + '/matches', {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json; charset=utf-8"
-          }
-        })
+      .then(async (res) => {
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
