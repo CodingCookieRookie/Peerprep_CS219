@@ -22,4 +22,4 @@ steps:
 images:
 - gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA
 options:
-  logging: CLOUD_LOGGING_ONLYd
+  logging: CLOUD_LOGGING_ONLY
