@@ -7,17 +7,20 @@ import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
 import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL } from "../../api";
+import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 
 const Home = (props: any) => {
   const [spin, setSpin] = useState(false);
-  
+  const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
   const [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
+
+  const handleClose = () => setShow(false);
 
   const getFriends = async (token) => {
     await fetch(API_URL + "/user-friend/", {
@@ -82,7 +85,8 @@ const Home = (props: any) => {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-
+    setShow(true);
+    // LOADING, wait for match
     history.push('/interview');
   }
 
@@ -98,6 +102,7 @@ const Home = (props: any) => {
           </h4>
         </section>
         {/* landing content */}
+        <LoadingModal show={show} onHide={handleClose} />
         <Row>
           <Col sm={7}>
             <Card>

@@ -10,26 +10,21 @@ const CHAT_API_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
 const Chat = (props: any) => {
   const sessionId = props.sessionId;
   const username = props.username;
-  const [socket, setSocket] = useState(null);
+  const socket = io(CHAT_API_URL);
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
-    const s = io(CHAT_API_URL);
     if (connected === false) {
+      socket.on(sessionId, (msg: {text: string}) => {
+        console.log(`Msg recvd ${msg.text}`)
+        setMessages((history) => [...history, msg]);
+      });
+      // setConnected(true);
       setMessages((history) => [...history, {sender: 'system', text: '-- Connected --'}])
     }
-    s.on(sessionId, (msg) => {
-      console.log(`Msg recvd ${msg.text}`)
-      setMessages((history) => [...history, msg]);
-    });
-    setSocket(s);
-    setConnected(true);
-    return () => {
-      s.disconnect();
-    };
-    
+    return ;
   }, [sessionId, connected])
 
   const sendMessage = () => {
