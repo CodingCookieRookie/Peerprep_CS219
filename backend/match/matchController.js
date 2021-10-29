@@ -3,8 +3,8 @@ const e = require('express');
 Match = require('./matchModel');
 const diff = 100;
 
+// Find individual match only
 exports.getCurrentUserMatch = function (req, res) {
-    // Find individual match only
     Match.findOne({username: req.body.username}, function (err, currentUser) {
         if (err) {
             res.status(400).json({
