@@ -40,8 +40,6 @@ const Home = (props: any) => {
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
-
-    getFriends(userInfo.token);
     // No record of session login
     if (!userInfo) {
       history.push("/");
@@ -49,6 +47,7 @@ const Home = (props: any) => {
       // Set name
       const data = userInfo.user.username;
       setUsername(data);
+      getFriends(userInfo.token);
     }
     
   }, [cookies.userInfo, history]);
