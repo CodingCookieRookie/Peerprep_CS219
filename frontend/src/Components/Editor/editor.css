@@ -1,4 +1,9 @@
+.ql-container {
+  height: 9.7in;
+}
 .ql-editor {
-  width: 4in;
-  min-height: 11in;
+  min-width: 8.7in;
+  width: 8.7in;
+  height: 9.7in;
+  overflow-y: scroll;
 }

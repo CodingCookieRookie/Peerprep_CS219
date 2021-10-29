@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactScrollToBottom from "react-scroll-to-bottom";
 import io from 'socket.io-client';
-import {Button, TextField, Chip, Typography} from '@material-ui/core';
+import { Button, TextField, Chip, Typography } from '@material-ui/core';
 import { DEV_MSG_API_URL, PROD_MSG_API_URL } from "../../api";
 import "./chat.css";
 
@@ -21,7 +21,7 @@ const Chat = (props: any) => {
         console.log(`Msg recvd ${msg.text}`)
         setMessages((history) => [...history, msg]);
       });
-      // setConnected(true);
+      setConnected(true);
       setMessages((history) => [...history, {sender: 'system', text: '-- Connected --'}])
     }
     return ;

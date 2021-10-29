@@ -8,6 +8,7 @@ import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
 import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL } from "../../api";
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
+import SelectInput from "@material-ui/core/Select/SelectInput";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
@@ -87,7 +88,9 @@ const Home = (props: any) => {
     //   });
     setShow(true);
     // LOADING, wait for match
-    history.push('/interview');
+    setTimeout(() => {
+      history.push('/interview')
+    }, 10000);
   }
 
   return (

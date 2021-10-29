@@ -87,7 +87,7 @@ const Interview = (props:any) => {
           </Card>
         </div>
         <div className="right-panel">
-          <Card style={{ display: "flex", flex: 7, height: "10.5in"}}>
+          <Card style={{ display: "flex", flex: 7, height: "10.51in"}}>
             <CardContent style={{ width: "9in" }}>
               <Editor />
             </CardContent>

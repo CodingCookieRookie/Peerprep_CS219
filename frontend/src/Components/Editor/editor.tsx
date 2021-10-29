@@ -100,7 +100,13 @@ const Editor = () => {
     q.setText("Loading...");
     setQuill(q);
   }, []);
-  return <div className="container" ref={wrapperRef}></div>;
+  return (
+    <div 
+      className="ql-container" 
+    >
+      <div ref={wrapperRef} />
+    </div>
+    );
 };
 
 export default Editor;
