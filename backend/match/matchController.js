@@ -281,7 +281,7 @@ exports.update = function (req, res) {
 // Should be called before finding match / done with interview
 // Existing match acts as a second layer to wantsMatch (If have existing match then will not match)
 exports.delete = function (req, res) {
-    Match.findOne({username: req.body.username}, function (err, match) {   // If have same xp
+    Match.findOne({username: req.body.username}, function (err, match) { 
         if (!match || err) {
             res.json({
                 status: "failed",
@@ -289,8 +289,8 @@ exports.delete = function (req, res) {
                 data: match
             });
         } else {
+            match.wantsMatch = false;   //prevent auto matching when exit interview
             match.match = null;
-            match.wantsMatch = false;
             match.save(function (err) {
                 if (err) {
                     res.status(400).json({
