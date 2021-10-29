@@ -12,6 +12,12 @@ services:
     ports:
     - 5002:5002
   
+  editor:
+    build:
+      context: ./backend/editor
+    ports:
+    - 5003:5003
+  
   match:
     build:
       context: ./backend/match
@@ -24,7 +30,10 @@ services:
     ports:
     - 8080:8080
     depends_on:
-    - user message editor match
+    - user
+    - message
+    - editor
+    - match
   
 volumes:
   peerprep:
