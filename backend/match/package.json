@@ -21,6 +21,7 @@
     "mongoose": "^6.0.6",
     "node-java-maven": "^0.1.2",
     "react-bootstrap": "^2.0.0-rc.0",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "socket.io": "^4.3.1"
   }
 }

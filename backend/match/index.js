@@ -14,6 +14,32 @@ let app = express();
 // Import routes
 let apiRoutes = require("./api-routes");
 
+const matchController = require("./matchController");
+
+const io = require("socket.io")(5003, {
+    cors: {
+        origin: "*"
+    },
+})
+
+io.on("connection", (socket) => {
+    socket.on("send-username", username => {
+        io.emit("receive-username", username)
+    })
+    console.log(socket.id);
+});
+
+
+// http.listen(5003, async () => {
+//     try {
+//         await client.connect();
+//         collection = client.db("MyFirstDataBase").collection("matches");
+//         console.log("Listening on port :%s...", http.address().port);
+//     } catch (e) {
+//         console.error(e);
+//     }
+// });
+
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
 
