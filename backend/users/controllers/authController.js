@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
+const accessToken = process.env.ACCESS_TOKEN_SECRET || process.env.DEV_ACCESS_TOKEN_SECRET;
+
 function validateEmail(email) {
     // regex to check if email ends with ".edu"
     const re =
@@ -72,7 +74,7 @@ exports.login = async (req, res) => {
     
         // Validate user input
         if (!(username && password)) {
-          res.status(400).send({ 
+          return res.status(400).send({ 
             message: "Fill in all fields." 
           });
         }
@@ -80,14 +82,14 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ username: username });
         
         if (!user) {
-            res.status(400).json({ message: "User account not recorded in system." });
+            return res.status(400).json({ message: "User account not recorded in system." });
         }
         // Authorisation success
         if (user && (await bcrypt.compare(password, user.password))) {
           // Create token
           const token = jwt.sign(
               { user_id: user._id },
-              process.env.ACCESS_TOKEN_SECRET,
+              accessToken,
               { expiresIn: "3d" }
           );
           // remove user password
