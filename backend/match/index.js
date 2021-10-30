@@ -16,18 +16,25 @@ let apiRoutes = require("./api-routes");
 
 const matchController = require("./matchController");
 
-const io = require("socket.io")(5219, {
+const http = require('http').createServer(app);
+
+const io = require("socket.io")(http, {
     cors: {
         origin: "*"
     },
 })
 
 io.on("connection", (socket) => {
-    socket.on("send-username", username => {
-        io.emit("receive-username", username)
-    })
+    // socket.on("send-username", username => {
+    //     io.emit("receive-username", username)
+    // })
     console.log(socket.id);
 });
+
+  
+http.listen(port, () => {
+    console.log(`Match ms listening to port ${port}`);
+})
 
 
 // http.listen(5004, async () => {
@@ -79,4 +86,4 @@ app.listen(port, function () {
     console.log("Running Peerprep on port " + port);
 });
 
-module.exports = app;
+module.exports = io;
