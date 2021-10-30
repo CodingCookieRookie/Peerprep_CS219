@@ -1,6 +1,13 @@
 require("dotenv").config();
 const express = require('express');
 const cors = require('cors');
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+const port = process.env.PORT || 5003
+const http = require('http').createServer(app);
+
 
 const mongoose = require("mongoose");
 const Editor = require("./models/editorModel");
@@ -9,7 +16,7 @@ const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL ||
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const io = require("socket.io")(5003, {
+const io = require("socket.io")(http, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
@@ -44,13 +51,6 @@ async function findOrCreateEditor(id) {
         return await Editor.create({ _id: id, data: "" });
     }
 }
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-const port = process.env.PORT || 5003
-const http = require('http').createServer(app);
 
 app.get('/', (req, res) => {
     res.status(200).json({status: 'ok', data: 'Editor Microservice is running.'})
