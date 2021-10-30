@@ -42,6 +42,11 @@ async function findOrCreateEditor(id) {
     }
 }
 
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
 app.get('/', (req, res) => {
     res.status(200).json({status: 'ok', data: 'Editor Microservice is running.'})
 })
