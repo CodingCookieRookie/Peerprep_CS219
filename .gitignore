@@ -33,5 +33,8 @@ backend/.DS_Store
 /frontend/yarn.lock
 /frotnend/.env
 
+# Global
+/node_modules
+
 ../../.DS_Store
 .DS_Store
