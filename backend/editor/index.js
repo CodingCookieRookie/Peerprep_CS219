@@ -41,3 +41,11 @@ async function findOrCreateEditor(id) {
         return await Editor.create({ _id: id, data: "" });
     }
 }
+
+app.get('/', (req, res) => {
+    res.status(200).json({status: 'ok', data: 'Editor Microservice is running.'})
+})
+  
+app.get('/api/editor/', (req, res) => 
+    res.status(200).json({status: 'ok', data: 'Editor microservice is working!'})
+);
