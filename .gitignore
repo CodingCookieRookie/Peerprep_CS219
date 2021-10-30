@@ -16,7 +16,7 @@ backend/.DS_Store
 /backend/editor/package-lock.json
 /backend/editor/.env
 
-## editor ms
+## match ms
 /backend/match/node_modules
 /backend/match/package-lock.json
 /backend/match/.env
