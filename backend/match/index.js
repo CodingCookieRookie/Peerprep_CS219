@@ -16,7 +16,7 @@ let apiRoutes = require("./api-routes");
 
 const matchController = require("./matchController");
 
-const io = require("socket.io")(5004, {
+const io = require("socket.io")(5219, {
     cors: {
         origin: "*"
     },
