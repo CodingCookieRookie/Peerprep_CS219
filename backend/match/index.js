@@ -16,7 +16,7 @@ let apiRoutes = require("./api-routes");
 
 const matchController = require("./matchController");
 
-const io = require("socket.io")(5003, {
+const io = require("socket.io")(5004, {
     cors: {
         origin: "*"
     },
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
 });
 
 
-// http.listen(5003, async () => {
+// http.listen(5004, async () => {
 //     try {
 //         await client.connect();
 //         collection = client.db("MyFirstDataBase").collection("matches");
@@ -67,7 +67,7 @@ else
     console.log("Db connected successfully")
 
 // Setup server port
-var port = process.env.PORT || 5003;
+var port = process.env.PORT || 5004;
 
 // Send message for default URL
 app.get('/', (req, res) => res.send('Hello welcome to peerprep!'));
