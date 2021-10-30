@@ -28,7 +28,7 @@ spec:
           imagePullPolicy: IfNotPresent
           name: match
           ports:
-            - containerPort: 5003
+            - containerPort: 5004
           resources: {}
       restartPolicy: Always
 status: {}

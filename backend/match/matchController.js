@@ -1,8 +1,10 @@
 const e = require('express');
 
 Match = require('./matchModel');
-const diff = 100;
 
+const io = require('./index');
+
+const diff = 100;
 // Find individual match only
 exports.getCurrentUserMatch = function (req, res) {
     Match.findOne({username: req.body.username}, function (err, currentUser) {
@@ -240,6 +242,8 @@ exports.update = function (req, res) {
                                             message: "Save error on current user: " + err.message,
                                         });
                                     } else {
+                                        io.emit(`match-found-${currentUserName}`, {match: matches[index].username});
+                                        io.emit(`match-found-${matches[index].username}`, {match: currentUserName});
                                         res.json({  // any res.json call should end the call
                                             status: "Success",
                                             message: 'Found both matches and saved both successfully',
