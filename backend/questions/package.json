@@ -1,6 +1,7 @@
 {
-  "name": "backend",
+  "name": "questions",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index",
@@ -16,14 +17,12 @@
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^9.1.3",
     "mongoose": "^6.0.10"
   },
-  "description": "",
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.13"
   }
 }

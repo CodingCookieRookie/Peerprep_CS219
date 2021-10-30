@@ -12,7 +12,7 @@ import "./login.css";
 import * as yup from "yup";
 import { Formik } from "formik";
 import { useState } from "react";
-import { DEV_API_URL, PROD_API_URL } from "../../api";
+import { DEV_API_URL, PROD_API_URL, API_HEADERS } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
@@ -42,10 +42,7 @@ const Login = ({ history }) => {
 
     await fetch(API_URL + "/auth/login", {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-      },
+      headers: API_HEADERS,
       body: JSON.stringify({
         username: e.username,
         password: e.password,

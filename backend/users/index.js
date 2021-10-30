@@ -20,13 +20,14 @@ app.use(express.json())
 
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
-
+/*
 if (!dbUsername || !dbPassword) {
   console.error(
     "Please specify the database username and password as environment variables!"
   );
   process.exit(1);
 }
+*/
 
 const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "http://localhost:5001");
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });

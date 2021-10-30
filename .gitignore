@@ -21,6 +21,11 @@ backend/.DS_Store
 /backend/match/package-lock.json
 /backend/match/.env
 
+## questions ms
+/backend/questions/node_modules
+/backend/questions/package-lock.json
+/backend/questions/.env
+
 # Frontend
 /frontend/node_modules
 /frontend/build
