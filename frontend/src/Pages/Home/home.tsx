@@ -1,6 +1,5 @@
 import Header from "../../Components/Header/header";
 import "./home.css";
-import home from "../../assets/home-welcome.svg";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
@@ -9,6 +8,7 @@ import { Cursor, PersonSquare } from "react-bootstrap-icons";
 import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL } from "../../api";
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
+import PastMatch from "../../Components/PastMatch/pastmatch";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
@@ -35,6 +35,7 @@ const Home = (props: any) => {
       .then(async (res) => {
         var result = await res.json();
         if (res.status === 200) {
+          // console.log(result)
           setfriendData(result.data);
         } else {
           setfriendData(result.message);
@@ -47,8 +48,6 @@ const Home = (props: any) => {
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
-
-    getFriends(userInfo.token);
     // No record of session login
     if (!userInfo) {
       history.push("/");
@@ -56,6 +55,8 @@ const Home = (props: any) => {
       // Set name
       const data = userInfo.user.username;
       setUsername(data);
+      // console.log(userInfo.token)
+      getFriends(userInfo.token);
     }
     
   }, [cookies.userInfo, history]);
@@ -108,11 +109,10 @@ const Home = (props: any) => {
         <LoadingModal show={show} onHide={handleClose} />
         <Row>
           <Col sm={7}>
-            <Card>
-              <Card.Header className="bold">User Profile</Card.Header>
+            <Card className="mb-3">
               <Card.Body>
-                {/* <Card.Title>User Profile</Card.Title> */}
-                <Card.Subtitle className="mb-3 text-muted">
+                <Card.Title className="fs-4 mb-3"> User Profile</Card.Title>
+                <Card.Subtitle className="mt-2 mb-3 text-muted">
                   {username}
                 </Card.Subtitle>
                 <Card.Text>
@@ -121,32 +121,39 @@ const Home = (props: any) => {
                 <Card.Text>
                   <strong> XP: </strong>
                 </Card.Text>
-                <Card>
-                  <Card.Header>Past matches</Card.Header>
-                  <Card.Body>
-                    <Card.Title>Primary Card Title</Card.Title>
-                    <Card.Text>
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card's content.
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
+              </Card.Body>
+            </Card>
+            <Card className="">
+              <Card.Body className="d-grid gap-2">
+              <Card.Title className="fs-4 ">Past matches</Card.Title>
+                  <PastMatch/>
               </Card.Body>
             </Card>
           </Col>
           <Col sm={5}>
-            <Card>
+            <Card className="mb-3">
               <Card.Body>
-                <Card.Title> Find a peer and get cracking! </Card.Title>
+                <Card.Title className="fs-4 mb-3"> Find a peer and get cracking! </Card.Title>
                 <Card.Subtitle
-                  className="mt-2 mb-3 text-muted"
+                  className="mt-2 mb-3 text-muted fw-light"
                   style={{ fontSize: 14 }}
                 >
                   Simply pick a question based on the difficulty you're pitting
                   yourself up against and we will match you with someone who's
                   just as determined and skilled as you!
                 </Card.Subtitle>
-                <Card.Text>
+                <div className="d-grid gap-2 mb-3">
+                    {difficultyData.map((item, idx) => {
+                          return (
+                            <Button className="my-2" variant={item[1]} key={idx} >
+                              <Cursor className="mb-1 me-1" />
+                              {item[0]}
+                              <br />
+                            </Button>
+                          );
+                        })}
+                  </div>
+                <Card.Text className="lh-sm">
                   Upon the start of a successful pairing, users can work on a
                   problem together with a messaging panel and a coshared text
                   editor. The session can be terminated any time and your XP
@@ -167,7 +174,9 @@ const Home = (props: any) => {
                     })}
                   </Card.Body>
                 </Card>
-                <Card>
+              </Card.Body>
+            </Card>
+            <Card>
                   <Card.Header>Friend List</Card.Header>
                   <Card.Body className="d-grid gap-2">
                     <ListGroup>
@@ -182,21 +191,9 @@ const Home = (props: any) => {
                     })}
                     </ListGroup>
                   </Card.Body>
-                </Card>
-              </Card.Body>
-            </Card>
+              </Card>
           </Col>
         </Row>
-        {/* </Container> */}
-        {/* <section className="centering">
-          <div className="container landing-center">
-            <img className="home-img-style mb-4" src={home} alt="logo" />
-            <h1>PeerPrep</h1>
-            <p>
-              Acing technical interviews, <strong>together</strong>
-            </p>
-          </div>
-        </section> */}
       </div>
     </div>
   );

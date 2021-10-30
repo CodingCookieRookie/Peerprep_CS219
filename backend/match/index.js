@@ -14,6 +14,39 @@ let app = express();
 // Import routes
 let apiRoutes = require("./api-routes");
 
+const matchController = require("./matchController");
+
+const http = require('http').createServer(app);
+
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "*"
+    },
+})
+
+io.on("connection", (socket) => {
+    // socket.on("send-username", username => {
+    //     io.emit("receive-username", username)
+    // })
+    console.log(socket.id);
+});
+
+  
+http.listen(port, () => {
+    console.log(`Match ms listening to port ${port}`);
+})
+
+
+// http.listen(5004, async () => {
+//     try {
+//         await client.connect();
+//         collection = client.db("MyFirstDataBase").collection("matches");
+//         console.log("Listening on port :%s...", http.address().port);
+//     } catch (e) {
+//         console.error(e);
+//     }
+// });
+
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
 
@@ -41,7 +74,7 @@ else
     console.log("Db connected successfully")
 
 // Setup server port
-var port = process.env.PORT || 5003;
+var port = process.env.PORT || 5004;
 
 // Send message for default URL
 app.get('/', (req, res) => res.send('Hello welcome to peerprep!'));
@@ -53,4 +86,4 @@ app.listen(port, function () {
     console.log("Running Peerprep on port " + port);
 });
 
-module.exports = app;
+module.exports = io;

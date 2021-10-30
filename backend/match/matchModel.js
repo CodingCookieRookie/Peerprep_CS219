@@ -13,6 +13,10 @@ const matchSchema = new mongoose.Schema({
         type: String,
         required: false
     }, 
+    isOnline: {
+        type: Boolean,
+        required: true
+    },
     wantsMatch: {   // If offline, wantsMatch = false
         type: Boolean,
         required: true

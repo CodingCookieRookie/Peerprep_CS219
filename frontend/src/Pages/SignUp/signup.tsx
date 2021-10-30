@@ -18,7 +18,7 @@ import {
 import "./signup.css";
 import * as yup from "yup";
 import { Formik } from "formik";
-import { DEV_API_URL, PROD_API_URL, PROD_MATCH_API_URL, DEV_MATCH_API_URL } from "../../api";
+import { API_HEADERS, DEV_API_URL, PROD_API_URL, PROD_MATCH_API_URL, DEV_MATCH_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 import RegistrationModal from '../../Components/RegistrationModal/registrationmodal';
 
@@ -37,10 +37,7 @@ const SignUp = () => {
     console.log(e);
     await fetch(API_URL + "/auth/register", {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-      },
+      headers: API_HEADERS,
       body: JSON.stringify({
         username: e.username,
         email: e.email,

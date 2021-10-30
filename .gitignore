@@ -16,10 +16,15 @@ backend/.DS_Store
 /backend/editor/package-lock.json
 /backend/editor/.env
 
-## editor ms
+## match ms
 /backend/match/node_modules
 /backend/match/package-lock.json
 /backend/match/.env
+
+## questions ms
+/backend/questions/node_modules
+/backend/questions/package-lock.json
+/backend/questions/.env
 
 # Frontend
 /frontend/node_modules
@@ -27,6 +32,9 @@ backend/.DS_Store
 /frontend/package-lock.json
 /frontend/yarn.lock
 /frotnend/.env
+
+# Global
+/node_modules
 
 ../../.DS_Store
 .DS_Store

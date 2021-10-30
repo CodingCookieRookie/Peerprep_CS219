@@ -12,9 +12,15 @@ router.get('/', function (req, res) {
 var matchController = require('./matchController');
 
 router.route('/matches')
-    .get(matchController.match)
+    .get(matchController.matches)
     .post(matchController.new)
     .put(matchController.update)
     .delete(matchController.delete);   
+
+//Operations to get/update user's status with corresponding username  
+router.route('/matches/match')
+    .get(matchController.getCurrentUserMatch)
+    .put(matchController.updateCurrentUserMatch);
+
 // Export API routes
 module.exports = router;
