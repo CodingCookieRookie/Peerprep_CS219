@@ -15,7 +15,7 @@ const matchSchema = new mongoose.Schema({
     }, 
     isOnline: {
         type: Boolean,
-        required: false
+        required: true
     },
     wantsMatch: {   // If offline, wantsMatch = false
         type: Boolean,
