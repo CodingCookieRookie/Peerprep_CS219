@@ -46,6 +46,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+const port = process.env.PORT || 5003
+const http = require('http').createServer(app);
 
 app.get('/', (req, res) => {
     res.status(200).json({status: 'ok', data: 'Editor Microservice is running.'})
@@ -54,3 +56,7 @@ app.get('/', (req, res) => {
 app.get('/api/editor/', (req, res) => 
     res.status(200).json({status: 'ok', data: 'Editor microservice is working!'})
 );
+
+http.listen(port, () => {
+    console.log(`Editor ms listening to port ${port}`);
+})
