@@ -102,6 +102,7 @@ const Home = (props: any) => {
     //     console.log(err);
     //   });
     setShow(true);
+    history.push("/interview");
     // LOADING, wait for match
   }
 
