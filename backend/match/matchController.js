@@ -244,8 +244,8 @@ exports.update = function (req, res) {
                                             message: "Save error on current user: " + err.message,
                                         });
                                     } else {
-                                        io.emit(`match-found-${currentUserName}`, {match: matches[index].username});
-                                        io.emit(`match-found-${matches[index].username}`, {match: currentUserName});
+                                        // io.emit(`match-found-${currentUserName}`, {match: matches[index].username});
+                                        // io.emit(`match-found-${matches[index].username}`, {match: currentUserName});
                                         res.json({  // any res.json call should end the call
                                             status: "Success",
                                             message: 'Found both matches and saved both successfully',

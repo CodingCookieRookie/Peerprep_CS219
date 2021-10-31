@@ -38,6 +38,8 @@ app.use(express.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     next();
 });
 
@@ -72,7 +74,7 @@ http.listen(port, () => {
 const io = require("socket.io")(http, {
     cors: {
         origin: "*",
-        methods: ["GET", "POST", "PUT", "DELETE"]
+        methods: ["GET", "POST"]
     },
 })
 
