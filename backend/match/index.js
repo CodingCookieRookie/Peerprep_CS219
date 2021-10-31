@@ -14,8 +14,6 @@ let app = express();
 // Import routes
 let apiRoutes = require("./api-routes");
 
-const matchController = require("./matchController");
-
 // http.listen(5004, async () => {
 //     try {
 //         await client.connect();
@@ -79,10 +77,14 @@ const io = require("socket.io")(http, {
 })
 
 io.on("connection", (socket) => {
-    socket.on("send-username", username => {
-        io.emit("receive-username", "NAH USERNAME GIVE U " + username)
-    })
+    // socket.on("send-username", username => {
+    //     io.emit("receive-username", "NAH USERNAME GIVE U " + username)
+    // })
     console.log(socket.id);
 });
 
-module.exports = io;
+const matchController = require('./matchController');
+
+app.put("/api/matches", (req, res) => {
+    matchController.update(req, res, io);
+})

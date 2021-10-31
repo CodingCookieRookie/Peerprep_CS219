@@ -9,7 +9,7 @@ import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL, PROD
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
@@ -18,7 +18,6 @@ const MATCH_URL = PROD_MATCH_URL;
 const Home = (props: any) => {
   const [socket, setSocket] = useState();
   const [connected, setConnected] = useState(false);
-
   // const [spin, setSpin] = useState(false);
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
@@ -37,22 +36,19 @@ const Home = (props: any) => {
       setUsername(data);
       // console.log(userInfo.token)
       getFriends(userInfo.token);
+      
+      if (connected === false) {
+        setConnected(true);
+        const sock = io(MATCH_URL);
+        sock.on(`match-found-${data}`, (matchedUser) => {
+          console.log(`${data} is matched with ${matchedUser}`);
+        });
+        setSocket(sock);
+      }
+      
     }
     
-  }, [cookies.userInfo, history]);
-
-  useEffect(() => {
-    if (connected === false && username) {
-        const sock = io(MATCH_URL);
-        sock.connect(`match-found-${username}`, (result) => {
-          history.push('/interview');
-        });
-
-        setSocket(sock);
-
-        setConnected(true);
-      }
-  }, [socket, connected, username, history])
+  }, [cookies.userInfo, history, socket, connected]);
 
   const handleClose = () => setShow(false);
 

@@ -14,7 +14,6 @@ var matchController = require('./matchController');
 router.route('/matches')
     .get(matchController.matches)
     .post(matchController.new)
-    .put(matchController.update)
     .delete(matchController.delete);   
 
 //Operations to get/update user's status with corresponding username  
