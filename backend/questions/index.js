@@ -18,6 +18,7 @@ app.use(function(req, res, next) {
 });
 app.use(express.json())
 
+/*
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
 
@@ -27,6 +28,7 @@ if (!dbUsername || !dbPassword) {
   );
   process.exit(1);
 }
+*/
 
 const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "http://localhost:5005");
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -48,7 +50,7 @@ app.use("/api", questionRouter);
 const port = process.env.PORT || 5005;
 
 app.listen(port, () =>
-  console.log(`Server listening to port ${port} at ${uri}`)
+  console.log(`Server listening to port ${port}`)
 );
 
 module.exports = app;
