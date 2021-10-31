@@ -5,21 +5,48 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL } from "../../api";
+import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL, PROD_MATCH_URL } from "../../api";
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
+import io from 'socket.io-client';
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
+const MATCH_URL = PROD_MATCH_URL;
 
 const Home = (props: any) => {
-  const [spin, setSpin] = useState(false);
+  const socket = io(MATCH_URL);
+  const [connected, setConnected] = useState(false);
+
+  // const [spin, setSpin] = useState(false);
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
   const [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
+
+  useEffect(() => {
+    const userInfo = cookies.userInfo;
+    // No record of session login
+    if (!userInfo) {
+      history.push("/");
+    } else {
+      // Set name
+      const data = userInfo.user.username;
+      setUsername(data);
+      // console.log(userInfo.token)
+      getFriends(userInfo.token);
+      if (connected === false) {
+        socket.on(`match-found-${data}`, (result) => {
+          history.push('/interview');
+        });
+
+        setConnected(true);
+      }
+    }
+    
+  }, [cookies.userInfo, history, connected, socket]);
 
   const handleClose = () => setShow(false);
 
@@ -45,21 +72,6 @@ const Home = (props: any) => {
         console.log(err);
       });
   }
-
-  useEffect(() => {
-    const userInfo = cookies.userInfo;
-    // No record of session login
-    if (!userInfo) {
-      history.push("/");
-    } else {
-      // Set name
-      const data = userInfo.user.username;
-      setUsername(data);
-      // console.log(userInfo.token)
-      getFriends(userInfo.token);
-    }
-    
-  }, [cookies.userInfo, history]);
 
   const difficultyData = [
     ["Easy", "success"],
@@ -89,9 +101,6 @@ const Home = (props: any) => {
     //   });
     setShow(true);
     // LOADING, wait for match
-    setTimeout(() => {
-      history.push('/interview')
-    }, 10000);
   }
 
   return (

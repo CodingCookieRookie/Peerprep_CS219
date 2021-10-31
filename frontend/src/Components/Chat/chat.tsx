@@ -25,7 +25,7 @@ const Chat = (props: any) => {
       setMessages((history) => [...history, {sender: 'system', text: '-- Connected --'}])
     }
     return ;
-  }, [sessionId, connected])
+  }, [sessionId, connected, socket])
 
   const sendMessage = () => {
     if (draft !== '') {
