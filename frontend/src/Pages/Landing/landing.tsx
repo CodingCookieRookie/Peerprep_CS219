@@ -2,11 +2,53 @@ import Header from "../../Components/Header/header";
 import "./landing.css";
 import logo from "../../assets/collaboration.svg";
 import { Accordion, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { API_HEADERS, DEV_QUESTIONS_API_URL } from "../../api";
 
-const Landing = (props: any) => {
+const QuestionImage = ({ image }) => <img src={`data:image/jpeg;base64,${image}`} alt="question_image" />
+
+const Landing = () => {
+  const history = useHistory();
+  const [cookies] = useCookies(["userInfo"]);
+  const [image, setImage] = useState(null);
+
+  // sample handler method for parsing image;
+  const getQuestion = async () => {
+    await fetch(DEV_QUESTIONS_API_URL + "/questions/", {
+      method: "GET",
+      headers: API_HEADERS,
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        if (res.status === 200) {
+          var question = result.data[0];
+          console.log(question)
+          setImage(question.image);
+        } else {
+          return result.message;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  useEffect(() => {
+    getQuestion();
+    const userInfo = cookies.userInfo;
+
+    if (userInfo) {
+      history.push("/home");
+    }
+  }, [cookies.userInfo, history]);
+
+  
+
   return (
     <div className="content">
-      <Header></Header>
+      <Header isSignedIn={false}></Header>
       {/* landing content */}
       <section className="centering">
         <div className="container landing-center">
@@ -22,6 +64,7 @@ const Landing = (props: any) => {
         <hr />
         <h2 className="landing-center">Details</h2>
         <div>
+        <QuestionImage image={image} />
           <Accordion className="p-4" flush>
             <Accordion.Item eventKey="0">
               <Accordion.Header>What do I gain out of this?</Accordion.Header>

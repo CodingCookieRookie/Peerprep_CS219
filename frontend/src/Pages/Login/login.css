@@ -17,7 +17,8 @@
   margin-right: 20%;
 }
 
-.login-style {
-  height: 300px;
-  width: 450px;
+.error-message {
+  color: red;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 800;
 }

@@ -1,0 +1,25 @@
+{
+  "name": "peerprep",
+  "version": "1.0.0",
+  "description": "1. Frontend setup with create react app 2. Backend 3. Kubernetes",
+  "main": "index.js",
+  "scripts": {
+    "users": "cd backend/users && npm run dev",
+    "frontend": "cd frontend && npm run start",
+    "dev": "concurrently \"npm run users\" \"npm run frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CS3219-SE-Principles-and-Patterns/cs3219-project-ay2122-2122-s1-g23.git"
+  },
+  "author": "CS3219 Team 23",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CS3219-SE-Principles-and-Patterns/cs3219-project-ay2122-2122-s1-g23/issues"
+  },
+  "homepage": "https://github.com/CS3219-SE-Principles-and-Patterns/cs3219-project-ay2122-2122-s1-g23#readme",
+  "devDependencies": {
+    "concurrently": "^6.3.0"
+  }
+}

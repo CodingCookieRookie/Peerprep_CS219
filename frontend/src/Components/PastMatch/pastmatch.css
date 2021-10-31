@@ -1,0 +1,9 @@
+.list-styles {
+    max-height: 350px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+.no-match {
+    height: 340px;
+}

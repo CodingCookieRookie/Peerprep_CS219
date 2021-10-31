@@ -2,19 +2,23 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 
-/** If time permits, find a way to pass props from Formik in Registration to this Modal */
-
-const RegistrationModal = () => {
+const RegistrationModal = (prop: { status: boolean; errorMsg: string }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  // const [spin, setSpin] = useState(false);
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button
+        className="me-2"
+        variant="primary"
+        type="submit"
+        disabled={prop.status}
+        onClick={prop.errorMsg === "" ? handleShow : handleClose}
+      >
         Register
       </Button>
-
       <Modal
         show={show}
         onHide={handleClose}
@@ -29,9 +33,9 @@ const RegistrationModal = () => {
           page to access PeerPrep.
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary">
-            <BoxArrowInRight />
-            {"Login"}
+          <Button variant="primary" href="/login">
+            <BoxArrowInRight className="mb-1 me-1" />
+            {" Login "}
           </Button>
         </Modal.Footer>
       </Modal>

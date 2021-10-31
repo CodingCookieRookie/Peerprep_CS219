@@ -1,0 +1,42 @@
+# cloudbuild.yaml
+
+steps:
+### Build & Deploy User Microservice
+
+# SERVICE_NAME = users
+# IMAGE_NAME = users
+
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'backend/users'
+
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build', '--if-present']
+  dir: 'backend/users'
+
+# Test
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'test']
+  env: ['DBUSERNAME=admin', 'DBPASSWORD=password', 'CLOUD_DATABASE_URL=mongodb+srv://usersms-dev:1234@team23.77voc.mongodb.net/development?retryWrites=true&w=majority', 'DEV_ACCESS_TOKEN_SECRET=21c9aa63fb5ae198d6aa7e03e8bc82ed576716ffdd782056db9312e54bb15450ef79909df9c75ae1f922dcd55341ce107eeb86c252728ec3ea716cfc642107a1']
+  dir: 'backend/users'
+
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA', './backend/users']
+
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'users', '--image', 'gcr.io/cs3219-team23-328712/users:$COMMIT_SHA', '--region', 'asia-east1']
+
+images:
+- gcr.io/cs3219-team23-328712/users:$COMMIT_SHA
+
+options:
+  logging: CLOUD_LOGGING_ONLY
