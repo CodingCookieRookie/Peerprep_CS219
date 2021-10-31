@@ -10,7 +10,6 @@ export const PROD_MSG_API_URL = "https://message-6i7ougacoq-de.a.run.app";
 export const PROD_EDITOR_API_URL = "https://editor-6i7ougacoq-de.a.run.app";
 
 export const DEV_QUESTIONS_API_URL = "http://localhost:5005/api";
-export const PROD_API_URL = "https://users-6i7ougacoq-de.a.run.app/api";
 
 export var API_HEADERS = {
     Accept: "application/json",
