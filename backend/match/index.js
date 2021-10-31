@@ -60,6 +60,10 @@ app.use('/api', apiRoutes);
 
 const http = require('http').createServer(app);
 
+http.listen(port, () => {
+    console.log(`Match ms listening to port ${port}`);
+})
+
 const io = require("socket.io")(http, {
     cors: {
         origin: "*",
@@ -73,10 +77,5 @@ io.on("connection", (socket) => {
     })
     console.log(socket.id);
 });
-
-
-http.listen(port, () => {
-    console.log(`Match ms listening to port ${port}`);
-})
 
 module.exports = io;
