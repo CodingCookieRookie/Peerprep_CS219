@@ -24,6 +24,12 @@ services:
     ports:
     - 5004:5004
 
+  question:
+    build:
+      context: ./backend/questions
+    ports:
+    - 5005:5005
+
   frontend:
     build:
       context: ./frontend

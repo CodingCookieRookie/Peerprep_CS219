@@ -16,7 +16,7 @@ const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 const MATCH_URL = PROD_MATCH_URL;
 
 const Home = (props: any) => {
-  const socket = io(MATCH_URL);
+  const [socket, setSocket] = useState();
   const [connected, setConnected] = useState(false);
 
   // const [spin, setSpin] = useState(false);
@@ -37,16 +37,22 @@ const Home = (props: any) => {
       setUsername(data);
       // console.log(userInfo.token)
       getFriends(userInfo.token);
-      if (connected === false) {
-        socket.on(`match-found-${data}`, (result) => {
+    }
+    
+  }, [cookies.userInfo, history]);
+
+  useEffect(() => {
+    if (connected === false && username) {
+        const sock = io(MATCH_URL);
+        sock.connect(`match-found-${username}`, (result) => {
           history.push('/interview');
         });
 
+        setSocket(sock);
+
         setConnected(true);
       }
-    }
-    
-  }, [cookies.userInfo, history, connected, socket]);
+  }, [socket, connected, username, history])
 
   const handleClose = () => setShow(false);
 
