@@ -10,6 +10,8 @@ import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
 import io from 'socket.io-client';
+import { userInfo } from "os";
+
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
@@ -41,18 +43,18 @@ const Home = (props: any) => {
     
   }, [cookies.userInfo, history]);
 
-  useEffect(() => {
-    if (connected === false && username) {
-        const sock = io(MATCH_URL);
-        sock.connect(`match-found-${username}`, (result) => {
-          history.push('/interview');
-        });
+  // useEffect(() => {
+  //   if (connected === false && username) {
+  //       const sock = io(MATCH_URL);
+  //       sock.connect(`match-found-${username}`, (result) => {
+  //         history.push('/interview');
+  //       });
 
-        setSocket(sock);
+  //       setSocket(sock);
 
-        setConnected(true);
-      }
-  }, [socket, connected, username, history])
+  //       setConnected(true);
+  //     }
+  // }, [socket, connected, username, history])
 
   const handleClose = () => setShow(false);
 
@@ -85,28 +87,56 @@ const Home = (props: any) => {
     ["Hard", "danger"],
   ];
 
-  const navInterviewPage = (difficulty:string) => {
-    // await fetch(MATCH_API_URL + "/API_ENDPOINT_TODO/", {
-    //   method: "GET",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-type": "application/json; charset=utf-8",
-    //     "Authorization": "Bearer " + token
-    //   },
-    // })
-    //   .then(async (res) => {
-    //     var result = await res.json();
-    //     if (res.status === 200) {
-          
-    //     } else {
-          
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    setShow(true);
-    // LOADING, wait for match
+  const navInterviewPage = async (difficulty) => {
+    const userInfo = cookies.userInfo;
+    const token = userInfo.token
+    const username = userInfo.user.username
+
+    // delete user match first
+    await fetch(MATCH_API_URL + "/matches", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        username: username,
+      }),
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        console.log(result.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
+    // request for a match
+    await fetch(MATCH_API_URL + "/matches", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        username: username,
+      }),
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        console.log(result.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
+    // setShow(true);
+    // // LOADING, wait for match
+    // setTimeout(() => {
+    //   history.push('/interview')
+    // }, 5000);
   }
 
   return (

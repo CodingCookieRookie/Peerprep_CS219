@@ -8,7 +8,7 @@ router.get('/', function (req, res) {
         message: 'Success getting matches',
     });
 });
-// Import contact controller
+// Import match controller
 var matchController = require('./matchController');
 
 router.route('/matches')
