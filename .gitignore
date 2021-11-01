@@ -33,8 +33,12 @@ backend/.DS_Store
 /frontend/yarn.lock
 /frotnend/.env
 
+<<<<<<< Updated upstream
 # Global
 /node_modules
 
+=======
+node_modules
+>>>>>>> Stashed changes
 ../../.DS_Store
 .DS_Store
