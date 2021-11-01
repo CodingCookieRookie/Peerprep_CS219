@@ -8,19 +8,20 @@ router.get('/', function (req, res) {
         message: 'Success getting matches',
     });
 });
-// Import contact controller
+// Import match controller
 var matchController = require('./matchController');
 
 router.route('/matches')
     .get(matchController.matches)
     .post(matchController.new)
-    .put(matchController.update)
     .delete(matchController.delete);   
 
 //Operations to get/update user's status with corresponding username  
 router.route('/matches/match')
-    .get(matchController.getCurrentUserMatch)
     .put(matchController.updateCurrentUserMatch);
+
+router.route('/matches/match/:username')
+    .get(matchController.getCurrentUserMatch)
 
 // Export API routes
 module.exports = router;

@@ -1,13 +1,29 @@
 require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+const port = process.env.PORT || 5003
+const http = require('http').createServer(app);
+
+
 const mongoose = require("mongoose");
 const Editor = require("./models/editorModel");
 
-const uri = process.env.CLOUD_DATABASE_URL || process.env.LOCAL_DATABASE_URL;
+const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || 'http://localhost:5003');
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const io = require("socket.io")(4001, {
+const io = require("socket.io")(http, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"],
     },
 });
@@ -40,3 +56,15 @@ async function findOrCreateEditor(id) {
         return await Editor.create({ _id: id, data: "" });
     }
 }
+
+app.get('/', (req, res) => {
+    res.status(200).json({status: 'ok', data: 'Editor Microservice is running.'})
+})
+  
+app.get('/api/editor/', (req, res) => 
+    res.status(200).json({status: 'ok', data: 'Editor microservice is working!'})
+);
+
+http.listen(port, () => {
+    console.log(`Editor ms listening to port ${port}`);
+})

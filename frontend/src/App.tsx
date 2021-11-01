@@ -25,24 +25,32 @@ const App = () => {
       <div>
         <BrowserRouter>
           {/* <Switch> */}
-          <Route exact path="/" component={() => <Landing />} />
+          <Route 
+            exact path="/" 
+            component={() => <Landing />} 
+          />
           <Route
             path="/login"
             component={({ history }) => <Login history={history} />}
           />
-          <Route path="/signup" component={() => <SignUp />} />
+          <Route 
+            path="/signup"
+            component={() => <SignUp />} 
+          />
           <Route
             path="/home"
             component={({ history }) => <Home history={history} />}
           />
           {/* interview id shall replace uuid */}
-          {/* <Route path="/interview" exact>
+          {/* <Route 
+            path="/interview" exact
+          >
             <Redirect to={`/interview/${uuidV4()}`} />
           </Route> */}
-          {/* <Route
+          <Route
             path="/interview/:interviewId"
             component={() => <Interview />}
-          /> */}
+          />
           {/* <Route path="/interview/" component={() => <Interview />} /> */}
 
           {/* </Switch> */}

@@ -68,6 +68,7 @@ exports.new = async function (req, res) {
             email: req.body.email,
             password: req.body.password,
         });
+
         newUser.save(function (err) {
             if (err) {
                 return res.status(400).json({
@@ -80,6 +81,7 @@ exports.new = async function (req, res) {
             });
         });
     });
+             
 };
 
 // PUT (Edit a user's details)

@@ -25,7 +25,7 @@ const Editor = () => {
 
   // connect to editor MS
   useEffect(() => {
-    const s = io("http://localhost:4001");
+    const s = io("https://editor-6i7ougacoq-de.a.run.app");
     setSocket(s);
 
     return () => {
@@ -47,7 +47,7 @@ const Editor = () => {
   useEffect(() => {
     if (socket == null || quill == null) return;
     const interval = setInterval(() => {
-      console.log(quill.getContents())
+      // console.log(quill.getContents())
       socket.emit("save-editor", quill.getContents());
     }, 2000)
     
@@ -96,11 +96,17 @@ const Editor = () => {
       theme: "snow",
       modules: { toolbar: TOOLBAR_OPTIONS },
     });
-    q.disable();
-    q.setText("Loading...");
+    // q.disable();
+    // q.setText("Loading...");
     setQuill(q);
   }, []);
-  return <div className="container" ref={wrapperRef}></div>;
+  return (
+    <div 
+      className="ql-container" 
+    >
+      <div ref={wrapperRef} />
+    </div>
+    );
 };
 
 export default Editor;

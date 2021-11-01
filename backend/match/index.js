@@ -14,29 +14,6 @@ let app = express();
 // Import routes
 let apiRoutes = require("./api-routes");
 
-const matchController = require("./matchController");
-
-const http = require('http').createServer(app);
-
-const io = require("socket.io")(http, {
-    cors: {
-        origin: "*"
-    },
-})
-
-io.on("connection", (socket) => {
-    // socket.on("send-username", username => {
-    //     io.emit("receive-username", username)
-    // })
-    console.log(socket.id);
-});
-
-  
-http.listen(port, () => {
-    console.log(`Match ms listening to port ${port}`);
-})
-
-
 // http.listen(5004, async () => {
 //     try {
 //         await client.connect();
@@ -52,15 +29,18 @@ const dbPassword = process.env.DBPASSWORD;
 
 // Configure bodyparser to handle post requests
 app.use(express.urlencoded({
-    extended: true
+    extended: false
 }));
 app.use(cors());
 app.use(express.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     next();
 });
+
 // Connect to Mongoose and set connection variable
 const uri = `mongodb+srv://${dbUsername}:${dbPassword}@team23.77voc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -82,8 +62,29 @@ app.get('/', (req, res) => res.send('Hello welcome to peerprep!'));
 // Use Api routes in the App
 app.use('/api', apiRoutes);
 // Launch app to listen to specified port
-app.listen(port, function () {
-    console.log("Running Peerprep on port " + port);
+
+const http = require('http').createServer(app);
+
+http.listen(port, () => {
+    console.log(`Match ms listening to port ${port}`);
+})
+
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    },
+})
+
+io.on("connection", (socket) => {
+    // socket.on("send-username", username => {
+    //     io.emit("receive-username", "NAH USERNAME GIVE U " + username)
+    // })
+    console.log(socket.id);
 });
 
-module.exports = io;
+const matchController = require('./matchController');
+
+app.put("/api/matches", (req, res) => {
+    matchController.update(req, res, io);
+})

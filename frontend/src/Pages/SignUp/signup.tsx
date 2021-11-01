@@ -18,10 +18,12 @@ import {
 import "./signup.css";
 import * as yup from "yup";
 import { Formik } from "formik";
-import { API_HEADERS, DEV_API_URL, PROD_API_URL } from "../../api";
+import { API_HEADERS, DEV_API_URL, PROD_API_URL, PROD_MATCH_API_URL, DEV_MATCH_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
+import RegistrationModal from '../../Components/RegistrationModal/registrationmodal';
 
 const API_URL = PROD_API_URL || DEV_API_URL;
+const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 
 const SignUp = () => {
   const [spin, setSpin] = useState(false);
@@ -45,15 +47,36 @@ const SignUp = () => {
       .then(async (res) => {
         var result = await res.json();
         if (res.status === 201) {
-          setErrorMsg("");
-          handleShow();
+          await fetch(MATCH_API_URL + '/matches', {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify({
+              username: e.username
+            })
+          }).then(async (postRes) => {
+            const postResult = await postRes.json();
+            if (postResult.message === 'New match created!' || postResult.status === 'success') {
+              setErrorMsg('');
+              handleShow();
+              return result;
+            } else {
+              setErrorMsg(postResult.message);
+              return postResult.message;
+            }
+
+          })
           return result;
         } else {
           setErrorMsg(result.message);
           return result.message;
         }
       })
-      .then((res) => console.log(res))
+      .then(async (res) => {
+        console.log(res);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -238,26 +261,7 @@ const SignUp = () => {
                     >
                       Register
                     </Button>
-                    <Modal
-                      show={show}
-                      onHide={handleClose}
-                      backdrop="static"
-                      keyboard={false}
-                    >
-                      <Modal.Header>
-                        <Modal.Title>Success!</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        Your account has been created successfully. Now head
-                        over to the Login page to access PeerPrep.
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="primary" href="/login">
-                          <BoxArrowInRight className="mb-1 me-1" />
-                          {" Login "}
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
+                    <RegistrationModal show={show} onHide={handleClose} />
                   </>
                   <Button variant="secondary" href="/">
                     Back to Home
