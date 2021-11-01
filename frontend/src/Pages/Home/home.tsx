@@ -9,7 +9,7 @@ import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL, PROD
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
-import io from 'socket.io-client';
+import { io } from "socket.io-client";
 import { userInfo } from "os";
 
 
@@ -18,7 +18,7 @@ const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 const MATCH_URL = PROD_MATCH_URL;
 
 const Home = (props: any) => {
-  const [socket, setSocket] = useState();
+  // const [socket, setSocket] = useState<any>("");
   const [connected, setConnected] = useState(false);
 
   // const [spin, setSpin] = useState(false);
@@ -40,21 +40,56 @@ const Home = (props: any) => {
       // console.log(userInfo.token)
       getFriends(userInfo.token);
     }
-    
   }, [cookies.userInfo, history]);
 
+  // METHOD WITH UseEffect
   // useEffect(() => {
   //   if (connected === false && username) {
-  //       const sock = io(MATCH_URL);
-  //       sock.connect(`match-found-${username}`, (result) => {
-  //         history.push('/interview');
-  //       });
+  //     const sock = io(MATCH_URL);
+  //     sock.connect(`match-found-${username}`, (result) => {
+  //       history.push("/interview");
+  //     });
 
-  //       setSocket(sock);
+  //     setSocket(sock);
 
-  //       setConnected(true);
-  //     }
-  // }, [socket, connected, username, history])
+  //     setConnected(true);
+  //   }
+  // }, [socket, connected, username, history]);
+
+  // METHOD WITH UseEffect
+  // useEffect(() => {
+  //   const s = io("https://match-6i7ougacoq-de.a.run.app");
+  //   // console.log(s)
+  //   setSocket(s);
+
+  //   return () => {
+  //     s.disconnect();
+  //   };
+  // }, []);
+  // // console.log(socket)
+
+  // useEffect(() => {
+  //   if (socket == null) return;
+  //   console.log(socket)
+
+  //   socket.on(`match-found-${username}`, (msg) => {
+  //     console.log("received");
+  //     console.log(msg);
+  //   });
+  // }, [socket]);
+
+  // METHOD WITHOUT UseEffect
+  const socket = io("https://match-6i7ougacoq-de.a.run.app");
+
+  socket.on("connect", () => {
+    console.log("connected");
+  });
+
+  socket.on(`match-found-${username}`, (data) => {
+    console.log("received");
+    const match = JSON.parse(data);
+    console.log(match.name);
+  });
 
   const handleClose = () => setShow(false);
 
@@ -64,7 +99,7 @@ const Home = (props: any) => {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json; charset=utf-8",
-        "Authorization": "Bearer " + token
+        Authorization: "Bearer " + token,
       },
     })
       .then(async (res) => {
@@ -79,7 +114,7 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const difficultyData = [
     ["Easy", "success"],
@@ -89,8 +124,8 @@ const Home = (props: any) => {
 
   const navInterviewPage = async (difficulty) => {
     const userInfo = cookies.userInfo;
-    const token = userInfo.token
-    const username = userInfo.user.username
+    const token = userInfo.token;
+    const username = userInfo.user.username;
 
     // delete user match first
     await fetch(MATCH_API_URL + "/matches", {
@@ -111,7 +146,7 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
-    
+
     // request for a match
     await fetch(MATCH_API_URL + "/matches", {
       method: "PUT",
@@ -131,13 +166,13 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
-    
+
     // setShow(true);
     // // LOADING, wait for match
     // setTimeout(() => {
     //   history.push('/interview')
     // }, 5000);
-  }
+  };
 
   return (
     <div className="content">
@@ -170,15 +205,18 @@ const Home = (props: any) => {
             </Card>
             <Card className="">
               <Card.Body className="d-grid gap-2">
-              <Card.Title className="fs-4 ">Past matches</Card.Title>
-                  <PastMatch/>
+                <Card.Title className="fs-4 ">Past matches</Card.Title>
+                <PastMatch />
               </Card.Body>
             </Card>
           </Col>
           <Col sm={5}>
             <Card className="mb-3">
               <Card.Body>
-                <Card.Title className="fs-4 mb-3"> Find a peer and get cracking! </Card.Title>
+                <Card.Title className="fs-4 mb-3">
+                  {" "}
+                  Find a peer and get cracking!{" "}
+                </Card.Title>
                 <Card.Subtitle
                   className="mt-2 mb-3 text-muted fw-light"
                   style={{ fontSize: 14 }}
@@ -188,16 +226,16 @@ const Home = (props: any) => {
                   just as determined and skilled as you!
                 </Card.Subtitle>
                 <div className="d-grid gap-2 mb-3">
-                    {difficultyData.map((item, idx) => {
-                          return (
-                            <Button className="my-2" variant={item[1]} key={idx} >
-                              <Cursor className="mb-1 me-1" />
-                              {item[0]}
-                              <br />
-                            </Button>
-                          );
-                        })}
-                  </div>
+                  {difficultyData.map((item, idx) => {
+                    return (
+                      <Button className="my-2" variant={item[1]} key={idx}>
+                        <Cursor className="mb-1 me-1" />
+                        {item[0]}
+                        <br />
+                      </Button>
+                    );
+                  })}
+                </div>
                 <Card.Text className="lh-sm">
                   Upon the start of a successful pairing, users can work on a
                   problem together with a messaging panel and a coshared text
@@ -210,7 +248,12 @@ const Home = (props: any) => {
                   <Card.Body className="d-grid gap-2">
                     {difficultyData.map((item, idx) => {
                       return (
-                        <Button className="my-2" variant={item[1]} key={idx} onClick={() => navInterviewPage(item[0])}>
+                        <Button
+                          className="my-2"
+                          variant={item[1]}
+                          key={idx}
+                          onClick={() => navInterviewPage(item[0])}
+                        >
                           <Cursor className="mb-1 me-1" />
                           {item[0]}
                           <br />
@@ -222,21 +265,26 @@ const Home = (props: any) => {
               </Card.Body>
             </Card>
             <Card>
-                  <Card.Header>Friend List</Card.Header>
-                  <Card.Body className="d-grid gap-2">
-                    <ListGroup>
-                    {friendData.map((item, idx) => {
-                      return (
-                        <ListGroup.Item action variant="primary" className="my-2" key={idx} >
-                          <PersonSquare className="mb-1 me-2" />
-                          {"  " + item.friend_username}
-                          <br />
-                        </ListGroup.Item>
-                      );
-                    })}
-                    </ListGroup>
-                  </Card.Body>
-              </Card>
+              <Card.Header>Friend List</Card.Header>
+              <Card.Body className="d-grid gap-2">
+                <ListGroup>
+                  {friendData.map((item, idx) => {
+                    return (
+                      <ListGroup.Item
+                        action
+                        variant="primary"
+                        className="my-2"
+                        key={idx}
+                      >
+                        <PersonSquare className="mb-1 me-2" />
+                        {"  " + item.friend_username}
+                        <br />
+                      </ListGroup.Item>
+                    );
+                  })}
+                </ListGroup>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </div>
