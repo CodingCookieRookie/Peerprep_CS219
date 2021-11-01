@@ -2,12 +2,10 @@ const e = require('express');
 
 Match = require('./matchModel');
 
-const io = require('./index');
-
 const diff = 100;
 // Find individual match only
 exports.getCurrentUserMatch = function (req, res) {
-    Match.findOne({username: req.body.username}, function (err, currentUser) {
+    Match.findOne({username: req.params.username}, function (err, currentUser) {
         if (err) {
             res.status(400).json({
                 message: "Error finding user. Error: " + err.message,
@@ -185,7 +183,7 @@ exports.new = function (req, res) {
 // Because match updates always try to find someone without a match
 // Only works for unique username due to findOne
 // *NOTE THIS FUNCTION SHOULD BE USED ONLY FOR MATCH BUTTON*, individual user update should use updateCurrentUserMatch
-exports.update = function (req, res) {
+exports.update = function (req, res, socket) {
     // req should be current user's match details -> update current user's match to another suitable user with similar xp
     Match.findOne({username: req.body.username}, function (err, currentMatch) {
         if (!currentMatch || err) {
@@ -244,8 +242,8 @@ exports.update = function (req, res) {
                                             message: "Save error on current user: " + err.message,
                                         });
                                     } else {
-                                        io.emit(`match-found-${currentUserName}`, {match: matches[index].username});
-                                        io.emit(`match-found-${matches[index].username}`, {match: currentUserName});
+                                        socket.emit(`match-found-${currentUserName}`, {match: matches[index].username});
+                                        socket.emit(`match-found-${matches[index].username}`, {match: currentUserName});
                                         res.json({  // any res.json call should end the call
                                             status: "Success",
                                             message: 'Found both matches and saved both successfully',

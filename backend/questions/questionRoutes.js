@@ -1,8 +1,8 @@
 const cors = require("cors");
-const router = require("express").Router();
+let router = require("express").Router();
 
 // Import questionController
-const questionController = require("./questionController.js");
+const questionController = require("./questionController");
 
 router
     .route("/questions/")

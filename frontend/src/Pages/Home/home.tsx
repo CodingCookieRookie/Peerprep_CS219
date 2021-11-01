@@ -21,7 +21,6 @@ const MATCH_URL = PROD_MATCH_URL;
 const Home = (props: any) => {
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
-
   // const [spin, setSpin] = useState(false);
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
@@ -68,53 +67,53 @@ const Home = (props: any) => {
   }, [socket, connected, username, history]);
 
   // get user's match details
-  useEffect(() => {
-    getUserMatchDetails()
-  })
+  // useEffect(() => {
+  //   getUserMatchDetails()
+  // })
 
-  const getUserMatchDetails = async () => {
-    await fetch(MATCH_API_URL + `/matches/match/${username}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        Authorization: "Bearer " + token,
-      },
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        console.log(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const getUserMatchDetails = async () => {
+  //   await fetch(MATCH_API_URL + `/matches/match/${username}`, {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-type": "application/json; charset=utf-8",
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   })
+  //     .then(async (res) => {
+  //       var result = await res.json();
+  //       console.log(result.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const handleClose = async () => {
     const userInfo = cookies.userInfo;
     const token = userInfo.token;
     console.log(userInfo)
     setShow(false);
-    await fetch(MATCH_API_URL + "/matches/match", {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify({
-        username: username,
-        isOnline: userInfo.isOnline,
+    // await fetch(MATCH_API_URL + "/matches/match", {
+    //   method: "PUT",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-type": "application/json; charset=utf-8",
+    //     Authorization: "Bearer " + token,
+    //   },
+    //   body: JSON.stringify({
+    //     username: username,
+    //     isOnline: userInfo.isOnline,
 
-      }),
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        console.log(result.message);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //   }),
+    // })
+    //   .then(async (res) => {
+    //     var result = await res.json();
+    //     console.log(result.message);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   const getFriends = async (token) => {
