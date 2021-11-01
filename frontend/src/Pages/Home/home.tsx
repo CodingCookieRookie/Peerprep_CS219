@@ -192,10 +192,6 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
-    // // LOADING, wait for match
-    // setTimeout(() => {
-    //   history.push('/interview')
-    // }, 5000);
   };
 
   return (
