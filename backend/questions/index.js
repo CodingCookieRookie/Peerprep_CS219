@@ -44,7 +44,7 @@ app.get("/api", (req, res) =>
 );
 
 // Question API 
-const questionRouter = require("./questionRoutes.js");
+const questionRouter = require("./questionRoutes");
 app.use("/api", questionRouter);
 
 const port = process.env.PORT || 5005;

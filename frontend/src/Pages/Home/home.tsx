@@ -20,7 +20,6 @@ const MATCH_URL = PROD_MATCH_URL;
 const Home = (props: any) => {
   const [socket, setSocket] = useState();
   const [connected, setConnected] = useState(false);
-
   // const [spin, setSpin] = useState(false);
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
@@ -39,22 +38,19 @@ const Home = (props: any) => {
       setUsername(data);
       // console.log(userInfo.token)
       getFriends(userInfo.token);
+      
+      if (connected === false) {
+        setConnected(true);
+        const sock = io(MATCH_URL);
+        sock.on(`match-found-${data}`, (matchedUser) => {
+          console.log(`${data} is matched with ${matchedUser}`);
+        });
+        setSocket(socket);
+      }
+      
     }
     
-  }, [cookies.userInfo, history]);
-
-  // useEffect(() => {
-  //   if (connected === false && username) {
-  //       const sock = io(MATCH_URL);
-  //       sock.connect(`match-found-${username}`, (result) => {
-  //         history.push('/interview');
-  //       });
-
-  //       setSocket(sock);
-
-  //       setConnected(true);
-  //     }
-  // }, [socket, connected, username, history])
+  }, [cookies.userInfo, history, socket, connected]);
 
   const handleClose = () => setShow(false);
 
