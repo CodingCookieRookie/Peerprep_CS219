@@ -49,6 +49,7 @@ const Home = (props: any) => {
       sock.on(`match-found-${username}`, (result) => {
         console.log(`YOU ARE MATCHED WITH ... ${result.match} !!!`);
         history.push("/interview");
+        sock.disconnect();
       });
       setSocket(sock);
       setConnected(true);
