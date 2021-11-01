@@ -100,7 +100,6 @@ const Interview = (props:any) => {
                 <h3>Chat</h3>
                 <Chat
                   username={cookies.userInfo.user.username}
-                  sessionId="TO_ADD_SESSION_ID"
                 />
               </CardContent>
             </Card>

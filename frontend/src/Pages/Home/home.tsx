@@ -27,6 +27,10 @@ const Home = (props: any) => {
   const [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
   const [token, setToken] = useState("");
+  const [xp, setXp] = useState("");
+  const [isOnline, setIsOnline] = useState(false);
+  const [wantsMatch, setWantsMatch] = useState("");
+
   const history = useHistory();
 
   useEffect(() => {
@@ -67,53 +71,54 @@ const Home = (props: any) => {
   }, [socket, connected, username, history]);
 
   // get user's match details
-  // useEffect(() => {
-  //   getUserMatchDetails()
-  // })
+  useEffect(() => {
+    getUserMatchDetails()
+  })
 
-  // const getUserMatchDetails = async () => {
-  //   await fetch(MATCH_API_URL + `/matches/match/${username}`, {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-type": "application/json; charset=utf-8",
-  //       Authorization: "Bearer " + token,
-  //     },
-  //   })
-  //     .then(async (res) => {
-  //       var result = await res.json();
-  //       console.log(result.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const getUserMatchDetails = async () => {
+    await fetch(MATCH_API_URL + `/matches/match/${username}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        var data = result.data
+        setXp(data.xp)
+        setIsOnline(data.isOnline);
+        setWantsMatch(data.wantsMatch);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleClose = async () => {
-    const userInfo = cookies.userInfo;
-    const token = userInfo.token;
-    console.log(userInfo)
     setShow(false);
-    // await fetch(MATCH_API_URL + "/matches/match", {
-    //   method: "PUT",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-type": "application/json; charset=utf-8",
-    //     Authorization: "Bearer " + token,
-    //   },
-    //   body: JSON.stringify({
-    //     username: username,
-    //     isOnline: userInfo.isOnline,
-
-    //   }),
-    // })
-    //   .then(async (res) => {
-    //     var result = await res.json();
-    //     console.log(result.message);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    await fetch(MATCH_API_URL + "/matches/match", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        username: username,
+        isOnline: isOnline,
+        wantsMatch: false,
+        xp: xp
+      }),
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        console.log(result.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const getFriends = async (token) => {
@@ -220,6 +225,9 @@ const Home = (props: any) => {
                 <Card.Text>
                   <strong> XP: </strong>
                 </Card.Text>
+                <Card.Subtitle className="mt-2 mb-3 text-muted">
+                  {xp}
+                </Card.Subtitle>
               </Card.Body>
             </Card>
             <Card className="">
