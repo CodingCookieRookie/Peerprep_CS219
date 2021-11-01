@@ -18,8 +18,10 @@ router.route('/matches')
 
 //Operations to get/update user's status with corresponding username  
 router.route('/matches/match')
-    .get(matchController.getCurrentUserMatch)
     .put(matchController.updateCurrentUserMatch);
+
+router.route('/matches/match/:username')
+    .get(matchController.getCurrentUserMatch)
 
 // Export API routes
 module.exports = router;

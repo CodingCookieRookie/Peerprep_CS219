@@ -5,7 +5,7 @@ Match = require('./matchModel');
 const diff = 100;
 // Find individual match only
 exports.getCurrentUserMatch = function (req, res) {
-    Match.findOne({username: req.body.username}, function (err, currentUser) {
+    Match.findOne({username: req.params.username}, function (err, currentUser) {
         if (err) {
             res.status(400).json({
                 message: "Error finding user. Error: " + err.message,
