@@ -11,6 +11,7 @@ import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
 import io, { Socket }  from "socket.io-client";
 import { userInfo } from "os";
+import { stringify } from "querystring";
 
 
 const API_URL = PROD_API_URL || DEV_API_URL;
@@ -26,6 +27,7 @@ const Home = (props: any) => {
   const [username, setUsername] = useState("");
   const [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
+  const [token, setToken] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -39,16 +41,25 @@ const Home = (props: any) => {
       setUsername(data);
       // console.log(userInfo.token)
       getFriends(userInfo.token);
+      setToken(userInfo.token);
     }
   }, [cookies.userInfo, history]);
 
-  //METHOD WITH UseEffect
+  // connect to match socket
   useEffect(() => {
     if (connected === false && username) {
       const sock = io(MATCH_URL);
       sock.on(`match-found-${username}`, (result) => {
-        console.log(`YOU ARE MATCHED WITH ... ${result.match} !!!`);
-        history.push("/interview");
+        const matchedUsername = result.match;
+        console.log(`YOU ARE MATCHED WITH ... ${matchedUsername} !!!`);
+        var sessionId = "";
+        if (matchedUsername < username) {
+          sessionId = matchedUsername + "-" + username;
+        } else {
+          sessionId = username + "-" + matchedUsername;
+        }
+        console.log("SESSION ID IS: " + sessionId);
+        history.push(`/interview/${sessionId}`);
         sock.disconnect();
       });
       setSocket(sock);
@@ -56,42 +67,58 @@ const Home = (props: any) => {
     }
   }, [socket, connected, username, history]);
 
-  // METHOD WITH UseEffect
-  // useEffect(() => {
-  //   const s = io("https://match-6i7ougacoq-de.a.run.app");
-  //   // console.log(s)
-  //   setSocket(s);
+  // get user's match details
+  useEffect(() => {
+    getUserMatchDetails()
+  })
 
-  //   return () => {
-  //     s.disconnect();
-  //   };
-  // }, []);
-  // // console.log(socket)
+  const getUserMatchDetails = async () => {
+    await fetch(MATCH_API_URL + "/matches/match", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        username: username
+      }),
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        console.log(result.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  // useEffect(() => {
-  //   if (socket == null) return;
-  //   console.log(socket)
+  const handleClose = async () => {
+    const userInfo = cookies.userInfo;
+    const token = userInfo.token;
+    console.log(userInfo)
+    setShow(false);
+    await fetch(MATCH_API_URL + "/matches/match", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        username: username,
+        isOnline: userInfo.isOnline,
 
-  //   socket.on(`match-found-${username}`, (msg) => {
-  //     console.log("received");
-  //     console.log(msg);
-  //   });
-  // }, [socket]);
-
-  // METHOD WITHOUT UseEffect
-  // const socket = io("https://match-6i7ougacoq-de.a.run.app");
-
-  // socket.on("connect", () => {
-  //   console.log("connected");
-  // });
-
-  // socket.on(`match-found-${username}`, (data) => {
-  //   console.log("received");
-  //   const match = JSON.parse(data);
-  //   console.log(match.name);
-  // });
-
-  const handleClose = () => setShow(false);
+      }),
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        console.log(result.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const getFriends = async (token) => {
     await fetch(API_URL + "/user-friend/", {
@@ -123,9 +150,6 @@ const Home = (props: any) => {
   ];
 
   const navInterviewPage = async (difficulty) => {
-    const userInfo = cookies.userInfo;
-    const token = userInfo.token;
-    const username = userInfo.user.username;
 
     setShow(true);
     // delete user match first

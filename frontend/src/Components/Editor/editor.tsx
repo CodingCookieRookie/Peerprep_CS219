@@ -47,7 +47,7 @@ const Editor = () => {
   useEffect(() => {
     if (socket == null || quill == null) return;
     const interval = setInterval(() => {
-      console.log(quill.getContents())
+      // console.log(quill.getContents())
       socket.emit("save-editor", quill.getContents());
     }, 2000)
     
@@ -96,8 +96,8 @@ const Editor = () => {
       theme: "snow",
       modules: { toolbar: TOOLBAR_OPTIONS },
     });
-    q.disable();
-    q.setText("Loading...");
+    // q.disable();
+    // q.setText("Loading...");
     setQuill(q);
   }, []);
   return (

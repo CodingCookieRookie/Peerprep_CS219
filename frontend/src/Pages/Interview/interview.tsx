@@ -9,7 +9,6 @@ import Container from "@material-ui/core/Container";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
-// import { io } from "socket.io-client";
 import Question from "../../Components/Question/question";
 import * as qns from "../../questions/question-easy";
 import "./interview.css";
@@ -26,11 +25,6 @@ const Interview = (props:any) => {
   const onClickEndSession = () => {
     console.log("End session");
   };
-
-  // const socket = io("https://match-6i7ougacoq-de.a.run.app");
-  // socket.on("connect", () => {
-  //   console.log("hello")
-  // });
 
   return (
     <Container className="main-container">
@@ -88,7 +82,7 @@ const Interview = (props:any) => {
               style={{ display: "flex", flex: 1, flexDirection: "column" }}
             >
               <h3>Chat</h3>
-              <Chat username={cookies.userInfo.user.username} sessionId="TO_ADD_SESSION_ID" />
+              <Chat username={cookies.userInfo.user.username} />
             </CardContent>
           </Card>
         </div>

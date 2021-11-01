@@ -1,43 +1,49 @@
 import { useEffect, useState } from "react";
 import ReactScrollToBottom from "react-scroll-to-bottom";
-import io from 'socket.io-client';
+import io, { Socket } from "socket.io-client";
 import { Button, TextField, Chip, Typography } from '@material-ui/core';
 import { DEV_MSG_API_URL, PROD_MSG_API_URL } from "../../api";
+import { useParams } from "react-router-dom";
 import "./chat.css";
 
 const CHAT_API_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
 
 const Chat = (props: any) => {
-  const sessionId = props.sessionId;
+  const { interviewId: interviewId } = useParams<any>();
   const username = props.username;
-  const socket = io(CHAT_API_URL);
+  const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
     if (connected === false) {
-      socket.on(sessionId, (msg: {text: string}) => {
+      const socket = io(CHAT_API_URL);
+      socket.on(interviewId, (msg: {text: string}) => {
         console.log(`Msg recvd ${msg.text}`)
         setMessages((history) => [...history, msg]);
+        // socket.disconnect();
       });
+      setSocket(socket);
       setConnected(true);
       setMessages((history) => [...history, {sender: 'system', text: '-- Connected --'}])
+      
     }
     return ;
-  }, [sessionId, connected, socket])
+  }, [interviewId, connected, socket])
 
   const sendMessage = () => {
     if (draft !== '') {
-      console.log(`Emitted ${sessionId} ${username} ${draft}`);
+      console.log(`Emitted ${interviewId} ${username} ${draft}`);
       socket.emit('new-message', {
-        interviewId: sessionId,
+        interviewId: interviewId,
         newMsg: {
           sender: username,
           text: draft,
         }
       });
       setDraft('');
+      // socket.disconnect();
     }
   }
 
