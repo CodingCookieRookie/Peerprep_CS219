@@ -9,7 +9,7 @@ import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL, PROD
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
-import { io } from "socket.io-client";
+import io, { Socket }  from "socket.io-client";
 import { userInfo } from "os";
 
 
@@ -18,7 +18,7 @@ const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
 const MATCH_URL = PROD_MATCH_URL;
 
 const Home = (props: any) => {
-  // const [socket, setSocket] = useState<any>("");
+  const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
 
   // const [spin, setSpin] = useState(false);
@@ -42,19 +42,18 @@ const Home = (props: any) => {
     }
   }, [cookies.userInfo, history]);
 
-  // METHOD WITH UseEffect
-  // useEffect(() => {
-  //   if (connected === false && username) {
-  //     const sock = io(MATCH_URL);
-  //     sock.connect(`match-found-${username}`, (result) => {
-  //       history.push("/interview");
-  //     });
-
-  //     setSocket(sock);
-
-  //     setConnected(true);
-  //   }
-  // }, [socket, connected, username, history]);
+  //METHOD WITH UseEffect
+  useEffect(() => {
+    if (connected === false && username) {
+      const sock = io(MATCH_URL);
+      sock.on(`match-found-${username}`, (result) => {
+        console.log(`YOU ARE MATCHED WITH ... ${result.match} !!!`);
+        history.push("/interview");
+      });
+      setSocket(sock);
+      setConnected(true);
+    }
+  }, [socket, connected, username, history]);
 
   // METHOD WITH UseEffect
   // useEffect(() => {
@@ -79,17 +78,17 @@ const Home = (props: any) => {
   // }, [socket]);
 
   // METHOD WITHOUT UseEffect
-  const socket = io("https://match-6i7ougacoq-de.a.run.app");
+  // const socket = io("https://match-6i7ougacoq-de.a.run.app");
 
-  socket.on("connect", () => {
-    console.log("connected");
-  });
+  // socket.on("connect", () => {
+  //   console.log("connected");
+  // });
 
-  socket.on(`match-found-${username}`, (data) => {
-    console.log("received");
-    const match = JSON.parse(data);
-    console.log(match.name);
-  });
+  // socket.on(`match-found-${username}`, (data) => {
+  //   console.log("received");
+  //   const match = JSON.parse(data);
+  //   console.log(match.name);
+  // });
 
   const handleClose = () => setShow(false);
 
@@ -127,6 +126,7 @@ const Home = (props: any) => {
     const token = userInfo.token;
     const username = userInfo.user.username;
 
+    setShow(true);
     // delete user match first
     await fetch(MATCH_API_URL + "/matches", {
       method: "DELETE",
@@ -166,8 +166,6 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
-
-    // setShow(true);
     // // LOADING, wait for match
     // setTimeout(() => {
     //   history.push('/interview')
