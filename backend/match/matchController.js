@@ -19,7 +19,7 @@ exports.getCurrentUserMatch = function (req, res) {
             res.json({  // any res.json call should end the call
                 status: "Success",
                 message: 'Found current user status successfully',
-                data: "Current user: " + currentUser
+                data: currentUser
             });
         }
     });
