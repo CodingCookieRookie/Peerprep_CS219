@@ -73,20 +73,17 @@ const Home = (props: any) => {
   })
 
   const getUserMatchDetails = async () => {
-    await fetch(MATCH_API_URL + "/matches/match", {
+    await fetch(MATCH_API_URL + `/matches/match/${username}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
         "Content-type": "application/json; charset=utf-8",
         Authorization: "Bearer " + token,
       },
-      body: JSON.stringify({
-        username: username
-      }),
     })
       .then(async (res) => {
         var result = await res.json();
-        console.log(result.message);
+        console.log(result.data);
       })
       .catch((err) => {
         console.log(err);
