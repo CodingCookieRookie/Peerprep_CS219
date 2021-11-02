@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import { USER_API_URL, MATCH_API_URL, MATCH_URL} from "../../api";
+import { USER_API_URL, MATCH_API_URL, MATCH_URL, QNS_API_URL, API_HEADERS } from "../../api";
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
@@ -153,47 +153,66 @@ const Home = (props: any) => {
 
     setShow(true);
 
-    await fetch(Q)
-
-    // delete user match first
-    await fetch(MATCH_API_URL + "/matches", {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify({
-        username: username,
-      }),
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        console.log(result.message);
+    // Get question information
+    const qnTitle = await fetch(QNS_API_URL + `/questions/difficulty/${difficulty}`, {
+      method: "GET",
+      headers: API_HEADERS
+    }).then(async (res) => {
+      var result = await res.json();
+      console.log(res.data);
+      return result.data.title;
+    }).catch((err) => {
+      console.log(err);
+      return null; // TODO: require error handling
+    });
+    
+    if (qnTitle === null || qnTitle === undefined) {
+      console.log("Something went wrong.");
+      setShow(false);
+    } else {
+      // delete user match first
+      await fetch(MATCH_API_URL + "/matches", {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          username: username,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(async (res) => {
+          var result = await res.json();
+          console.log(result.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-    // request for a match
-    await fetch(MATCH_API_URL + "/matches", {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify({
-        username: username,
-      }),
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        console.log(result.message);
+      // request for a match
+      await fetch(MATCH_API_URL + "/matches", {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          username: username,
+          questionTitle: qnTitle, // add qn info
+          questionDifficulty: difficulty
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(async (res) => {
+          var result = await res.json();
+          console.log(result.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    
   };
 
   return (
