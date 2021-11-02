@@ -9,7 +9,7 @@ import "./chat.css";
 const CHAT_API_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
 
 const Chat = (props: any) => {
-  const { interviewId: interviewId } = useParams<any>();
+  const { interviewId } = useParams<string>();
   const username = props.username;
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);

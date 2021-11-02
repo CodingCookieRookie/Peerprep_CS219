@@ -29,7 +29,7 @@ const Home = (props: any) => {
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
   const [isOnline, setIsOnline] = useState(false);
-  const [wantsMatch, setWantsMatch] = useState("");
+  const [wantsMatch, setWantsMatch] = useState(false);
 
   const history = useHistory();
 
