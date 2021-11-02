@@ -21,7 +21,7 @@ const TOOLBAR_OPTIONS = [
 const Editor = () => {
   const [socket, setSocket] = useState<any>("");
   const [quill, setQuill] = useState<any>();
-  const { interviewId: interviewId } = useParams<any>();
+  const { interviewId } = useParams<String>();
 
   // connect to editor MS
   useEffect(() => {

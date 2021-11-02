@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import ReactScrollToBottom from "react-scroll-to-bottom";
 import io, { Socket } from "socket.io-client";
 import { Button, TextField, Chip, Typography } from '@material-ui/core';
-import { DEV_MSG_API_URL, PROD_MSG_API_URL } from "../../api";
+import { MSG_URL } from "../../api";
 import { useParams } from "react-router-dom";
 import "./chat.css";
-
-const CHAT_API_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
 
 const Chat = (props: any) => {
   const { interviewId } = useParams<string>();
@@ -18,7 +16,7 @@ const Chat = (props: any) => {
 
   useEffect(() => {
     if (connected === false) {
-      const socket = io(CHAT_API_URL);
+      const socket = io(MSG_URL);
       socket.on(interviewId, (msg: {text: string}) => {
         console.log(`Msg recvd ${msg.text}`)
         setMessages((history) => [...history, msg]);

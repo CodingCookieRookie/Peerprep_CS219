@@ -5,7 +5,7 @@ import { Accordion, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { API_HEADERS, PROD_QUESTIONS_API_URL } from "../../api";
+import { API_HEADERS, QNS_API_URL } from "../../api";
 
 const QuestionImage = ({ image }) => <img src={`data:image/jpeg;base64,${image}`} alt="question_image" />
 
@@ -16,7 +16,7 @@ const Landing = () => {
 
   // sample handler method for parsing image;
   const getQuestion = async () => {
-    await fetch(PROD_QUESTIONS_API_URL + "/questions/", {
+    await fetch(QNS_API_URL + "/questions/", {
       method: "GET",
       headers: API_HEADERS,
     })

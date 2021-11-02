@@ -5,7 +5,7 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL, PROD_MATCH_URL } from "../../api";
+import { USER_API_URL, MATCH_API_URL, MATCH_URL} from "../../api";
 import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
@@ -14,9 +14,8 @@ import { userInfo } from "os";
 import { stringify } from "querystring";
 
 
-const API_URL = PROD_API_URL || DEV_API_URL;
-const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
-const MATCH_URL = PROD_MATCH_URL;
+const API_URL = USER_API_URL;
+
 
 const Home = (props: any) => {
   const [socket, setSocket] = useState<Socket>();
@@ -153,6 +152,9 @@ const Home = (props: any) => {
   const navInterviewPage = async (difficulty) => {
 
     setShow(true);
+
+    await fetch(Q)
+
     // delete user match first
     await fetch(MATCH_API_URL + "/matches", {
       method: "DELETE",
