@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import Login from "./Pages/Login/login";
 import SignUp from "./Pages/SignUp/signup";
 import Home from "./Pages/Home/home";
+import Loading from "./Pages/Loading/loading";
 // import { v4 as uuidV4 } from "uuid";
 
 const loader = document.querySelector(".preloader");
@@ -25,6 +26,10 @@ const App = () => {
       <div>
         <BrowserRouter>
           {/* <Switch> */}
+          {/* <Route
+            exact path="/loading"
+            component={() => <Interview isRed={false} />}
+          /> */}
           <Route 
             exact path="/" 
             component={() => <Landing />} 
