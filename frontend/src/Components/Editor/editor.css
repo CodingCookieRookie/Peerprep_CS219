@@ -6,4 +6,7 @@
   width: 8.7in;
   height: 9.7in;
   overflow-y: scroll;
+  background-color: #3f3e3e;
+  margin-left: -2px;
+  color: #fffffd;
 }

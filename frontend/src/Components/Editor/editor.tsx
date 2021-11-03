@@ -11,7 +11,7 @@ const TOOLBAR_OPTIONS = [
   [{ font: [] }],
   [{ list: "ordered" }, { list: "bullet" }],
   ["bold", "italic", "underline"],
-  [{ color: [] }, { background: [] }],
+  [{ color: ["black", "cyan", "red", "white"] }, { background: [] }],
   [{ script: "sub" }, { script: "super" }],
   [{ align: [] }],
   ["image", "blockquote", "code-block"],
@@ -49,11 +49,11 @@ const Editor = () => {
     const interval = setInterval(() => {
       // console.log(quill.getContents())
       socket.emit("save-editor", quill.getContents());
-    }, 2000)
-    
+    }, 2000);
+
     return () => {
-      clearInterval(interval)
-    }
+      clearInterval(interval);
+    };
   }, [socket, quill]);
 
   // to send changes
@@ -101,12 +101,10 @@ const Editor = () => {
     setQuill(q);
   }, []);
   return (
-    <div 
-      className="ql-container" 
-    >
+    <div className="ql-container">
       <div ref={wrapperRef} />
     </div>
-    );
+  );
 };
 
 export default Editor;
