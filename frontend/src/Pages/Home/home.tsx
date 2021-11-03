@@ -28,7 +28,6 @@ const Home = (props: any) => {
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
   const [isOnline, setIsOnline] = useState(false);
-  const [wantsMatch, setWantsMatch] = useState(false);
 
   const history = useHistory();
 
@@ -89,7 +88,6 @@ const Home = (props: any) => {
         var data = result.data
         setXp(data.xp)
         setIsOnline(data.isOnline);
-        setWantsMatch(data.wantsMatch);
       })
       .catch((err) => {
         console.log(err);
@@ -150,12 +148,12 @@ const Home = (props: any) => {
     ["Hard", "danger"],
   ];
 
-  const navInterviewPage = async (difficulty) => {
+  const navInterviewPage = async (qnDifficulty) => {
 
     setShow(true);
 
-    // Get question information
-    const qnTitle = await fetch(QNS_API_URL + `/questions/difficulty/${difficulty}`, {
+    // Get a random question and its information
+    const qnTitle = await fetch(QNS_API_URL + `/questions/difficulty/${qnDifficulty}`, {
       method: "GET",
       headers: API_HEADERS
     }).then(async (res) => {
@@ -202,7 +200,7 @@ const Home = (props: any) => {
         body: JSON.stringify({
           username: username,
           questionTitle: qnTitle, // add qn info
-          questionDifficulty: difficulty
+          questionDifficulty: qnDifficulty
         }),
       })
         .then(async (res) => {
