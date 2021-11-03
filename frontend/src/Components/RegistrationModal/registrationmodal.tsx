@@ -2,15 +2,9 @@ import { Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 
 // Make reusable component
-const RegistrationModal = ({show, onHide}) => {
-
+const RegistrationModal = ({ show, onHide }) => {
   return (
-    <Modal
-      show={show}
-      onHide={onHide}
-      backdrop="static"
-      keyboard={false}
-    >
+    <Modal show={show} onHide={onHide} backdrop="static" keyboard={false}>
       <Modal.Header>
         <Modal.Title>Success!</Modal.Title>
       </Modal.Header>

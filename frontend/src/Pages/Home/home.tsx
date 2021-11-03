@@ -227,7 +227,7 @@ const Home = (props: any) => {
         </section>
         {/* landing content */}
         <LoadingModal show={show} onHide={handleClose} />
-        <Row className="row.match-my-cols">
+        <Row>
           <Col sm={7}>
             <Card className="mb-3 home-card">
               <Card.Body>

@@ -25,18 +25,12 @@ const App = () => {
       <div>
         <BrowserRouter>
           {/* <Switch> */}
-          <Route 
-            exact path="/" 
-            component={() => <Landing />} 
-          />
+          <Route exact path="/" component={() => <Landing />} />
           <Route
             path="/login"
             component={({ history }) => <Login history={history} />}
           />
-          <Route 
-            path="/signup"
-            component={() => <SignUp />} 
-          />
+          <Route path="/signup" component={() => <SignUp />} />
           <Route
             path="/home"
             component={({ history }) => <Home history={history} />}
