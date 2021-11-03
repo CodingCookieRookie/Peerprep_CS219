@@ -17,9 +17,13 @@ const matchSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
-    wantsMatch: {   // If offline, wantsMatch = false
-        type: Boolean,
-        required: true
+    questionTitle: {   // If offline, questionDifficulty = false
+        type: String,
+        required: false
+    },
+    questionDifficulty: {
+        type: String,
+        required: false
     }
 })
 

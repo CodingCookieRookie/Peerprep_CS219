@@ -12,7 +12,7 @@ exports.getCurrentUserMatch = function (req, res) {
             });
         } else if (currentUser == null) {
             res.status(400).json({
-                message: "Can't find current user with username: " + req.body.username,
+                message: "Can't find current user with username: " + req.params.username,
             });
         }
         else {
@@ -25,9 +25,9 @@ exports.getCurrentUserMatch = function (req, res) {
     });
 }
 
-// Can use this function to update xp/Online/WantsMatch/Match fields. 
+// Can use this function to update xp/Online/questionTitle/questionDifficulty/Match fields. 
 // If matching with friend, use this and set match to friend, if match field is not empty, it will try to find friend and update friend's match to current user as well
-// If successfully match with friend, will set wantsMatch to false as a 2nd layer precaution on top of match being not null to prevent other users from matching
+// If successfully match with friend, will set questionDifficulty to null as a 2nd layer precaution on top of match being not null to prevent other users from matching
 exports.updateCurrentUserMatch = function (req, res) {
     Match.findOne({username: req.body.username}, function (err, currentUser) {
         if (err) {
@@ -40,21 +40,24 @@ exports.updateCurrentUserMatch = function (req, res) {
             });
         }
         else {
-            if (req.body.isOnline== null) {
+            if (req.body.isOnline == null) {
                 res.status(400).json({
                     message: "Please input the isOnline status of user."
                 });
-            } else if (req.body.wantsMatch == null) {
-                res.status(400).json({
-                    message: "Please input the wantsMatch status of user."
-                });
-            } else {
+            }  else {
             currentUser.xp = req.body.xp;
             currentUser.isOnline = req.body.isOnline;
-            currentUser.wantsMatch = req.body.wantsMatch;
             if (req.body.match != null) {
                 // If there is a friend field added, update friend's match first
-                currentUser.wantsMatch = false;
+                // questionTitle and questionDifficulty will only be updated if matching with friend
+                currentUser.questionTitle = req.body.questionTitle;
+                currentUser.questionDifficulty = req.body.questionDifficulty;
+                if (currentUser.questionTitle == null || currentUser.questionDifficulty == null) {
+                    res.status(400).json({
+                        message: "Please add question title and difficulty to match with friend."
+                    });
+                    return;
+                }
                 currentUser.match = req.body.match;
                 Match.findOne({username: req.body.match}, function (err, friend) {
                     if (err) {
@@ -75,7 +78,8 @@ exports.updateCurrentUserMatch = function (req, res) {
                                 message: "Friend is in another interview!"
                             });
                         } else {
-                            friend.wantsMatch = false;
+                            friend.questionTitle = currentUser.questionTitle;
+                            friend.questionDifficulty = currentUser.questionDifficulty;
                             friend.match = currentUser.username;
                             friend.save( function (err) {
                                 // Check for save error
@@ -141,16 +145,17 @@ exports.matches = function (req, res) {
     });
 };
 
-/* Info on new: For each user, a match will be created with user's username, start xp = 0, with match = null, wantsMatch = false */
-/* Info on update: Update is called when click on match button -> wantsMatch status will be true -> If got match, match partner in both user's and match's match field will be updated */
-/* Info on delete: Match field on *CURRENT USER ONLY* will be null and wantsMatch status set to false */
+/* Info on new: For each user, a match will be created with user's username, start xp = 0, with match = null, questionDifficulty = "" */
+/* Info on update: Update is called when click on match button -> questionDifficulty status will be non-empty -> If got match, match partner in both user's and match's match field will be updated */
+/* Info on delete: Match field on *CURRENT USER ONLY* will be null and questionDifficulty status set to non-empty */
 
 exports.new = function (req, res) {
     var match = new Match();
     match.username = req.body.username;
     match.xp = 0;
     match.match = null;
-    match.wantsMatch = false;
+    match.questionTitle = null;
+    match.questionDifficulty = null;
     match.isOnline = true;
     if (req.body.username == null) {
         res.json({
@@ -196,24 +201,16 @@ exports.update = function (req, res, socket) {
             const currentUserName = currentMatch.username;
             const currentUserXP = currentMatch.xp;
             currentMatch.isOnline = true;
-            currentMatch.wantsMatch = true;
-            // if (!currentUserWantsMatch || !currentUserOnline) {
-            //     // If not online or does not want match, this function just updates and saves their isOnline and wantsMatch status to false
-            //     currentMatch.save(function (err) {
-            //         if (err) {
-            //             res.status(400).json({
-            //                 message: "Save error on current user online and match status: " + err.message,
-            //             });
-            //         } else {
-            //             res.json({  // any res.json call should end the call
-            //                 status: "Success",
-            //                 message: 'Set current user status successfully',
-            //                 data: "Current user: " + currentUserName
-            //             });
-            //         }
-            //     });
-            //     return;
-            // }
+            if (req.body.questionTitle == null || req.body.questionDifficulty == null) {
+                res.json({
+                    status: "failed",
+                    message: 'Need to input question title and difficulty to match',
+                    data: currentMatch
+                });
+                return;
+            }
+            currentMatch.questionTitle = req.body.questionTitle;
+            currentMatch.questionDifficulty = req.body.questionDifficulty;
             Match.find({match: null}, function (err, matches) {   // If have same xp
                 if (!matches || err) {
                     res.json({
@@ -224,11 +221,13 @@ exports.update = function (req, res, socket) {
                 } else {
                     var potentialExist = false;
                     for (index in matches) {
-                        if (matches[index].username != currentUserName && Math.abs(matches[index].xp - currentUserXP) < diff 
-                        && matches[index].wantsMatch && matches[index].isOnline) {
+                        if (matches[index].username != currentUserName && Math.abs(matches[index].xp - currentUserXP) < diff && matches[index].isOnline
+                        && matches[index].questionDifficulty === currentMatch.questionDifficulty) {
                         potentialExist = true;
                         console.log("potential name: " + matches[index].username);
                         matches[index].match = currentUserName;
+                        matches[index].questionTitle = currentMatch.questionTitle;
+                        matches[index].questionDifficulty = currentMatch.questionDifficulty;
                         matches[index].save(function (err) {
                             if (err) {
                                 res.status(400).json({
@@ -242,8 +241,8 @@ exports.update = function (req, res, socket) {
                                             message: "Save error on current user: " + err.message,
                                         });
                                     } else {
-                                        socket.emit(`match-found-${currentUserName}`, {match: matches[index].username});
-                                        socket.emit(`match-found-${matches[index].username}`, {match: currentUserName});
+                                        socket.emit(`match-found-${currentUserName}`, {match: matches[index].username, questionTitle: currentMatch.questionTitle, questionDifficulty: currentMatch.questionDifficulty});
+                                        socket.emit(`match-found-${matches[index].username}`, {match: currentUserName,  questionTitle: currentMatch.questionTitle, questionDifficulty: currentMatch.questionDifficulty});
                                         res.json({  // any res.json call should end the call
                                             status: "Success",
                                             message: 'Found both matches and saved both successfully',
@@ -257,7 +256,7 @@ exports.update = function (req, res, socket) {
                         } 
                     }
                     if(!potentialExist) {
-                        // Required to save your wantsMatch and isOnline status (if no match) which will be true now.
+                        // Required to save your questionTitle, questionDifficulty and isOnline status (if no match) which will be true now.
                         currentMatch.save(function (err) {
                             if (err) {
                                 res.status(400).json({
@@ -266,7 +265,7 @@ exports.update = function (req, res, socket) {
                             } else {
                                 res.json({  // any res.json call should end the call
                                     status: "Success",
-                                    message: 'Set current user wantMatch status to true successfully',
+                                    message: 'Set current user questionTitle and questionDifficulty status successfully',
                                     data: "Current user: " + currentUserName
                                 });
                             }
@@ -283,7 +282,7 @@ exports.update = function (req, res, socket) {
 // Handle delete match of user
 // Note does not delete any match. But delete a match's match
 // Should be called before finding match / done with interview
-// Existing match acts as a second layer to wantsMatch (If have existing match then will not match)
+// Existing match acts as a second layer to questionDifficulty (If have existing match then will not match)
 exports.delete = function (req, res) {
     Match.findOne({username: req.body.username}, function (err, match) { 
         if (!match || err) {
@@ -293,7 +292,8 @@ exports.delete = function (req, res) {
                 data: match
             });
         } else {
-            match.wantsMatch = false;   //prevent auto matching when exit interview
+            match.questionTitle = null;
+            match.questionDifficulty = null;   //prevent auto matching when exit interview
             match.match = null;
             match.save(function (err) {
                 if (err) {
