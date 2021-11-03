@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "users": "cd backend/users && npm run dev",
+    "editor": "cd backend/editor && npm run dev",
+    "match": "cd backend/match && npm run dev",
+    "message": "cd backend/message && npm run dev",
     "frontend": "cd frontend && npm run start",
-    "dev": "concurrently \"npm run users\" \"npm run frontend\"",
+    "dev": "concurrently \"npm run users\" \"npm run frontend\" \"npm run editor\" \"npm run match\" \"npm run message\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
