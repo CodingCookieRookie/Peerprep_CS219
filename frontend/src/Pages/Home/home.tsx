@@ -5,14 +5,20 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import { DEV_API_URL , PROD_API_URL, DEV_MATCH_API_URL, PROD_MATCH_API_URL, PROD_MATCH_URL } from "../../api";
-import LoadingModal from '../../Components/LoadingModal/loadingmodal';
+import {
+  DEV_API_URL,
+  PROD_API_URL,
+  DEV_MATCH_API_URL,
+  PROD_MATCH_API_URL,
+  PROD_MATCH_URL,
+} from "../../api";
+import LoadingModal from "../../Components/LoadingModal/loadingmodal";
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
-import io, { Socket }  from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { userInfo } from "os";
 import { stringify } from "querystring";
-
+import { FriendList } from "../../Components/FriendList/friendlist";
 
 const API_URL = PROD_API_URL || DEV_API_URL;
 const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
@@ -24,7 +30,7 @@ const Home = (props: any) => {
   // const [spin, setSpin] = useState(false);
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
-  const [friendData, setfriendData] = useState([]);
+  var [friendData, setfriendData] = useState([]);
   const [cookies] = useCookies(["userInfo"]);
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
@@ -32,6 +38,21 @@ const Home = (props: any) => {
   const [wantsMatch, setWantsMatch] = useState("");
 
   const history = useHistory();
+
+  // friendData = [
+  //     {
+  //       friend_username: "Test"
+  //     },
+  //     {
+  //       friend_username: "Le Pioche"
+  //     },
+  //     {
+  //       friend_username: "El Matador"
+  //     },
+  //     {
+  //       friend_username: "El Nino"
+  //     }
+  // ]
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
@@ -43,7 +64,7 @@ const Home = (props: any) => {
       const data = userInfo.user.username;
       setUsername(data);
       // console.log(userInfo.token)
-      getFriends(userInfo.token);
+      // getFriends(userInfo.token);
       setToken(userInfo.token);
     }
   }, [cookies.userInfo, history]);
@@ -72,8 +93,8 @@ const Home = (props: any) => {
 
   // get user's match details
   useEffect(() => {
-    getUserMatchDetails()
-  })
+    getUserMatchDetails();
+  });
 
   const getUserMatchDetails = async () => {
     await fetch(MATCH_API_URL + `/matches/match/${username}`, {
@@ -86,8 +107,8 @@ const Home = (props: any) => {
     })
       .then(async (res) => {
         var result = await res.json();
-        var data = result.data
-        setXp(data.xp)
+        var data = result.data;
+        setXp(data.xp);
         setIsOnline(data.isOnline);
         setWantsMatch(data.wantsMatch);
       })
@@ -109,7 +130,7 @@ const Home = (props: any) => {
         username: username,
         isOnline: isOnline,
         wantsMatch: false,
-        xp: xp
+        xp: xp,
       }),
     })
       .then(async (res) => {
@@ -119,7 +140,7 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const getFriends = async (token) => {
     await fetch(API_URL + "/user-friend/", {
@@ -151,7 +172,6 @@ const Home = (props: any) => {
   ];
 
   const navInterviewPage = async (difficulty) => {
-
     setShow(true);
     // delete user match first
     await fetch(MATCH_API_URL + "/matches", {
@@ -195,7 +215,7 @@ const Home = (props: any) => {
   };
 
   return (
-    <div className="content">
+    <div className="">
       <Header isSignedIn={true}></Header>
       <div className="home">
         <section className="pb-1 mb-2">
@@ -207,9 +227,9 @@ const Home = (props: any) => {
         </section>
         {/* landing content */}
         <LoadingModal show={show} onHide={handleClose} />
-        <Row>
+        <Row className="row.match-my-cols">
           <Col sm={7}>
-            <Card className="mb-3">
+            <Card className="mb-3 home-card">
               <Card.Body>
                 <Card.Title className="fs-4 mb-3"> User Profile</Card.Title>
                 <Card.Subtitle className="mt-2 mb-3 text-muted">
@@ -226,15 +246,10 @@ const Home = (props: any) => {
                 </Card.Subtitle>
               </Card.Body>
             </Card>
-            <Card className="">
-              <Card.Body className="d-grid gap-2">
-                <Card.Title className="fs-4 ">Past matches</Card.Title>
-                <PastMatch />
-              </Card.Body>
-            </Card>
+            <PastMatch />
           </Col>
           <Col sm={5}>
-            <Card className="mb-3">
+            <Card className="mb-3 home-card">
               <Card.Body>
                 <Card.Title className="fs-4 mb-3">
                   {" "}
@@ -266,48 +281,9 @@ const Home = (props: any) => {
                   will be weighted accordingly based on your peer's feedback of
                   you.
                 </Card.Text>
-                <Card border="light">
-                  <Card.Header>Get me PeerPrepped now!</Card.Header>
-                  <Card.Body className="d-grid gap-2">
-                    {difficultyData.map((item, idx) => {
-                      return (
-                        <Button
-                          className="my-2"
-                          variant={item[1]}
-                          key={idx}
-                          onClick={() => navInterviewPage(item[0])}
-                        >
-                          <Cursor className="mb-1 me-1" />
-                          {item[0]}
-                          <br />
-                        </Button>
-                      );
-                    })}
-                  </Card.Body>
-                </Card>
               </Card.Body>
             </Card>
-            <Card>
-              <Card.Header>Friend List</Card.Header>
-              <Card.Body className="d-grid gap-2">
-                <ListGroup>
-                  {friendData.map((item, idx) => {
-                    return (
-                      <ListGroup.Item
-                        action
-                        variant="primary"
-                        className="my-2"
-                        key={idx}
-                      >
-                        <PersonSquare className="mb-1 me-2" />
-                        {"  " + item.friend_username}
-                        <br />
-                      </ListGroup.Item>
-                    );
-                  })}
-                </ListGroup>
-              </Card.Body>
-            </Card>
+            <FriendList friendList={friendData} />
           </Col>
         </Row>
       </div>

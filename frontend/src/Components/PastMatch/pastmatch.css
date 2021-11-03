@@ -1,9 +1,13 @@
-.list-styles {
-    max-height: 350px;
-    margin-bottom: 10px;
-    overflow:scroll;
-    -webkit-overflow-scrolling: touch;
+.match {
+  overflow-y: scroll;
+  height: 400px;
+  /* overflow-y: scroll;
+    -webkit-overflow-scrolling: touch; */
 }
-.no-match {
-    height: 340px;
+
+.list-styles {
+  max-height: 350px;
+  margin-bottom: 10px;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
