@@ -53,7 +53,7 @@ const App = () => {
             <Redirect to={`/interview/${uuidV4()}`} />
           </Route> */}
           <Route
-            path="/interview/:interviewId"
+            path="/interview/:interviewId/:title"
             component={() => <Interview />}
           />
           {/* <Route path="/interview/" component={() => <Interview />} /> */}

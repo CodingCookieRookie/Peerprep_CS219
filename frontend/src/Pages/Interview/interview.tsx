@@ -22,7 +22,7 @@ const Interview = (props:any) => {
   const [cookies] = useCookies(["userInfo"]);
   const [show, setShow] = useState(false);
 
-  const { interviewId } = useParams<String>();
+  const [ interviewId, title ] = useParams<String>();
   const [isLoaded, setIsLoaded] = useState(false);
   const [question, setQuestion] = useState<any>(null);
   const [peer, setPeer] = useState("");
@@ -59,19 +59,19 @@ const Interview = (props:any) => {
   const getQuestionInfo = async() => {
     if (!isLoaded) {
       //TODO: Fetch Match details => Get Question Title and Difficulty
-      const qnTitle = await fetch(MATCH_API_URL + `/matches/match/${userInfo.user.username}`, {
-        method: "GET",
-        headers: API_HEADERS
-      }).then(async (res) => {
-        var result = await res.json();
-        console.log(res.data);
-        return result.data;
-      }).catch((err) => {
-        console.log(err);
-      })
+      // const qnTitle = await fetch(MATCH_API_URL + `/matches/match/${userInfo.user.username}`, {
+      //   method: "GET",
+      //   headers: API_HEADERS
+      // }).then(async (res) => {
+      //   var result = await res.json();
+      //   console.log(res.data);
+      //   return result.data;
+      // }).catch((err) => {
+      //   console.log(err);
+      // })
 
       //TODO: Fetch Question details
-      const qn = await fetch(QNS_API_URL + `/questions/${qnTitle}`, {
+      const qn = await fetch(QNS_API_URL + `/questions/${title}`, {
         method: "GET",
         headers: API_HEADERS
       }).then(async (res) => {

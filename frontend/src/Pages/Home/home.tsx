@@ -53,6 +53,7 @@ const Home = (props: any) => {
       const sock = io(MATCH_URL);
       sock.on(`match-found-${username}`, (result) => {
         const matchedUsername = result.match;
+        const questionTitle = result.questionTitle;
         console.log(`YOU ARE MATCHED WITH ... ${matchedUsername} !!!`);
         var sessionId = "";
         if (matchedUsername < username) {
@@ -61,7 +62,7 @@ const Home = (props: any) => {
           sessionId = username + "-" + matchedUsername;
         }
         console.log("SESSION ID IS: " + sessionId);
-        history.push(`/interview/${sessionId}`);
+        history.push(`/interview/${sessionId}/${questionTitle}`);
         sock.disconnect();
       });
       setSocket(sock);
