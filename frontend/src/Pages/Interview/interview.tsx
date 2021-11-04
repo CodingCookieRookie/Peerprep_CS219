@@ -118,7 +118,7 @@ const Interview = (props: any) => {
               component="p"
               style={{ textTransform: "capitalize" }}
             >
-              Peer: {"FAKE_NAME"}
+              Peer: {peer}
             </Typography>
             <div>
               <Button
