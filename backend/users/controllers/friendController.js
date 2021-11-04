@@ -37,11 +37,11 @@ exports.index = function (req, res) {
     })
 };
 
-// POST (Create new friend for a user)
+// POST (Create new friend for a user with friend_id as param)
 exports.new = async (req, res) => {
 
     const userId = getUserId(req.headers['authorization']);
-    const friendId = req.body.friendId
+    const friendId = req.body.friend_id
     const friend = await User.findOne({ _id: friendId });
 
     if (!friend) {
@@ -53,6 +53,39 @@ exports.new = async (req, res) => {
     const newFriend = new Friend({
         user_id: userId,
         friend_id: friendId,
+        friend_username: friend.username
+    })
+
+    newFriend.save((err) => {
+        if (err) {
+            return res.status(400).json({
+                message: err.message,
+            });
+        }
+        return res.status(201).json({
+            message: "New friend formed!",
+            data: newFriend,
+        });
+    })
+};
+
+// POST (Create new friend for a user with friend username as param)
+exports.new_by_username = async (req, res) => {
+
+    const userId = getUserId(req.headers['authorization']);
+    const username = req.body.friend_username
+    console.log(username)
+    const friend = await User.findOne({ username: username });
+
+    if (!friend) {
+        return res.status(404).json({
+            message: "Friend non existent.",
+        });
+    }
+
+    const newFriend = new Friend({
+        user_id: userId,
+        friend_id: friend._id,
         friend_username: friend.username
     })
 

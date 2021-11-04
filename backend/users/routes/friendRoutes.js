@@ -10,4 +10,8 @@ router
     .post(friendController.new)
     .delete(friendController.delete)
 
+router
+    .route("/user2/")
+    .post(friendController.new_by_username)
+
 module.exports = router;

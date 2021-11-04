@@ -18,12 +18,11 @@ import {
 import "./signup.css";
 import * as yup from "yup";
 import { Formik } from "formik";
-import { API_HEADERS, DEV_API_URL, PROD_API_URL, PROD_MATCH_API_URL, DEV_MATCH_API_URL } from "../../api";
+import { API_HEADERS, USER_API_URL, MATCH_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
-import RegistrationModal from '../../Components/RegistrationModal/registrationmodal';
+import RegistrationModal from "../../Components/RegistrationModal/registrationmodal";
 
-const API_URL = PROD_API_URL || DEV_API_URL;
-const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
+const API_URL = USER_API_URL;
 
 const SignUp = () => {
   const [spin, setSpin] = useState(false);
@@ -47,27 +46,29 @@ const SignUp = () => {
       .then(async (res) => {
         var result = await res.json();
         if (res.status === 201) {
-          await fetch(MATCH_API_URL + '/matches', {
+          await fetch(MATCH_API_URL + "/matches", {
             method: "POST",
             headers: {
               Accept: "application/json",
-              "Content-type": "application/json; charset=utf-8"
+              "Content-type": "application/json; charset=utf-8",
             },
             body: JSON.stringify({
-              username: e.username
-            })
+              username: e.username,
+            }),
           }).then(async (postRes) => {
             const postResult = await postRes.json();
-            if (postResult.message === 'New match created!' || postResult.status === 'success') {
-              setErrorMsg('');
+            if (
+              postResult.message === "New match created!" ||
+              postResult.status === "success"
+            ) {
+              setErrorMsg("");
               handleShow();
               return result;
             } else {
               setErrorMsg(postResult.message);
               return postResult.message;
             }
-
-          })
+          });
           return result;
         } else {
           setErrorMsg(result.message);

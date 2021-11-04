@@ -18,14 +18,21 @@ app.use(function(req, res, next) {
 });
 app.use(express.json())
 
+let bodyParser = require("body-parser");
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
+
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
 /*
 if (!dbUsername || !dbPassword) {
-  console.error(
-    "Please specify the database username and password as environment variables!"
-  );
-  process.exit(1);
+    console.error(
+        "Please specify the database username and password as environment variables!"
+    );
+    process.exit(1);
 }
 */
 
@@ -38,7 +45,7 @@ db.once("open", console.error.bind(console, "Db connected successfully"));
 
 // User microservice API status check
 app.get("/api/user", (req, res) =>
-  res.status(200).json({ message: "User microservice is working!" })
+    res.status(200).json({ message: "User microservice is working!" })
 );
 
 // User Microservice API status check at root level

@@ -6,10 +6,13 @@
 backend/users/.DS_Store
 backend/.DS_Store
 
+
+
 ## message ms
 /backend/message/node_modules
 /backend/message/package-lock.json
 /backend/message/.env
+backend/message/yarn.lock
 
 ## editor ms
 /backend/editor/node_modules
@@ -30,7 +33,7 @@ backend/.DS_Store
 /frontend/node_modules
 /frontend/build
 /frontend/package-lock.json
-/frontend/yarn.lock
+frontend/yarn.lock
 /frotnend/.env
 
 # Global

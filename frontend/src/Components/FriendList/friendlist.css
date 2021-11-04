@@ -1,0 +1,5 @@
+.card-matches {
+  max-height: 240px;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
