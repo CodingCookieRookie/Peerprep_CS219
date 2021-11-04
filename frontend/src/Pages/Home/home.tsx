@@ -5,14 +5,9 @@ import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
 import { Cursor, PersonSquare } from "react-bootstrap-icons";
-import {
-  DEV_API_URL,
-  PROD_API_URL,
-  DEV_MATCH_API_URL,
-  PROD_MATCH_API_URL,
-  PROD_MATCH_URL,
-} from "../../api";
 import LoadingModal from "../../Components/LoadingModal/loadingmodal";
+import { USER_API_URL, MATCH_API_URL, MATCH_URL, QNS_API_URL, API_HEADERS } from "../../api";
+import LoadingModal from '../../Components/LoadingModal/loadingmodal';
 import SelectInput from "@material-ui/core/Select/SelectInput";
 import PastMatch from "../../Components/PastMatch/pastmatch";
 import io, { Socket } from "socket.io-client";
@@ -20,9 +15,8 @@ import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
 
-const API_URL = PROD_API_URL || DEV_API_URL;
-const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
-const MATCH_URL = PROD_MATCH_URL;
+const API_URL = USER_API_URL;
+
 
 const Home = (props: any) => {
   const [socket, setSocket] = useState<Socket>();
@@ -35,7 +29,6 @@ const Home = (props: any) => {
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
   const [isOnline, setIsOnline] = useState(false);
-  const [wantsMatch, setWantsMatch] = useState("");
 
   const history = useHistory();
 
@@ -75,6 +68,7 @@ const Home = (props: any) => {
       const sock = io(MATCH_URL);
       sock.on(`match-found-${username}`, (result) => {
         const matchedUsername = result.match;
+        const questionTitle = result.questionTitle;
         console.log(`YOU ARE MATCHED WITH ... ${matchedUsername} !!!`);
         var sessionId = "";
         if (matchedUsername < username) {
@@ -83,7 +77,7 @@ const Home = (props: any) => {
           sessionId = username + "-" + matchedUsername;
         }
         console.log("SESSION ID IS: " + sessionId);
-        history.push(`/interview/${sessionId}`);
+        history.push(`/interview/${sessionId}/${questionTitle}`);
         sock.disconnect();
       });
       setSocket(sock);
@@ -110,7 +104,6 @@ const Home = (props: any) => {
         var data = result.data;
         setXp(data.xp);
         setIsOnline(data.isOnline);
-        setWantsMatch(data.wantsMatch);
       })
       .catch((err) => {
         console.log(err);
@@ -171,47 +164,70 @@ const Home = (props: any) => {
     ["Hard", "danger"],
   ];
 
-  const navInterviewPage = async (difficulty) => {
-    setShow(true);
-    // delete user match first
-    await fetch(MATCH_API_URL + "/matches", {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify({
-        username: username,
-      }),
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        console.log(result.message);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const navInterviewPage = async (qnDifficulty) => {
 
-    // request for a match
-    await fetch(MATCH_API_URL + "/matches", {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json; charset=utf-8",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify({
-        username: username,
-      }),
-    })
-      .then(async (res) => {
-        var result = await res.json();
-        console.log(result.message);
+    setShow(true);
+
+    // Get a random question and its information
+    const qnTitle = await fetch(QNS_API_URL + `/questions/difficulty/${qnDifficulty}`, {
+      method: "GET",
+      headers: API_HEADERS
+    }).then(async (res) => {
+      var result = await res.json();
+      console.log(res.data);
+      return result.data.title;
+    }).catch((err) => {
+      console.log(err);
+      return null; // TODO: require error handling
+    });
+    
+    if (qnTitle === null || qnTitle === undefined) {
+      console.log("Something went wrong.");
+      setShow(false);
+    } else {
+      // delete user match first
+      await fetch(MATCH_API_URL + "/matches", {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          username: username,
+        }),
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then(async (res) => {
+          var result = await res.json();
+          console.log(result.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // request for a match
+      await fetch(MATCH_API_URL + "/matches", {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          username: username,
+          questionTitle: qnTitle, // add qn info
+          questionDifficulty: qnDifficulty
+        }),
+      })
+        .then(async (res) => {
+          var result = await res.json();
+          console.log(result.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    
   };
 
   return (

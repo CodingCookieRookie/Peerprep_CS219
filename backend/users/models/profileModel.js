@@ -11,6 +11,10 @@ const interviewSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    question: {
+        type: String,
+        required: true,
+    }
 });
 
 const profileSchema = new mongoose.Schema({

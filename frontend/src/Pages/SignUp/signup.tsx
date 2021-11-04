@@ -18,18 +18,11 @@ import {
 import "./signup.css";
 import * as yup from "yup";
 import { Formik } from "formik";
-import {
-  API_HEADERS,
-  DEV_API_URL,
-  PROD_API_URL,
-  PROD_MATCH_API_URL,
-  DEV_MATCH_API_URL,
-} from "../../api";
+import { API_HEADERS, USER_API_URL, MATCH_API_URL } from "../../api";
 import { FailureAlert } from "../../Components/FailureAlert/failurealert";
 import RegistrationModal from "../../Components/RegistrationModal/registrationmodal";
 
-const API_URL = PROD_API_URL || DEV_API_URL;
-const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
+const API_URL = USER_API_URL;
 
 const SignUp = () => {
   const [spin, setSpin] = useState(false);

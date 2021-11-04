@@ -92,10 +92,14 @@ exports.newInterview = function (req, res) {
 
         const newInterview = profile.interviews.create({
             partnerUsername: req.body.partnerUsername,
+            question: req.body.question,
         });
 
         const interviews = profile.interviews;
         interviews.push(newInterview);
+        if (interviews.length > 5) {
+            interviews.shift();
+        }
         profile.save(function (err) {
             if (err) {
                 return res.status(400).json({
