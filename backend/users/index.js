@@ -68,7 +68,7 @@ app.use("/api/user-friend", verifyToken, friendRouter);
 const port = process.env.PORT || 5001;
 
 app.listen(port, () =>
-  console.log(`Server listening to port ${port} at ${uri}`)
+  console.log(`Server listening to port ${port}`)
 );
 
 module.exports = app;
