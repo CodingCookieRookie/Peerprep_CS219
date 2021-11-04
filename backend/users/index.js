@@ -18,13 +18,6 @@ app.use(function(req, res, next) {
 });
 app.use(express.json())
 
-let bodyParser = require("body-parser");
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    })
-);
-
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
 /*
