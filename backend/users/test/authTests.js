@@ -100,7 +100,7 @@ describe("Login unit tests", () => {
                 result.body.user.email.should.equal(users[0].email);
                 done();
             });
-    }).timeout(5000);
+    }).timeout(10000);
 
     it('Fail to login due to missing fields', (done) => {
         chai.request(app)
@@ -136,7 +136,7 @@ describe("Login unit tests", () => {
                 result.body.message.should.equal('Invalid credentials.');
                 done();
             });
-    }).timeout(5000);
+    }).timeout(10000);
 
 
     after('Clear data', () => {
