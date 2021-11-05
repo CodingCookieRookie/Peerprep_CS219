@@ -5,7 +5,7 @@ var fs = require('fs');
 var buffer = require('buffer');
 
 // count of each question type - update when question is added or removed
-const count = 5;
+const count = 3;
 
 
 // GET (all questions)
@@ -62,7 +62,7 @@ exports.level = (req, res) => {
             }
             return res.json({
                 message: "Random question: " + qns[0].title + " retrieved successfully!",
-                data: qns,
+                data: qns[0],
             });
         });
 };
