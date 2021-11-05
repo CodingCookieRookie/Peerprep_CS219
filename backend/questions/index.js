@@ -2,21 +2,24 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-let bodyParser = require('body-parser')
+
 // use cors
 let cors = require('cors');
 
 
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     next();
 });
-app.use(express.json())
 
 /*
 const dbUsername = process.env.DBUSERNAME;

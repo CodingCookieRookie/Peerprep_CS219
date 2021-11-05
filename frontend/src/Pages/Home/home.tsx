@@ -13,6 +13,7 @@ import io, { Socket } from "socket.io-client";
 import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
+import { createUniqueName } from "typescript";
 
 const API_URL = USER_API_URL;
 
@@ -90,7 +91,8 @@ const Home = (props: any) => {
   });
 
   const getUserMatchDetails = async () => {
-    await fetch(MATCH_API_URL + `/matches/match/${username}`, {
+    const uname = cookies.userInfo.user.username;
+    await fetch(MATCH_API_URL + `/matches/match/${uname}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -173,7 +175,7 @@ const Home = (props: any) => {
       headers: API_HEADERS
     }).then(async (res) => {
       var result = await res.json();
-      console.log(res.data);
+      console.log(result.data);
       return result.data.title;
     }).catch((err) => {
       console.log(err);
@@ -281,7 +283,7 @@ const Home = (props: any) => {
                 <div className="d-grid gap-2 mb-3">
                   {difficultyData.map((item, idx) => {
                     return (
-                      <Button className="my-2" variant={item[1]} key={idx}>
+                      <Button className="my-2" variant={item[1]} key={idx} onClick={() => navInterviewPage(item[0])}>
                         <Cursor className="mb-1 me-1" />
                         {item[0]}
                         <br />
