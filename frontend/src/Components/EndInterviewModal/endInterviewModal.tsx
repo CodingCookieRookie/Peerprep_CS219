@@ -4,15 +4,52 @@ import { BoxArrowInRight } from "react-bootstrap-icons";
 import Rating from "react-rating";
 import "./endInterviewModal.css";
 import feedback from "../../assets/feedback.svg";
+import { USER_API_URL } from "../../api";
+import { useCookies } from "react-cookie";
 
 const endInterviewMsg = `Congratulations, you have completed a PeerPrep interview session!
             Keep up the good work!`;
 
 const EndInterviewModal = ({ show, onHide }) => {
   const [draftReview, setDraftReview] = useState("");
+  const [isFriend, setIsFriend] = useState(false);
 
   const handleSubmit = () => {};
 
+  const addFriend = () => {
+    setIsFriend(true);
+    console.log(isFriend)
+  }
+
+  const removeFriend = () => {
+    setIsFriend(false);
+    console.log(isFriend)
+  }
+
+  const createFriend = async () => {
+
+    var token; // to assign
+    var uname; // to assign
+    if (isFriend) {
+      await fetch(USER_API_URL + `/user-friend/user2/${uname}`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then(async (res) => {
+          var result = await res.json();
+          if (res.status === 201) {
+            console.log("Friend added succesfully!")
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        }); 
+    }
+  }
   // return (
   //     <Modal
   //       show={show}
@@ -91,6 +128,7 @@ const EndInterviewModal = ({ show, onHide }) => {
                     name="group1"
                     type="radio"
                     id={`inline-radio-1`}
+                    onClick={addFriend}
                   />
                   <Form.Check
                     inline
@@ -98,6 +136,7 @@ const EndInterviewModal = ({ show, onHide }) => {
                     name="group1"
                     type="radio"
                     id={`inline-radio-2`}
+                    onClick={removeFriend}
                   />
                 </div>
             </Form.Group>
