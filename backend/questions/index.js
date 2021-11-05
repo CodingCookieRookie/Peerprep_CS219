@@ -1,7 +1,13 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const app = express();
+require('dotenv').config();
+// Import express
+let express = require('express');
+// Import Body parser
+let bodyParser = require('body-parser');
+// Import Mongoose
+let mongoose = require('mongoose');
+
+// Initialise the app
+let app = express();
 
 // use cors
 let cors = require('cors');
@@ -14,11 +20,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    next();
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  next();
 });
 
 /*
@@ -37,8 +43,15 @@ const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL ||
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "Error connecting to db"));
-db.once("open", console.error.bind(console, "Db connected successfully"));
+// db.on("error", console.error.bind(console, "Error connecting to db"));
+// db.once("open", console.error.bind(console, "Db connected successfully"));
+
+// Added check for DB connection
+if(!db) {
+  console.log("Error connecting db")
+}
+else
+  console.log("Db connected successfully")
 
 
 // Question API status check
