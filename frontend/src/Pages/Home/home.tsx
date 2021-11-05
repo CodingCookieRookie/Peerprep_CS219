@@ -180,11 +180,14 @@ const Home = (props: any) => {
       console.log(err);
       return null; // TODO: require error handling
     });
-    
+
     if (qnTitle === null || qnTitle === undefined) {
       console.log("Something went wrong.");
       setShow(false);
     } else {
+
+      console.log(`Title = ${qnTitle}\n`);
+      
       // delete user match first
       await fetch(MATCH_API_URL + "/matches", {
         method: "DELETE",
