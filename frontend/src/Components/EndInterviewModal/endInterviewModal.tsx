@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
+import Rating from "react-rating";
 import "./endInterviewModal.css";
+import feedback from "../../assets/feedback.svg";
 
 const endInterviewMsg = `Congratulations, you have completed a PeerPrep interview session!
-            Do continue to practice with PeerPrep and all the best for your technical interviews!`;
+            Keep up the good work!`;
 
 const EndInterviewModal = ({ show, onHide }) => {
   const [draftReview, setDraftReview] = useState("");
@@ -48,24 +50,56 @@ const EndInterviewModal = ({ show, onHide }) => {
 
   return (
     <>
-      <Modal size="xl" show={show} onHide={() => onHide()}>
+      <Modal size="lg" show={show} onHide={() => onHide()}>
         <Modal.Header closeButton>
           <Modal.Title id="end_session">End Session</Modal.Title>
         </Modal.Header>
         <Modal.Body className="custom-modal-body">
-          <h5 className="mt-4 mb-5">{endInterviewMsg}</h5>
-          <Form className="mt-5 mb-4">
+        <div className="text-center">
+          <img
+            className="center mb-1"
+            src={feedback}
+            alt="feedback"
+            width={250}
+            height={250}
+          />
+          </div>
+          <h5 className="mt-4 mb-3">{endInterviewMsg}</h5>
+          <Form className="mt-2 mb-3">
             <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
+              // className="mb-2"
+              // controlId="exampleForm.ControlTextarea1"
             >
-              <Form.Label>Please give your peer review</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={10}
-                value={draftReview}
-                onChange={(e) => setDraftReview(e.target.value)}
-              />
+              <Form.Label>Rate how well your peer has fared!</Form.Label>
+              <br/>
+              <div className="mb-2" style={{marginLeft: '-2px'}}>
+              <Rating
+                fractions={2}
+                onHover={(rate) => {
+                  // check if rendered in DOM first
+                  if (document.getElementById('label-quiet-onrate')) {
+                    document.getElementById('label-quiet-onrate').innerHTML = String(rate) || '';
+                  }
+                }}/>
+                </div>
+                <Form.Label>Are you willing to add your fellow peer as <strong>friend</strong> to tackle questions together in the future?</Form.Label>
+                <br/>
+                <div key={`inline-radio`} className="mb-3">
+                  <Form.Check
+                    inline
+                    label="Yes"
+                    name="group1"
+                    type="radio"
+                    id={`inline-radio-1`}
+                  />
+                  <Form.Check
+                    inline
+                    label="No"
+                    name="group1"
+                    type="radio"
+                    id={`inline-radio-2`}
+                  />
+                </div>
             </Form.Group>
           </Form>
         </Modal.Body>
