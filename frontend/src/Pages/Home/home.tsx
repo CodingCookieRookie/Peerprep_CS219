@@ -170,20 +170,17 @@ const Home = (props: any) => {
     setShow(true);
 
     // Get a random question and its information
-    const qn = await fetch(QNS_API_URL + `/questions/difficulty/${qnDifficulty.toLowerCase()}`, {
+    const qnTitle = await fetch(QNS_API_URL + `/questions/difficulty/${qnDifficulty.toLowerCase()}`, {
       method: "GET",
       headers: API_HEADERS
     }).then(async (res) => {
       var result = await res.json();
-      return result;
+      return result.data.title;
     }).catch((err) => {
       console.log(err);
       return null; // TODO: require error handling
     });
-
-    console.log(`Title = ${qn.data[0].title}\n`);
-    const qnTitle = qn;
-
+    
     if (qnTitle === null || qnTitle === undefined) {
       console.log("Something went wrong.");
       setShow(false);
