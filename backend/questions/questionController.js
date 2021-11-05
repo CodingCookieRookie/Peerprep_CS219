@@ -5,7 +5,7 @@ var fs = require('fs');
 var buffer = require('buffer');
 
 // count of each question type - update when question is added or removed
-const count = 3;
+const count = 5;
 
 
 // GET (all questions)
