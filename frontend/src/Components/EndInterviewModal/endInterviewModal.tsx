@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 import Rating from "react-rating";
+import { useHistory } from "react-router-dom";
 import "./endInterviewModal.css";
 import feedback from "../../assets/feedback.svg";
 import { USER_API_URL } from "../../api";
@@ -13,8 +14,13 @@ const endInterviewMsg = `Congratulations, you have completed a PeerPrep intervie
 const EndInterviewModal = ({ show, onHide }) => {
   const [draftReview, setDraftReview] = useState("");
   const [isFriend, setIsFriend] = useState(false);
+  const history = useHistory();
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+
+    //return to homepage
+    history.push("/home");
+  };
 
   const addFriend = () => {
     setIsFriend(true);
