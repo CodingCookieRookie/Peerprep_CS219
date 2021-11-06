@@ -6,7 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import { CardContent } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import { useEffect, useState, useParams } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Question from "../../Components/Question/question";
 import Loading from "../Loading/loading"
@@ -20,7 +21,8 @@ const Interview = (props: any) => {
   const [cookies] = useCookies(["userInfo"]);
   const [show, setShow] = useState(false);
 
-  const [ interviewId, title ] = useParams<String>();
+  const {interviewId} = useParams<any>();
+  const {title} = useParams<any>();
   const [isLoaded, setIsLoaded] = useState(false);
   const [question, setQuestion] = useState<any>(null);
   const [peer, setPeer] = useState("");
@@ -39,11 +41,11 @@ const Interview = (props: any) => {
     
   }, [setPeer, interviewId, cookies]);
 
-  userEffect(() => {
+  useEffect(() => {
     if (!isLoaded) {
       getQuestionInfo();
     };
-  }, [isLoaded])
+  });
 
   const onClickEndSession = () => {
     console.log("End session");
