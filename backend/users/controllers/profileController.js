@@ -74,7 +74,7 @@ exports.delete = function (req, res) {
 };
 
 
-// PUT (Create new interview)
+// POST (Create new interview)
 exports.newInterview = function (req, res) {
     Profile.findOne({ username: req.params.username }, function (err, profile) {
         if (err) {

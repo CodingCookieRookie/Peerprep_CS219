@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Profile = require("../models/profileModel");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
@@ -14,12 +15,12 @@ function validateEmail(email) {
 // Register (Create new user)
 exports.new = async (req, res) => {
     try {
-        const { username, email, password } = req.body
-        
+        const { username, email, password } = req.body;
+
         // Validate user input
         if (!(username && email && password)) {
             return res.status(400).json({
-                message: "Fill in all fields."
+                message: "Fill in all fields.",
             });
         }
 
@@ -35,23 +36,30 @@ exports.new = async (req, res) => {
         // check if user already exist
         // Validate if user exist in our database
         const oldUser = await User.findOne({ username: username });
-        
+
         if (oldUser !== null) {
-            return res.status(405).send({ 
-                message: "There exists a current account with this username. Please login or change your username." 
+            return res.status(405).send({
+                message:
+                    "There exists a current account with this username. Please login or change your username.",
             });
         }
 
         //Encrypt user password
         encryptedPassword = await bcrypt.hash(password, 10);
-    
+
         // Create user in our database
         const user = await User.create({
-            username: username, 
+            username: username,
             email: email,
-            password: encryptedPassword
+            password: encryptedPassword,
         });
-        
+
+        // Create user profile in our database
+        const profile = await Profile.create({
+            username: username,
+            interviews: [],
+        });
+ 
         // hide password
         const data = user.toObject();
         delete data.password;
@@ -59,7 +67,7 @@ exports.new = async (req, res) => {
         // return new user
         return res.status(201).json({
             message: "New user created.",
-            data: data
+            data: data,
         });
     } catch (err) {
         return res.status(500);

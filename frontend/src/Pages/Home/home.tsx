@@ -78,6 +78,7 @@ const Home = (props: any) => {
         }
         console.log("SESSION ID IS: " + sessionId);
         history.push(`/interview/${sessionId}/${questionTitle}`);
+        updateUserProfile(matchedUsername, questionTitle)
         sock.disconnect();
       });
       setSocket(sock);
@@ -110,6 +111,28 @@ const Home = (props: any) => {
         console.log(err);
       });
   };
+
+  const updateUserProfile = async (matchedUsername, questionTitle) => {
+    await fetch(USER_API_URL + `/user/profile/interview/${username}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        partnerUsername: matchedUsername,
+        question: questionTitle,
+      }),
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        console.log(result.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const handleClose = async () => {
     setShow(false);

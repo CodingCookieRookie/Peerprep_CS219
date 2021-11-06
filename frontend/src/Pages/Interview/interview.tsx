@@ -76,7 +76,7 @@ const Interview = (props: any) => {
         headers: API_HEADERS
       }).then(async (res) => {
         var result = await res.json();
-        console.log(res.data);
+        console.log(result.data);
         return result.data;
       }).catch((err) => {
         console.log(err);
