@@ -31,6 +31,7 @@ const Home = (props: any) => {
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
   const [isOnline, setIsOnline] = useState(false);
+  const [pastMatches, setPastMatches] = useState([]);
 
   const history = useHistory();
 
@@ -48,6 +49,7 @@ const Home = (props: any) => {
         friend_username: "El Nino"
       }
   ]
+  
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
@@ -55,12 +57,14 @@ const Home = (props: any) => {
     if (!userInfo) {
       history.push("/");
     } else {
+      // console.log(userInfo.token)
+      // getFriends(userInfo.token);
+
       // Set name
       const data = userInfo.user.username;
       setUsername(data);
-      // console.log(userInfo.token)
-      // getFriends(userInfo.token);
       setToken(userInfo.token);
+      getPastMatchDetails();
     }
   }, [cookies.userInfo, history]);
 
@@ -88,9 +92,35 @@ const Home = (props: any) => {
     }
   }, [socket, connected, username, history]);
 
+  const getPastMatchDetails = async () => {
+    if (cookies.userInfo) {
+      const uname = cookies.userInfo.user.username;
+      await fetch(USER_API_URL + `/user/profile/${uname}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then(async (res) => {
+          var result = await res.json();
+          var data = result.data;
+          if (res.status === 200) {
+            setPastMatches(data.interviews)
+            console.log(data)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+  }
+
   // get user's match details
   useEffect(() => {
     getUserMatchDetails();
+    getPastMatchDetails();
   });
 
   const getUserMatchDetails = async () => {
@@ -260,6 +290,8 @@ const Home = (props: any) => {
     
   };
 
+  
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -305,7 +337,7 @@ const Home = (props: any) => {
                 <EndInterviewModal show={showModal} onHide={handleCloseModal} />
               </Card.Body>
             </Card>
-            <PastMatch />
+            <PastMatch pastMatches={pastMatches}/>
           </Col>
           <Col sm={5}>
             <Card className="mb-3 home-card">

@@ -4,7 +4,7 @@ import friends from "../../assets/friends.svg";
 
 export const FriendList = (props: { friendList }) => {
   return (
-    <Card className="home-card" style={{ height: "202px" }}>
+    <Card className="home-card" style={{  minHeight: "222px" }}>
       <Card.Body className="d-grid">
         <Card.Title className="fs-4 mb-3"> Friend List</Card.Title>
         <div style={{ overflow: "scroll", height: "130px" }}>
@@ -29,7 +29,7 @@ export const FriendList = (props: { friendList }) => {
                     return (
                       <ListGroup.Item
                         action
-                        variant="primary"
+                        variant="warning"
                         // className="my-2"
                         key={idx}
                       >

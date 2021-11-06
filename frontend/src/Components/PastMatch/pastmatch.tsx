@@ -41,7 +41,10 @@ var dummyPastMatches = [
   },
 ];
 
-const PastMatch = () => {
+const PastMatch = (props: {pastMatches}) => {
+
+  const convertDateFormat = (date) => new Date(date).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+  
   return (
     // <div >
     <Card className="home-card" style={{ height: "465px" }}>
@@ -49,7 +52,7 @@ const PastMatch = () => {
         <Card.Title className="fs-4 ">Past matches</Card.Title>
 
         <div style={{ overflow: "scroll", height: "340px" }}>
-          {dummyPastMatches.length === 0 ? (
+          {props.pastMatches.length === 0 ? (
             <div className="text-center pb-5 mb-5">
               <img
                 className="mt-5 mb-2 img-fluid"
@@ -66,7 +69,7 @@ const PastMatch = () => {
             <>
               <div>
                 <ListGroup>
-                  {dummyPastMatches.map((item, idx) => {
+                  {props.pastMatches.map((item, idx) => {
                     return (
                       <ListGroup.Item
                         action
@@ -79,13 +82,13 @@ const PastMatch = () => {
                             className="mb-1 me-4"
                             style={{ fontSize: "16px" }}
                           />
-                          {item.pastMatch_username}
+                          {item.partnerUsername}
                         </div>
                         <QuestionSquare className="mb-1 me-4" />
                         {item.question}
                         <div>
                           <ClockFill className="mb-1 me-4" />
-                          {item.start_time} - {item.end_time}
+                          {convertDateFormat(item.date)} 
                         </div>
                       </ListGroup.Item>
                     );
@@ -93,7 +96,7 @@ const PastMatch = () => {
                 </ListGroup>
                 <div
                   className="text-center mt-2"
-                  style={{ height: dummyPastMatches.length <= 1 ? 230 : 125 }}
+                  style={{ height: props.pastMatches.length <= 1 ? 230 : 125 }}
                 >
                   <p>Reached the end of list.</p>
                 </div>
