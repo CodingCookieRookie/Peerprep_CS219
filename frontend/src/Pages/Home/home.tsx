@@ -14,6 +14,7 @@ import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
 import { createUniqueName } from "typescript";
+import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
 
 const API_URL = USER_API_URL;
 
@@ -22,6 +23,7 @@ const Home = (props: any) => {
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
   // const [spin, setSpin] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
   var [friendData, setfriendData] = useState([]);
@@ -32,20 +34,20 @@ const Home = (props: any) => {
 
   const history = useHistory();
 
-  // friendData = [
-  //     {
-  //       friend_username: "Test"
-  //     },
-  //     {
-  //       friend_username: "Le Pioche"
-  //     },
-  //     {
-  //       friend_username: "El Matador"
-  //     },
-  //     {
-  //       friend_username: "El Nino"
-  //     }
-  // ]
+  friendData = [
+      {
+        friend_username: "Test"
+      },
+      {
+        friend_username: "Le Pioche"
+      },
+      {
+        friend_username: "El Matador"
+      },
+      {
+        friend_username: "El Nino"
+      }
+  ]
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
@@ -92,6 +94,7 @@ const Home = (props: any) => {
   });
 
   const getUserMatchDetails = async () => {
+    if (cookies.userInfo) {
     const uname = cookies.userInfo.user.username;
     await fetch(MATCH_API_URL + `/matches/match/${uname}`, {
       method: "GET",
@@ -110,6 +113,7 @@ const Home = (props: any) => {
       .catch((err) => {
         console.log(err);
       });
+    }
   };
 
   const updateUserProfile = async (matchedUsername, questionTitle) => {
@@ -256,6 +260,15 @@ const Home = (props: any) => {
     
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const onClickEndSession = () => {
+    console.log("End session");
+    setShowModal(true);
+  };
+
   return (
     <div className="">
       <Header isSignedIn={true}></Header>
@@ -286,6 +299,10 @@ const Home = (props: any) => {
                 <Card.Subtitle className="mt-2 mb-3 text-muted">
                   {xp}
                 </Card.Subtitle>
+                <Button variant="primary" onClick={onClickEndSession}>
+                  End Session
+                </Button>
+                <EndInterviewModal show={showModal} onHide={handleCloseModal} />
               </Card.Body>
             </Card>
             <PastMatch />
