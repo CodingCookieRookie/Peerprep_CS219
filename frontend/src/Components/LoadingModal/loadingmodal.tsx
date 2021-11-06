@@ -9,9 +9,9 @@ const LoadingModal = ({ show, onHide }) => {
         <Modal.Header>
           <Modal.Title>Waiting for a match</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{display: 'flex', justifyContent:'center'}}>
           <Spinner
-            className="modal-body"
+            className="spinner-body"
             variant="primary"
             animation={"border"}
           />

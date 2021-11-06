@@ -4,7 +4,6 @@ import {
   Container,
   Form,
   InputGroup,
-  Modal,
   Spinner,
   Card,
 } from "react-bootstrap";
@@ -13,7 +12,6 @@ import {
   PersonCircle,
   Envelope,
   KeyFill,
-  BoxArrowInRight,
 } from "react-bootstrap-icons";
 import "./signup.css";
 import * as yup from "yup";
