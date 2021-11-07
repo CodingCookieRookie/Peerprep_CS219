@@ -99,7 +99,6 @@ const Home = (props: any) => {
   const getPastMatchDetails = async () => {
     if (cookies.userInfo) {
       const uname = cookies.userInfo.user.username;
-      console.log("token = " + token);
       await fetch(USER_API_URL + `/user/profile/${uname}`, {
         method: "GET",
         headers: {
@@ -113,7 +112,7 @@ const Home = (props: any) => {
           var data = result.data;
           if (res.status === 200) {
             setPastMatches(data.interviews)
-            console.log(data)
+            // console.log(data)
           }
         })
         .catch((err) => {
