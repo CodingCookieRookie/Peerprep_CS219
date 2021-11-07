@@ -30,6 +30,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   }, [setMyUsername, cookies.userInfo, myUsername, setToken])
 
 
+
    // connect to match socket
   useEffect(() => {
     const getSessionId = (matchUsername: String) => {
@@ -140,13 +141,38 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
       //wait for signal back
       console.log(`Waiting for signal from ${username}`);
 
-      //on match
-      console.log("On match!");
+      // //on match
+      // console.log("On match!");
+  }
+
+  const timeoutReset = async () => {
+     await new Promise((resolve) => setTimeout(resolve, 5000));
+     socket.emit(`@incoming_request_timeout`, {
+       requester: myUsername,
+       selectedFriend: username
+     });
+     declinedCallback();
+     setLoading(false);
+     setNeedsReset(true);
+     onHide();
+  }
+
+  useEffect(() => {
+    if (loading) {
+      timeoutReset();
+      
+    }
+  })
+
+  const matchModalOnHide = () => {
+    setLoading(false);
+    setNeedsReset(true);
+    onHide();
   }
 
   return (
     loading 
-        ? <LoadingModal show={loading} onHide={() => setLoading(false)} /> 
+        ? <LoadingModal show={loading} onHide={matchModalOnHide} /> 
         :
     <>
         <Modal show={show} onHide={() => onHide()} >

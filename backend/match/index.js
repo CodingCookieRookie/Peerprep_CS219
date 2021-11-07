@@ -91,6 +91,14 @@ io.on("connection", (socket) => {
         io.emit(`${requester}@friend_match`, response);
         console.log(`Response received from receiver ${response.receiver} for requester ${response.requester}`);
     })
+    socket.on("@incoming_request_timeout", request => {
+        const requester = request.requester;
+        const selectedFriend = request.selectedFriend;
+        console.log(`${requester}'s request TIME OUT!`)
+        io.emit(`${selectedFriend}@incoming_request_timeout`, {
+            requester: requester,
+        })
+    })
     console.log(socket.id);
 });
 

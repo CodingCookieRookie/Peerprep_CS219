@@ -189,10 +189,34 @@ const Home = (props: any) => {
       });
   };
 
-const addDeclinedNotification = () => {
+  const addDeclinedNotification = () => {
     NotifyHandler.add(
       "Declined",         // Notification title
       "The other party is busy at the moment.",       // Message
+      {
+        time: 2,                     // Time how much notification will be shown; default - 2
+        animationDelay: 0.3,         // Delay for notification animation; default - 0.3
+        animationTimeFunc: 'linear', // Animation func; default - 'linear'
+        position: 'RT',              // Position. Options - 'RT', 'RB', 'LT', 'LB'; default - 'RT'; ('RT' - Right Top, 'LB' - Left Bottom)
+        hide: true,                  // Hide after time (default - 2); default - true
+        progress: false               // Show progress line (timeline); default - true
+      },             // Settings
+      {
+        width: 220,                      // Notification width; default - 220
+        height: 54,                      // Notification height; default - 54
+        mainBackground: '#ff0000',       // Background color; default - '#16a085'
+        mainBackgroundHover: '#1abc9c',  // Background color on hover; default - '#1abc9c'
+        mainBackgroundHoverTime: 0.2, 
+      },             // Styles
+      () => { },       // Callback on click
+      () => { }        // Callback on time end
+    )
+  }
+
+  const addTimeoutNotification = () => {
+    NotifyHandler.add(
+      "Timeout",         // Notification title
+      "You did not accept the request within 2 minutes.",       // Message
       {
         time: 2,                     // Time how much notification will be shown; default - 2
         animationDelay: 0.3,         // Delay for notification animation; default - 0.3
@@ -286,9 +310,8 @@ const addDeclinedNotification = () => {
 
   useEffect(() => {
     if (connected && needsReset) {
-      console.log("================ RESET =================");
       socket.on(`${username}@incoming_request`, (result) => {
-        console.log("Received!" + result);
+        console.log("Received!" + result.requester);
         //pop up modal to join interview
         setIncomingRequestUsername(result.requester);
         setIncomingRequestQnTitle(result.qnTitle);
@@ -297,8 +320,24 @@ const addDeclinedNotification = () => {
       setSocket(socket);
       setNeedsReset(false);
     }
-  }, [connected, needsReset, socket, username, setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal]);
+  }, [connected, needsReset, socket, username, incomingRequestUsername,
+      setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal]);
 
+
+  useEffect(() => {
+    if (incomingRequestUsername && incomingRequestUsername !== "") {
+      socket.on(`${username}@incoming_request_timeout`, (result) => {
+        console.log(`Incoming request has timedout... ${result.requester}  : ${incomingRequestUsername}`);
+        if (result.requester === incomingRequestUsername) {
+          setIncomingRequestUsername();
+          setIncomingRequestQnTitle();
+          addTimeoutNotification();
+          setShowPopupModal(false);
+        }
+      });
+      setSocket(socket);
+    }
+  }, [incomingRequestUsername, username, socket])
   
 
   // const renderStickers = (xp) => {
@@ -411,7 +450,7 @@ const addDeclinedNotification = () => {
           </h4>
         </section>
         {/* landing content */}
-        <NotifyComponent maxNotify={ 2 } />  
+        <NotifyComponent maxNotify={ 1 } />  
         <LoadingModal show={show} onHide={handleClose} />
         <RequestModal show={showPopupModal} onHide={requestModalOnHide} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
