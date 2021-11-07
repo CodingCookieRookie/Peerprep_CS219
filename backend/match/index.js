@@ -14,16 +14,6 @@ let app = express();
 // Import routes
 let apiRoutes = require("./api-routes");
 
-// http.listen(5004, async () => {
-//     try {
-//         await client.connect();
-//         collection = client.db("MyFirstDataBase").collection("matches");
-//         console.log("Listening on port :%s...", http.address().port);
-//     } catch (e) {
-//         console.error(e);
-//     }
-// });
-
 const dbUsername = process.env.DBUSERNAME;
 const dbPassword = process.env.DBPASSWORD;
 
