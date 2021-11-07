@@ -19,6 +19,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
   const [needsReset, setNeedsReset] = useState(true);
+  const [isAccepted, setIsAccepted] = useState(false);
   
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
       const sock = io(MATCH_URL);
       sock.on(`${myUsername}@friend_match`, (result) => {
         if (result.accept === true) {
+            setIsAccepted(true);
             const questionTitle = result.questionTitle;
             const sessionId = getSessionId(result.receiver);
             // console.log("SESSION ID IS: " + sessionId);
@@ -74,6 +76,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
             history.push(`/interview/${sessionId}/${questionTitle}`);           
         } else {
             console.log("Show declined notification..");
+            setIsAccepted(false);
             declinedCallback();
             setLoading(false);
             setNeedsReset(true);
@@ -146,21 +149,23 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   }
 
   const timeoutReset = async () => {
+    //set timeout to 30 seconds, user needs to accept before 30 seconds
      await new Promise((resolve) => setTimeout(resolve, 30000));
-     socket.emit(`@incoming_request_timeout`, {
-       requester: myUsername,
-       selectedFriend: username
-     });
-     declinedCallback();
-     setLoading(false);
-     setNeedsReset(true);
-     onHide();
+     if (isAccepted === false) {
+        socket.emit(`@incoming_request_timeout`, {
+          requester: myUsername,
+          selectedFriend: username
+        });
+        declinedCallback();
+        setLoading(false);
+        setNeedsReset(true);
+        onHide();
+     }
   }
 
   useEffect(() => {
     if (loading) {
       timeoutReset();
-      
     }
   })
 
