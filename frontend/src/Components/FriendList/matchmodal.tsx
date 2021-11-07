@@ -146,7 +146,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   }
 
   const timeoutReset = async () => {
-     await new Promise((resolve) => setTimeout(resolve, 5000));
+     await new Promise((resolve) => setTimeout(resolve, 30000));
      socket.emit(`@incoming_request_timeout`, {
        requester: myUsername,
        selectedFriend: username

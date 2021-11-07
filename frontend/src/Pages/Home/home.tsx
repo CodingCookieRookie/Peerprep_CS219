@@ -216,7 +216,7 @@ const Home = (props: any) => {
   const addTimeoutNotification = () => {
     NotifyHandler.add(
       "Timeout",         // Notification title
-      "You did not accept the request within 2 minutes.",       // Message
+      "You did not accept the request within 30 seconds.",       // Message
       {
         time: 2,                     // Time how much notification will be shown; default - 2
         animationDelay: 0.3,         // Delay for notification animation; default - 0.3
