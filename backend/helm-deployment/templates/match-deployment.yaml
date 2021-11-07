@@ -29,6 +29,8 @@ spec:
           name: match
           ports:
             - containerPort: 5004
-          resources: {}
+          resources:
+            requests:
+              cpu: "250m" # need 1/4 of a core to run
       restartPolicy: Always
 status: {}
