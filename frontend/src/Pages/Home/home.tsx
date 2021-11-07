@@ -13,6 +13,7 @@ import io, { Socket } from "socket.io-client";
 import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
+import MatchModal from "../../Components/FriendList/matchmodal";
 import { createUniqueName } from "typescript";
 import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
 
@@ -32,6 +33,9 @@ const Home = (props: any) => {
   const [xp, setXp] = useState("");
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
+  
+  const [matchModalShow, setMatchModalShow] = useState(true);
+  const [targetMatchUsername, setTargetMatchUsername] = useState("");
 
   const history = useHistory();
 
@@ -95,6 +99,7 @@ const Home = (props: any) => {
   const getPastMatchDetails = async () => {
     if (cookies.userInfo) {
       const uname = cookies.userInfo.user.username;
+      console.log("token = " + token);
       await fetch(USER_API_URL + `/user/profile/${uname}`, {
         method: "GET",
         headers: {
@@ -216,6 +221,13 @@ const Home = (props: any) => {
       });
   };
 
+
+  const onClickMatchFriend = (username: String) => {
+    console.log(`On click match friend with ${username}`);
+    setTargetMatchUsername(username);
+    setMatchModalShow(true);
+  }
+
   const difficultyData = [
     ["Easy", "success"],
     ["Medium", "primary"],
@@ -301,6 +313,12 @@ const Home = (props: any) => {
     setShowModal(true);
   };
 
+
+  const hideMatchModal = () => {
+    setMatchModalShow(false);
+  }
+
+
   return (
     <div className="">
       <Header isSignedIn={true}></Header>
@@ -374,7 +392,8 @@ const Home = (props: any) => {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <FriendList friendList={friendData} />
+            <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername}/>
+            <FriendList friendList={friendData} onClickCallback={onClickMatchFriend}/>
           </Col>
         </Row>
       </div>

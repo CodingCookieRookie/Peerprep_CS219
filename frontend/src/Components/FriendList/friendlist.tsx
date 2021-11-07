@@ -2,7 +2,9 @@ import { Card, ListGroup } from "react-bootstrap";
 import { PersonSquare } from "react-bootstrap-icons";
 import friends from "../../assets/friends.svg";
 
-export const FriendList = (props: { friendList }) => {
+
+export const FriendList = (props: { friendList, onClickCallback }) => {
+
   return (
     <Card className="home-card" style={{  minHeight: "222px" }}>
       <Card.Body className="d-grid">
@@ -32,7 +34,8 @@ export const FriendList = (props: { friendList }) => {
                         variant="warning"
                         // className="my-2"
                         key={idx}
-                      >
+                        onClick={() => props.onClickCallback(item.friend_username)}
+                      > 
                         <PersonSquare className="mb-1 me-2" />
                         {"  " + item.friend_username}
                         <br />
