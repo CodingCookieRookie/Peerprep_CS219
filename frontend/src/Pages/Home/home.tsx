@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
-import { Arrow90degUp, Cursor, PersonSquare } from "react-bootstrap-icons";
+import { Cursor, Person } from "react-bootstrap-icons";
 import LoadingModal from "../../Components/LoadingModal/loadingmodal";
 import { USER_API_URL, MATCH_API_URL, MATCH_URL, QNS_API_URL, API_HEADERS } from "../../api";
 import SelectInput from "@material-ui/core/Select/SelectInput";
@@ -14,7 +14,6 @@ import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
 import { createUniqueName } from "typescript";
-import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
 import beginner_knight from "../../assets/beginner_knight.svg";
 import decent_knight from "../../assets/decent_knight.svg";
 import pro_knight from "../../assets/pro_knight.svg";
@@ -36,7 +35,7 @@ const Home = (props: any) => {
   const [cookies] = useCookies(["userInfo"]);
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
-  const [sticker, setSticker] = useState({level: '', logo: ''});
+  const [sticker, setSticker] = useState({level: '', logo: '', color: ''});
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
 
@@ -178,17 +177,21 @@ const Home = (props: any) => {
   const handleSticker = (xp) => {
     var level;
     var logo;
+    var color;
     if (xp < 2000) {
       level = "Beginner"
       logo = beginner_knight;
+      color = 'default';
     } else if (xp < 20000) {
-      level = "Intermediate"
-      logo = decent_knight
+      level = "Intermediate";
+      logo = decent_knight;
+      color = 'primary';
     } else {
       level = "Master"
       logo = pro_knight
+      color = 'secondary';
     }
-    return { level, logo }
+    return { level, logo, color }
   }
 
   const difficultyData = [
@@ -317,6 +320,9 @@ const Home = (props: any) => {
     
   };
 
+  const setColor = () => {
+    return sticker.level === "Beginner" ? "default" : sticker.level === "Intermediate" ? "primary" : "success"
+  }
   
 
   const handleCloseModal = () => {
@@ -354,6 +360,7 @@ const Home = (props: any) => {
                 <Card.Text>
                   <strong> Rank: </strong>
                 </Card.Text>
+                <Chip size="medium" className="mb-3" label={sticker.level} color='default' clickable icon={<Person style={{ marginLeft: '10px', marginBottom: '2px'}}/>}  />
                 <Card.Text>
                   <strong> XP: </strong>
                 </Card.Text>

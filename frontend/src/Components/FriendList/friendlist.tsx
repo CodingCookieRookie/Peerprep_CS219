@@ -4,10 +4,10 @@ import friends from "../../assets/friends.svg";
 
 export const FriendList = (props: { friendList }) => {
   return (
-    <Card className="home-card" style={{  minHeight: "222px" }}>
+    <Card className="home-card" style={{  minHeight: "290px" }}>
       <Card.Body className="d-grid">
         <Card.Title className="fs-4 mb-3"> Friend List</Card.Title>
-        <div style={{ overflow: "scroll", height: "130px" }}>
+        <div style={{ overflow: "scroll", height: "200px" }}>
           {props.friendList.length === 0 ? (
             <div className="text-center no-match pb-4">
               <img
