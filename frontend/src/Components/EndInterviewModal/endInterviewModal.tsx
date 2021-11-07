@@ -97,7 +97,7 @@ const EndInterviewModal = ({ show, onHide }) => {
         <Modal.Header closeButton>
           <Modal.Title id="end_session">End Session</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="custom-modal-body">
+        <Modal.Body className="mx-5">
         <div className="text-center">
           <img
             className="center mb-1"
