@@ -312,3 +312,7 @@ exports.delete = function (req, res) {
        
     });
 };
+
+exports.matchFriend = function (req, res, socket) {
+    const qnTitle = req.body.qnTitle;
+}

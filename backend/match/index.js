@@ -88,3 +88,7 @@ const matchController = require('./matchController');
 app.put("/api/matches", (req, res) => {
     matchController.update(req, res, io);
 })
+
+app.put("/api/match_friend", (req, res) => {
+    matchController.matchFriend(req, res, io);
+})

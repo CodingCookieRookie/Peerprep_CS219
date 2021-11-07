@@ -14,8 +14,10 @@ import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
 import MatchModal from "../../Components/FriendList/matchmodal";
+import RequestModal from "../../Components/FriendList/requestmodal";
 import { createUniqueName } from "typescript";
 import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
+import { NotifyHandler, NotifyComponent } from 'react-notification-component';
 
 const API_URL = USER_API_URL;
 
@@ -34,9 +36,12 @@ const Home = (props: any) => {
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
   
-  const [matchModalShow, setMatchModalShow] = useState(true);
-  const [targetMatchUsername, setTargetMatchUsername] = useState("");
+  const [matchModalShow, setMatchModalShow] = useState(false);
+  const [targetMatchUsername, setTargetMatchUsername] = useState();
 
+  const [showPopupModal, setShowPopupModal] = useState(false);
+  const [incomingRequestUsername, setIncomingRequestUsername] = useState();
+  const [incomingRequestQnTitle, setIncomingRequestQnTitle] = useState();
   const history = useHistory();
 
   friendData = [
@@ -54,6 +59,30 @@ const Home = (props: any) => {
       }
   ]
   
+
+  const addDeclinedNotification = () => {
+    NotifyHandler.add(
+      "Declined",         // Notification title
+      "The other party is busy at the moment.",       // Message
+      {
+        time: 2,                     // Time how much notification will be shown; default - 2
+        animationDelay: 0.3,         // Delay for notification animation; default - 0.3
+        animationTimeFunc: 'linear', // Animation func; default - 'linear'
+        position: 'RT',              // Position. Options - 'RT', 'RB', 'LT', 'LB'; default - 'RT'; ('RT' - Right Top, 'LB' - Left Bottom)
+        hide: true,                  // Hide after time (default - 2); default - true
+        progress: false               // Show progress line (timeline); default - true
+      },             // Settings
+      {
+        width: 220,                      // Notification width; default - 220
+        height: 54,                      // Notification height; default - 54
+        mainBackground: '#ff0000',       // Background color; default - '#16a085'
+        mainBackgroundHover: '#1abc9c',  // Background color on hover; default - '#1abc9c'
+        mainBackgroundHoverTime: 0.2, 
+      },             // Styles
+      () => { },       // Callback on click
+      () => { }        // Callback on time end
+    )
+  }
 
   useEffect(() => {
     const userInfo = cookies.userInfo;
@@ -91,6 +120,14 @@ const Home = (props: any) => {
         updateUserProfile(matchedUsername, questionTitle)
         sock.disconnect();
       });
+      sock.on(`${username}@incoming_request`, (result) => {
+        console.log("Received!" + result);
+        //pop up modal to join interview
+        setIncomingRequestUsername(result.requester);
+        setIncomingRequestQnTitle(result.qnTitle);
+        setShowPopupModal(true);
+        sock.disconnect();
+      })
       setSocket(sock);
       setConnected(true);
     }
@@ -330,7 +367,9 @@ const Home = (props: any) => {
           </h4>
         </section>
         {/* landing content */}
+        <NotifyComponent maxNotify={ 2 } />  
         <LoadingModal show={show} onHide={handleClose} />
+        <RequestModal show={showPopupModal} onHide={() => setShowPopupModal(false)} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
           <Col sm={7}>
             <Card className="mb-3 home-card">
@@ -391,7 +430,7 @@ const Home = (props: any) => {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername}/>
+            <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/>
             <FriendList friendList={friendData} onClickCallback={onClickMatchFriend}/>
           </Col>
         </Row>
