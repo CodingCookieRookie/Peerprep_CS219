@@ -10,15 +10,22 @@ console.log("Start test.js ")
 // socket.on("receive-username", (msg) => {
 //     console.log(`Received msg ${msg}`);
 // })
-socket.on("connection", (socket) => {
-    console.log("connected");
-    socket.emit("test@incoming_request", {
-        requester: "user1",
-        qnTitle: "Two Sum"
-    })
+// socket.on("connection", (socket) => {
+//     console.log("connected");
+//     socket.emit("test@incoming_request", {
+//         requester: "user1",
+//         qnTitle: "Two Sum"
+//     })
 
-    socket.emit("match-found-test", {
-        match: "user1",
-        questionTitle: "Two Sum"
-    })
+//     socket.emit("match-found-test", {
+//         match: "user1",
+//         questionTitle: "Two Sum"
+//     })
+// })
+
+
+socket.emit("incoming_request", {
+    requester: 'test',
+    selectedFriend: 'user1',
+    qnTitle: "Two Sum"
 })

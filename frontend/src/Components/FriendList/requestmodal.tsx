@@ -71,6 +71,7 @@ const RequestModal = ({ show, onHide, friend, qnTitle }) => {
             <Button variant="primary" onClick={acceptInterview}>
             {"Yes"}
             </Button>
+            {" "}
             <Button variant="danger" onClick={declineInterview}>
             {"No"}
             </Button>

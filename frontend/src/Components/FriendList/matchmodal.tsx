@@ -18,6 +18,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
 
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
+  const [needsReset, setNeedsReset] = useState(true);
   
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
         });
     }
 
-    if (connected === false && myUsername) {
+    if (connected === false && myUsername && needsReset) {
       const sock = io(MATCH_URL);
       sock.on(`${myUsername}@friend_match`, (result) => {
         if (result.accept === true) {
@@ -74,14 +75,15 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
             console.log("Show declined notification..");
             declinedCallback();
             setLoading(false);
+            setNeedsReset(true);
             onHide();
         }
-        sock.disconnect();
       });
       setSocket(sock);
       setConnected(true);
+      setNeedsReset(false);
     }
-  }, [socket, connected, myUsername, cookies, history, setSocket, setConnected, username, declinedCallback, onHide]);
+  }, [socket, connected, myUsername, needsReset, cookies, history, setSocket, setConnected, username, declinedCallback, onHide, token]);
 
 
   const fetchRandomQuestion = async (qnDifficulty: String) => {
@@ -140,7 +142,6 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
 
       //on match
       console.log("On match!");
-
   }
 
   return (

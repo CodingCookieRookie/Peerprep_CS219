@@ -49,6 +49,8 @@ const Home = (props: any) => {
   const [showPopupModal, setShowPopupModal] = useState(false);
   const [incomingRequestUsername, setIncomingRequestUsername] = useState();
   const [incomingRequestQnTitle, setIncomingRequestQnTitle] = useState();
+  const [needsReset, setNeedsReset] = useState(true);
+
   const history = useHistory();
 
   friendData = [
@@ -276,20 +278,26 @@ const addDeclinedNotification = () => {
         console.log("SESSION ID IS: " + sessionId);
         history.push(`/interview/${sessionId}/${questionTitle}`);
         updateUserProfile(matchedUsername, questionTitle)
-        sock.disconnect();
       });
-      sock.on(`${username}@incoming_request`, (result) => {
+      setSocket(sock);
+      setConnected(true);
+    }
+  }, [socket, connected, username, history]);
+
+  useEffect(() => {
+    if (connected && needsReset) {
+      console.log("================ RESET =================");
+      socket.on(`${username}@incoming_request`, (result) => {
         console.log("Received!" + result);
         //pop up modal to join interview
         setIncomingRequestUsername(result.requester);
         setIncomingRequestQnTitle(result.qnTitle);
         setShowPopupModal(true);
-        sock.disconnect();
       })
-      setSocket(sock);
-      setConnected(true);
+      setSocket(socket);
+      setNeedsReset(false);
     }
-  }, [socket, connected, username, history]);
+  }, [connected, needsReset, socket, username, setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal]);
 
   
 
@@ -383,6 +391,13 @@ const addDeclinedNotification = () => {
     setMatchModalShow(false);
   }
 
+  const requestModalOnHide = () => {
+    console.log("Declined... requestModalOnHide called");
+    setIncomingRequestUsername();
+    setIncomingRequestQnTitle();
+    setNeedsReset(true);
+    setShowPopupModal(false);
+  }
 
   return (
     <div className="">
@@ -398,7 +413,7 @@ const addDeclinedNotification = () => {
         {/* landing content */}
         <NotifyComponent maxNotify={ 2 } />  
         <LoadingModal show={show} onHide={handleClose} />
-        <RequestModal show={showPopupModal} onHide={() => setShowPopupModal(false)} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
+        <RequestModal show={showPopupModal} onHide={requestModalOnHide} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
           <Col sm={7}>
             <Card className="mb-3 home-card">
@@ -469,7 +484,7 @@ const addDeclinedNotification = () => {
               </Card.Body>
             </Card>
             <>
-            {targetMatchUsername ? <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/> : null}
+            {targetMatchUsername && targetMatchUsername !== "" ? <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/> : null}
             </>
             <FriendList friendList={friendData} onClickCallback={onClickMatchFriend}/>
           </Col>
