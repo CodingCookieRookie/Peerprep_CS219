@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
-import { MATCH_URL} from "../../api";
+import { MATCH_URL } from "../../api";
 
 
 // Small popup for matching with a friend
@@ -33,19 +33,24 @@ const RequestModal = ({ show, onHide, friend, qnTitle }) => {
   }, [connected, myUsername, socket, setSocket]);
 
   const acceptInterview = () => {
-      socket.emit(`${friend}@friend_match`, {
+      socket.emit(`@friend_match`, {
           accept: true,
           questionTitle: qnTitle,
-          match: myUsername
+          receiver: myUsername,
+          requester: friend
       })
       var sessionId = friend < myUsername
         ? `${friend}-${myUsername}`
         : `${myUsername}=${friend}`;
+
+      onHide();
       history.push(`/interview/${sessionId}/${qnTitle}`);
   }
 
   const declineInterview = () => {
-      socket.emit(`${friend}@friend_match`, {
+      socket.emit(`@friend_match`, {
+          receiver: myUsername,
+          requester: friend,
           accept: false
       });
       onHide();
@@ -53,7 +58,12 @@ const RequestModal = ({ show, onHide, friend, qnTitle }) => {
 
   return (
     <>
-        <Modal show={show} onHide={() => onHide()} >
+        <Modal 
+            show={show}
+            onHide={() => onHide()}
+            backdrop="static"
+            keyboard={false}
+        >
         <Modal.Header>
             <Modal.Title>{`Incoming interview request from ${friend}!`}</Modal.Title>
         </Modal.Header>

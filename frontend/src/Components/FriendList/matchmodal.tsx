@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import io, { Socket } from "socket.io-client";
-import { MATCH_URL, QNS_API_URL, API_HEADERS } from "../../api";
+import { MATCH_URL, QNS_API_URL, API_HEADERS, MATCH_API_URL, USER_API_URL } from "../../api";
 
 
 // Small popup for matching with a friend
@@ -14,6 +14,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
   const [myUsername, setMyUsername] = useState();
+  const [token, setToken] = useState();
 
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
@@ -23,8 +24,9 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
     if (!myUsername) {
       const myUsernameFromCookies = cookies.userInfo.user.username;
       setMyUsername(myUsernameFromCookies);
+      setToken(cookies.userInfo.token)
     }
-  }, [setMyUsername, cookies.userInfo.user.username, myUsername])
+  }, [setMyUsername, cookies.userInfo, myUsername, setToken])
 
 
    // connect to match socket
@@ -61,10 +63,10 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
     if (connected === false && myUsername) {
       const sock = io(MATCH_URL);
       sock.on(`${myUsername}@friend_match`, (result) => {
-        if (result.accept) {
+        if (result.accept === true) {
             const questionTitle = result.questionTitle;
-            const sessionId = getSessionId(result.match);
-            console.log("SESSION ID IS: " + sessionId);
+            const sessionId = getSessionId(result.receiver);
+            // console.log("SESSION ID IS: " + sessionId);
             updateUserProfile(username, questionTitle);
             setLoading(false);
             history.push(`/interview/${sessionId}/${questionTitle}`);           
@@ -103,6 +105,8 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
       //fetch a random easy question
       const qnTitle = await fetchRandomQuestion("Easy");
 
+      console.log(`Question Title for match request = ${qnTitle}`);
+
       //delete match
       await fetch(MATCH_API_URL + "/matches", {
         method: "DELETE",
@@ -117,7 +121,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
       })
         .then(async (res) => {
           var result = await res.json();
-          console.log(result.message);
+          // console.log(result.message);
         })
         .catch((err) => {
           console.log(err);
@@ -125,8 +129,9 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
 
       //send signal to user:username
       console.log(`Send signal to user: ${username}`);
-      socket.emit(`${username}@incoming_request`, {
+      socket.emit(`incoming_request`, {
         requester: myUsername,
+        selectedFriend: username,
         qnTitle: qnTitle
       })
 

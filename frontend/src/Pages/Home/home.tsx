@@ -44,7 +44,7 @@ const Home = (props: any) => {
   const [pastMatches, setPastMatches] = useState([]);
   
   const [matchModalShow, setMatchModalShow] = useState(false);
-  const [targetMatchUsername, setTargetMatchUsername] = useState();
+  const [targetMatchUsername, setTargetMatchUsername] = useState("");
 
   const [showPopupModal, setShowPopupModal] = useState(false);
   const [incomingRequestUsername, setIncomingRequestUsername] = useState();
@@ -63,6 +63,9 @@ const Home = (props: any) => {
       },
       {
         friend_username: "El Nino"
+      },
+      {
+        friend_username: "user1"
       }
   ]
   
@@ -465,7 +468,9 @@ const addDeclinedNotification = () => {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/>
+            <>
+            {targetMatchUsername ? <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/> : null}
+            </>
             <FriendList friendList={friendData} onClickCallback={onClickMatchFriend}/>
           </Col>
         </Row>

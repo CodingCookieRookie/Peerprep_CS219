@@ -77,9 +77,20 @@ const io = require("socket.io")(http, {
 })
 
 io.on("connection", (socket) => {
-    // socket.on("send-username", username => {
-    //     io.emit("receive-username", "NAH USERNAME GIVE U " + username)
-    // })
+    socket.on("incoming_request", request => {
+        const requester = request.requester;
+        const selectedFriend = request.selectedFriend;
+        const qnTitle = request.qnTitle;
+        io.emit(`${selectedFriend}@incoming_request`, {
+            requester: requester,
+            qnTitle: qnTitle
+        })
+    })
+    socket.on("@friend_match", response => {
+        const requester = response.requester;
+        io.emit(`${requester}@friend_match`, response);
+        console.log(`Response received from receiver ${response.receiver} for requester ${response.requester}`);
+    })
     console.log(socket.id);
 });
 
@@ -89,6 +100,6 @@ app.put("/api/matches", (req, res) => {
     matchController.update(req, res, io);
 })
 
-app.put("/api/match_friend", (req, res) => {
-    matchController.matchFriend(req, res, io);
-})
+// app.put("/api/match_friend", (req, res) => {
+//     matchController.matchFriend(req, res, io);
+// })
