@@ -304,18 +304,6 @@ exports.delete = function (req, res) {
     const rating = req.body.rating;
     const peerMatched = req.body.peer;
 
-    if (!difficulty) {
-        return res.status(400).json({
-            message: "Missing question difficulty."
-        });
-    }
-
-    if (!rating) {
-        return res.status(400).json({
-            message: "Missing peer rating."
-        });
-    }
-
     Match.findOne({username: req.body.username}, function (err, match) { 
         if (!match || err) {
             res.json({
@@ -327,6 +315,7 @@ exports.delete = function (req, res) {
             match.questionTitle = null;
             match.questionDifficulty = null;   //prevent auto matching when exit interview
 
+            // To update xp of peer matched too from ratings
             if (rating && difficulty) {
                 Match.findOne({ username: peerMatched }, (err, peer) => {
                     if (!peer || err) {
