@@ -12,7 +12,6 @@
 .svn/
 
 # Common backup files
-./templates/ingress.yaml
 *.swp
 *.bak
 *.tmp
