@@ -16,11 +16,6 @@ steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['run', 'deploy', 'match', '--image', 'gcr.io/cs3219-team23-328712/match:$COMMIT_SHA', '--region', 'asia-east1']
-images:
-- gcr.io/cs3219-team23-328712/match:$COMMIT_SHA
-options:
-  logging: CLOUD_LOGGING_ONLY
-
 # Configure a kubectl workspace for this project
 - name: gcr.io/cloud-builders/kubectl
   args: ['set', 'image', 'deployment/match', 'gcr.io/cs3219-team23-328712/match:latest']
