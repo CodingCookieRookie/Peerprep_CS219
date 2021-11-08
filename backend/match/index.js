@@ -81,6 +81,7 @@ io.on("connection", (socket) => {
         const requester = request.requester;
         const selectedFriend = request.selectedFriend;
         const qnTitle = request.qnTitle;
+        console.log(`There is incoming request from ${requester} to ${selectedFriend}`);
         io.emit(`${selectedFriend}@incoming_request`, {
             requester: requester,
             qnTitle: qnTitle
@@ -89,15 +90,21 @@ io.on("connection", (socket) => {
     socket.on("@friend_match", response => {
         const requester = response.requester;
         io.emit(`${requester}@friend_match`, response);
-        console.log(`Response received from receiver ${response.receiver} for requester ${response.requester}`);
+        // console.log(`Response received from receiver ${response.receiver} for requester ${response.requester}`);
     })
     socket.on("@incoming_request_timeout", request => {
         const requester = request.requester;
         const selectedFriend = request.selectedFriend;
-        console.log(`${requester}'s request TIME OUT!`)
+        // console.log(`${requester}'s request TIME OUT!`)
         io.emit(`${selectedFriend}@incoming_request_timeout`, {
             requester: requester,
         })
+    })
+    socket.on("@disconnected", request => {
+        const interviewId = request.interviewId;
+        const userDisconnected = request.user;
+        console.log(`${userDisconnected} has disconnected from ${interviewId}`);
+        io.emit(`${interviewId}@disconnected`, {user: userDisconnected});
     })
     console.log(socket.id);
 });

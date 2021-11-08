@@ -23,6 +23,15 @@ const Chat = (props: any) => {
         setMessages((history) => [...history, msg]);
         // socket.disconnect();
       });
+      socket.on(`${interviewId}@disconnected`, (signal: {user: string}) => {
+        const user = signal.user;
+        console.log(`${user} has disconnected`);
+        if (user !== username) {
+          setMessages((history) => [...history, 
+            {sender: "system", text: `-- ${user} has disconnected --`}
+          ]);
+        }
+      })
       setSocket(socket);
       setConnected(true);
       setMessages((history) => [
@@ -31,7 +40,7 @@ const Chat = (props: any) => {
       ]);
     }
     return;
-  }, [interviewId, connected, socket]);
+  }, [interviewId, connected, socket, username]);
 
   const sendMessage = () => {
     if (draft !== "") {
