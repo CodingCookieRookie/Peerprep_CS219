@@ -47,8 +47,7 @@ steps:
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
     - TILLER_NAMESPACE=kube-system
-
-# timeout: 1200s
-# substitutions:
-#   _CUSTOM_REGION: europe-west4
-#   _CUSTOM_CLUSTER: gke-cluster
+images:
+- gcr.io/cs3219-team23-328712/match:$COMMIT_SHA
+options:
+  logging: CLOUD_LOGGING_ONLY
