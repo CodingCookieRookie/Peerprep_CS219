@@ -26,6 +26,7 @@ const Interview = (props: any) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [question, setQuestion] = useState<any>(null);
   const [peer, setPeer] = useState("");
+  const [user, setUser] = useState("");
 
 
   useEffect(() => {
@@ -33,11 +34,14 @@ const Interview = (props: any) => {
     console.log(`userInfo.username = ${userInfo.user.username}`);
     
     var arr = interviewId.split(userInfo.user.username);
+    setUser(userInfo.user.username);
     if (arr[0] === "") {
       setPeer(arr[1].substring(1, arr[1].length));
     } else {
       setPeer(arr[0].substring(0, arr[0].length - 1));
     }
+
+    console.log(peer)
     
   }, [setPeer, interviewId, cookies]);
 
@@ -45,7 +49,7 @@ const Interview = (props: any) => {
     if (!isLoaded) {
       getQuestionInfo();
     };
-  });
+  }, []);
 
   const onClickEndSession = () => {
     console.log("End session");
@@ -132,7 +136,7 @@ const Interview = (props: any) => {
                 End Session
               </Button>
             </div>
-            <EndInterviewModal show={show} onHide={handleClose} />
+            <EndInterviewModal show={show} onHide={handleClose} peer={peer} user={user} difficulty={question.difficulty} />
           </div>
           <div className="p-3 flex-shrink-2">
             <div className="d-flex justify-content-end ">
@@ -154,9 +158,8 @@ const Interview = (props: any) => {
                   <Question
                     title={question.title}
                     description={question.description}
-                    image={question.image} //TODO: Convert string to image (RISHI HELP)
-                    testInput={question.testcases.input}
-                    testOutput={question.testcases.output}
+                    image={question.image}
+                    testcases={question.testcases}
                   />
                 </div>
               </CardContent>
