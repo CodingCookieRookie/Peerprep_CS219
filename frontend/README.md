@@ -2,6 +2,8 @@
 We are using [React.ts](https://www.typescriptlang.org/docs/handbook/react.html), a TypeScript library for building user interfaces, for our frontend.
 [React.ts](https://www.typescriptlang.org/docs/handbook/react.html) is very similar to [React.js](https://reactjs.org/).
 
+Alternatively, you can look up on `README-React.md`, the default README file for React apps.
+
 The only difference between React.ts and React.js is the language used, where React.ts aims to build applications **declaratively** with components. 
 
 ### Why choose react?
