@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: match
+  name: match
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: match
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: match
+    spec:
+      containers:
+        - image: gcr.io/cs3219-team23-328712/match:latest
+          imagePullPolicy: Always
+          name: match
+          ports:
+            - containerPort: 5004
+          resources:
+            requests:
+              cpu: "100m" # need 1/10 of a core to run default
+      restartPolicy: Always
+status: {}
