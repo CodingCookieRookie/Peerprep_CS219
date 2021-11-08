@@ -47,7 +47,7 @@ else
 var port = process.env.PORT || 5004;
 
 // Send message for default URL
-app.get('/', (req, res) => res.send('Hello welcome to peerprep!'));
+app.get('/', (req, res) => res.send('Hello and welcome to peerprep!'));
 
 // Use Api routes in the App
 app.use('/api', apiRoutes);
