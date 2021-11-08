@@ -241,8 +241,18 @@ exports.update = function (req, res, socket) {
                                             message: "Save error on current user: " + err.message,
                                         });
                                     } else {
-                                        socket.emit(`match-found-${currentUserName}`, {match: matches[index].username, questionTitle: currentMatch.questionTitle, questionDifficulty: currentMatch.questionDifficulty});
-                                        socket.emit(`match-found-${matches[index].username}`, {match: currentUserName,  questionTitle: currentMatch.questionTitle, questionDifficulty: currentMatch.questionDifficulty});
+                                        socket.emit(`match-found-${currentUserName}`, {
+                                            match: matches[index].username,
+                                            questionTitle: currentMatch.questionTitle,
+                                            questionDifficulty: currentMatch.questionDifficulty
+                                        });
+
+                                        socket.emit(`match-found-${matches[index].username}`, {
+                                            match: currentUserName,
+                                            questionTitle: currentMatch.questionTitle,
+                                            questionDifficulty: currentMatch.questionDifficulty
+                                        });
+
                                         res.json({  // any res.json call should end the call
                                             status: "Success",
                                             message: 'Found both matches and saved both successfully',
@@ -312,3 +322,7 @@ exports.delete = function (req, res) {
        
     });
 };
+
+// exports.matchFriend = function (req, res, socket) {
+//     const qnTitle = req.body.qnTitle;
+// }

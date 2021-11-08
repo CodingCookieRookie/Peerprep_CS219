@@ -13,7 +13,11 @@ import io, { Socket } from "socket.io-client";
 import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
+import MatchModal from "../../Components/FriendList/matchmodal";
+import RequestModal from "../../Components/FriendList/requestmodal";
 import { createUniqueName } from "typescript";
+import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
+import { NotifyHandler, NotifyComponent } from 'react-notification-component';
 import beginner_knight from "../../assets/beginner_knight.svg";
 import decent_knight from "../../assets/decent_knight.svg";
 import pro_knight from "../../assets/pro_knight.svg";
@@ -38,6 +42,14 @@ const Home = (props: any) => {
   const [sticker, setSticker] = useState({level: '', logo: '', color: ''});
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
+  
+  const [matchModalShow, setMatchModalShow] = useState(false);
+  const [targetMatchUsername, setTargetMatchUsername] = useState("");
+
+  const [showPopupModal, setShowPopupModal] = useState(false);
+  const [incomingRequestUsername, setIncomingRequestUsername] = useState();
+  const [incomingRequestQnTitle, setIncomingRequestQnTitle] = useState();
+  const [needsReset, setNeedsReset] = useState(true);
 
   const history = useHistory();
 
@@ -53,6 +65,9 @@ const Home = (props: any) => {
       },
       {
         friend_username: "El Nino"
+      },
+      {
+        friend_username: "user1"
       }
   ]
   
@@ -174,6 +189,60 @@ const Home = (props: any) => {
       });
   };
 
+  const addDeclinedNotification = () => {
+    NotifyHandler.add(
+      "Declined",         // Notification title
+      "The other party is busy at the moment.",       // Message
+      {
+        time: 2,                     // Time how much notification will be shown; default - 2
+        animationDelay: 0.3,         // Delay for notification animation; default - 0.3
+        animationTimeFunc: 'linear', // Animation func; default - 'linear'
+        position: 'RT',              // Position. Options - 'RT', 'RB', 'LT', 'LB'; default - 'RT'; ('RT' - Right Top, 'LB' - Left Bottom)
+        hide: true,                  // Hide after time (default - 2); default - true
+        progress: false               // Show progress line (timeline); default - true
+      },             // Settings
+      {
+        width: 220,                      // Notification width; default - 220
+        height: 54,                      // Notification height; default - 54
+        mainBackground: '#ff0000',       // Background color; default - '#16a085'
+        mainBackgroundHover: '#1abc9c',  // Background color on hover; default - '#1abc9c'
+        mainBackgroundHoverTime: 0.2, 
+      },             // Styles
+      () => { },       // Callback on click
+      () => { }        // Callback on time end
+    )
+  }
+
+  const addTimeoutNotification = () => {
+    NotifyHandler.add(
+      "Timeout",         // Notification title
+      "You did not accept the request within 30 seconds.",       // Message
+      {
+        time: 2,                     // Time how much notification will be shown; default - 2
+        animationDelay: 0.3,         // Delay for notification animation; default - 0.3
+        animationTimeFunc: 'linear', // Animation func; default - 'linear'
+        position: 'RT',              // Position. Options - 'RT', 'RB', 'LT', 'LB'; default - 'RT'; ('RT' - Right Top, 'LB' - Left Bottom)
+        hide: true,                  // Hide after time (default - 2); default - true
+        progress: false               // Show progress line (timeline); default - true
+      },             // Settings
+      {
+        width: 220,                      // Notification width; default - 220
+        height: 54,                      // Notification height; default - 54
+        mainBackground: '#ff0000',       // Background color; default - '#16a085'
+        mainBackgroundHover: '#1abc9c',  // Background color on hover; default - '#1abc9c'
+        mainBackgroundHoverTime: 0.2, 
+      },             // Styles
+      () => { },       // Callback on click
+      () => { }        // Callback on time end
+    )
+  }
+
+  const onClickMatchFriend = (username: String) => {
+    console.log(`On click match friend with ${username}`);
+    setTargetMatchUsername(username);
+    setMatchModalShow(true);
+  }
+
   const handleSticker = (xp) => {
     var level;
     var logo;
@@ -237,13 +306,42 @@ const Home = (props: any) => {
         console.log("SESSION ID IS: " + sessionId);
         history.push(`/interview/${sessionId}/${questionTitle}`);
         updateUserProfile(matchedUsername, questionTitle)
-        sock.disconnect();
       });
       setSocket(sock);
       setConnected(true);
     }
   }, [socket, connected, username, history]);
 
+  useEffect(() => {
+    if (connected && needsReset) {
+      socket.on(`${username}@incoming_request`, (result) => {
+        console.log("Received!" + result.requester);
+        //pop up modal to join interview
+        setIncomingRequestUsername(result.requester);
+        setIncomingRequestQnTitle(result.qnTitle);
+        setShowPopupModal(true);
+      })
+      setSocket(socket);
+      setNeedsReset(false);
+    }
+  }, [connected, needsReset, socket, username, incomingRequestUsername,
+      setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal]);
+
+
+  useEffect(() => {
+    if (incomingRequestUsername && incomingRequestUsername !== "") {
+      socket.on(`${username}@incoming_request_timeout`, (result) => {
+        console.log(`Incoming request has timedout... ${result.requester}  : ${incomingRequestUsername}`);
+        if (result.requester === incomingRequestUsername) {
+          setIncomingRequestUsername();
+          setIncomingRequestQnTitle();
+          addTimeoutNotification();
+          setShowPopupModal(false);
+        }
+      });
+      setSocket(socket);
+    }
+  }, [incomingRequestUsername, username, socket])
   
 
   // const renderStickers = (xp) => {
@@ -334,6 +432,19 @@ const Home = (props: any) => {
     setShowModal(true);
   };
 
+
+  const hideMatchModal = () => {
+    setMatchModalShow(false);
+  }
+
+  const requestModalOnHide = () => {
+    console.log("Declined... requestModalOnHide called");
+    setIncomingRequestUsername();
+    setIncomingRequestQnTitle();
+    setNeedsReset(true);
+    setShowPopupModal(false);
+  }
+
   return (
     <div className="">
       <Header isSignedIn={true}></Header>
@@ -346,7 +457,9 @@ const Home = (props: any) => {
           </h4>
         </section>
         {/* landing content */}
+        <NotifyComponent maxNotify={ 1 } />  
         <LoadingModal show={show} onHide={handleClose} />
+        <RequestModal show={showPopupModal} onHide={requestModalOnHide} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
           <Col sm={7}>
             <Card className="mb-3 home-card">
@@ -417,12 +530,16 @@ const Home = (props: any) => {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <FriendList friendList={friendData} />
+            <>
+            {targetMatchUsername && targetMatchUsername !== "" ? <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/> : null}
+            </>
+            <FriendList friendList={friendData} onClickCallback={onClickMatchFriend}/>
           </Col>
         </Row>
       </div>
     </div>
   );
 };
+
 
 export default Home;

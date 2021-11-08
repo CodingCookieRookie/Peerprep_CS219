@@ -3,37 +3,39 @@
 /backend/users/node_modules
 /backend/users/package-lock.json
 /backend/users/.env
+/backend/users/yarn.lock
 backend/users/.DS_Store
 backend/.DS_Store
-
-
 
 ## message ms
 /backend/message/node_modules
 /backend/message/package-lock.json
 /backend/message/.env
-backend/message/yarn.lock
+/backend/message/yarn.lock
 
 ## editor ms
 /backend/editor/node_modules
 /backend/editor/package-lock.json
 /backend/editor/.env
+/backend/editor/yarn.lock
 
 ## match ms
 /backend/match/node_modules
 /backend/match/package-lock.json
 /backend/match/.env
+/backend/match/yarn.lock
 
 ## questions ms
 /backend/questions/node_modules
 /backend/questions/package-lock.json
 /backend/questions/.env
+/backend/questions/yarn.lock
 
 # Frontend
 /frontend/node_modules
 /frontend/build
 /frontend/package-lock.json
-frontend/yarn.lock
+/frontend/yarn.lock
 /frotnend/.env
 
 # Global

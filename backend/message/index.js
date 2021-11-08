@@ -39,3 +39,5 @@ io.on('connection', socket => {
 http.listen(port, () => {
   console.log(`Message ms listening to port ${port}`);
 })
+
+module.exports = http;
