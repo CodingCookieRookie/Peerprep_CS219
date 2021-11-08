@@ -1,5 +1,5 @@
 # cloudbuild.yaml for Helm Deployment
-
+timeout: 2000s
 steps:
 ##################### Editor #########################
 # Build the container image
@@ -88,18 +88,18 @@ steps:
   args: ['run', 'deploy', 'users', '--image', 'gcr.io/cs3219-team23-328712/users', '--region', 'asia-east1']
 
 ##################### Web #########################
-# # Build the container image
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['build', '-t', 'gcr.io/cs3219-team23-328712/web', './frontend']
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/web', './frontend']
 
-# # Push the container image to Container Registry
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['push', 'gcr.io/cs3219-team23-328712/web']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/web']
 
-# # Deploy container image to Cloud Run
-# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#   entrypoint: gcloud
-#   args: ['run', 'deploy', 'web', '--image', 'gcr.io/cs3219-team23-328712/web', '--region', 'asia-east1']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'web', '--image', 'gcr.io/cs3219-team23-328712/web', '--region', 'asia-east1']
 
 
 ##################### Helm Deployment #########################
