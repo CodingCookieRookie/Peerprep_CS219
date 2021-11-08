@@ -28,6 +28,8 @@ steps:
 - name: gcr.io/cloud-builders/kubectl
   args: ['helm', 'uninstall', 'peerup']
   env:
+    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
     - TILLER_NAMESPACE=kube-system
@@ -44,6 +46,8 @@ steps:
 - name: gcr.io/cloud-builders/kubectl
   args: ['helm', 'install', 'peerup', 'helm-deployment/']
   env:
+    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
     - TILLER_NAMESPACE=kube-system
