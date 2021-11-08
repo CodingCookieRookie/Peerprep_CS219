@@ -17,12 +17,12 @@ steps:
   entrypoint: gcloud
   args: ['run', 'deploy', 'match', '--image', 'gcr.io/cs3219-team23-328712/match:$COMMIT_SHA', '--region', 'asia-east1']
 # Configure a kubectl workspace for this project
-- name: gcr.io/cloud-builders/kubectl
-  args: ['set', 'image', 'deployment/match', 'match=gcr.io/cs3219-team23-328712/match:latest']
-  env:
-    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
-    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
-    - KUBECONFIG=/workspace/.kube/config
+# - name: gcr.io/cloud-builders/kubectl
+#   args: ['set', 'image', 'deployment/match', 'match=gcr.io/cs3219-team23-328712/match:latest']
+#   env:
+#     - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
+#     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
+#     - KUBECONFIG=/workspace/.kube/config
 
 - name: gcr.io/cloud-builders/kubectl
   id: Configure kubectl
@@ -57,6 +57,15 @@ steps:
     - TILLERLESS=false
     - TILLER_NAMESPACE=kube-system
 
+# Delete all svc in kubectl
+- name: gcr.io/cloud-builders/kubectl
+  args: ['delete', 'svc', '--all']
+  env:
+    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
+    - KUBECONFIG=/workspace/.kube/config
+
+
 # Deploy with Helm
 - name: gcr.io/cs3219-team23-328712/helm
   args: ['install', 'peerprep', 'helm-deployment/']
@@ -75,13 +84,6 @@ steps:
 #     - TILLERLESS=false
 #     - TILLER_NAMESPACE=kube-system
 
-# Delete all svc in kubectl
-- name: gcr.io/cloud-builders/kubectl
-  args: ['delete', 'svc', '--all']
-  env:
-    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
-    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
-    - KUBECONFIG=/workspace/.kube/config
 
 # # Deploy with Helm
 # - name: gcr.io/cloud-builders/kubectl
