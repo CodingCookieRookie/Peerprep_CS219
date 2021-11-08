@@ -21,7 +21,7 @@ steps:
   args: ['set', 'image', 'deployment/match', 'gcr.io/cs3219-team23-328712/match:latest']
   env:
     - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
-    - CLOUDSDK_CONTAINER_CLUSTER=gke_cs3219-team23-328712_asia-southeast1-a_peerup-cluster
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
 
 # Deploy with Helm
@@ -37,7 +37,7 @@ steps:
   args: ['delete', 'svc', '--all']
   env:
     - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
-    - CLOUDSDK_CONTAINER_CLUSTER=gke_cs3219-team23-328712_asia-southeast1-a_peerup-cluster
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
 
 # Deploy with Helm
