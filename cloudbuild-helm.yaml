@@ -58,21 +58,21 @@ steps:
   args: ['run', 'deploy', 'question', '--image', 'gcr.io/cs3219-team23-328712/question', '--region', 'asia-east1']
 
 ##################### Users #########################
-# Install
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-  dir: 'backend/users'
+# # Install
+# - name: 'gcr.io/cloud-builders/npm'
+#   args: ['install']
+#   dir: 'backend/users'
 
-# Build
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['run', 'build', '--if-present']
-  dir: 'backend/users'
+# # Build
+# - name: 'gcr.io/cloud-builders/npm'
+#   args: ['run', 'build', '--if-present']
+#   dir: 'backend/users'
 
-# Test
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['run', 'test']
-  env: ['CLOUD_DATABASE_URL=mongodb+srv://usersms-dev:1234@team23.77voc.mongodb.net/development?retryWrites=true&w=majority', 'DEV_ACCESS_TOKEN_SECRET=21c9aa63fb5ae198d6aa7e03e8bc82ed576716ffdd782056db9312e54bb15450ef79909df9c75ae1f922dcd55341ce107eeb86c252728ec3ea716cfc642107a1']
-  dir: 'backend/users'
+# # Test
+# - name: 'gcr.io/cloud-builders/npm'
+#   args: ['run', 'test']
+#   env: ['CLOUD_DATABASE_URL=mongodb+srv://usersms-dev:1234@team23.77voc.mongodb.net/development?retryWrites=true&w=majority', 'DEV_ACCESS_TOKEN_SECRET=21c9aa63fb5ae198d6aa7e03e8bc82ed576716ffdd782056db9312e54bb15450ef79909df9c75ae1f922dcd55341ce107eeb86c252728ec3ea716cfc642107a1']
+#   dir: 'backend/users'
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
