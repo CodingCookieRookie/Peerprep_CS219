@@ -25,8 +25,8 @@ steps:
     - KUBECONFIG=/workspace/.kube/config
 
 # Deploy with Helm
-- name: gcr.io/cs3219-team23-328712/helm
-  args: ['uninstall', 'peerup']
+- name: gcr.io/cloud-builders/kubectl
+  args: ['helm', 'uninstall', 'peerup']
   env:
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
@@ -41,8 +41,8 @@ steps:
     - KUBECONFIG=/workspace/.kube/config
 
 # Deploy with Helm
-- name: gcr.io/cs3219-team23-328712/helm
-  args: ['install', 'peerup', 'helm-deployment/']
+- name: gcr.io/cloud-builders/kubectl
+  args: ['helm', 'install', 'peerup', 'helm-deployment/']
   env:
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
