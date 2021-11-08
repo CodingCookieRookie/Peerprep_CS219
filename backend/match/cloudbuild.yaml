@@ -23,14 +23,7 @@ steps:
     - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
-
-- name: gcr.io/cloud-builders/kubectl
-  args: ['apply', '-f', 'tiller-clusterrolebinding.yaml']
-  env:
-    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
-    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
-    - KUBECONFIG=/workspace/.kube/config
-
+    
 # Deploy with Helm
 - name: gcr.io/cloud-builders/kubectl
   args: ['helm', 'uninstall', 'peerup']
