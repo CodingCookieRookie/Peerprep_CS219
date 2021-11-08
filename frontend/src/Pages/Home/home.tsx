@@ -41,20 +41,20 @@ const Home = (props: any) => {
 
   const history = useHistory();
 
-  friendData = [
-      {
-        friend_username: "Test"
-      },
-      {
-        friend_username: "Le Pioche"
-      },
-      {
-        friend_username: "El Matador"
-      },
-      {
-        friend_username: "El Nino"
-      }
-  ]
+  // friendData = [
+  //     {
+  //       friend_username: "Test"
+  //     },
+  //     {
+  //       friend_username: "Le Pioche"
+  //     },
+  //     {
+  //       friend_username: "El Matador"
+  //     },
+  //     {
+  //       friend_username: "El Nino"
+  //     }
+  // ]
   
 
   const getPastMatchDetails = async (uname, token) => {
@@ -216,7 +216,7 @@ const Home = (props: any) => {
       setToken(localToken);
       getUserMatchDetails();
       getPastMatchDetails(uname, localToken);
-
+      getFriends(localToken);
     }
   }, [cookies.userInfo, history, token, username]);
 
