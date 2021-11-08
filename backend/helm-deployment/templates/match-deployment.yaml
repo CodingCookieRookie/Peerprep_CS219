@@ -24,7 +24,8 @@ spec:
         io.kompose.service: match
     spec:
       containers:
-        - image: gcr.io/cs3219-team23-328712/match:$COMMIT_SHA
+        - image: gcr.io/cs3219-team23-328712/match:latest
+          command: ['sh', '-c', 'cp -r /app /srv; chown -R 82:82 /srv/app']
           imagePullPolicy: Always
           name: match
           ports:
