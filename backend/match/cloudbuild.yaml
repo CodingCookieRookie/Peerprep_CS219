@@ -39,9 +39,9 @@ steps:
     - upgrade
     - -i
     - peerprep
-    - ./helm-deployment
+    - ./backend/helm-deployment
     - -f
-    - ./helm-deployment/values.yaml
+    - ./backend/helm-deployment/values.yaml
   env:
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=true
