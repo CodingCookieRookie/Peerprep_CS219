@@ -1,49 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 import Rating from "react-rating";
 import { useHistory } from "react-router-dom";
 import "./endInterviewModal.css";
 import feedback from "../../assets/feedback.svg";
-import { USER_API_URL } from "../../api";
+import { MATCH_API_URL, USER_API_URL } from "../../api";
 import { useCookies } from "react-cookie";
 
 const endInterviewMsg = `Congratulations, you have completed a PeerPrep interview session!
             Keep up the good work!`;
 
-const EndInterviewModal = ({ show, onHide }) => {
-  const [draftReview, setDraftReview] = useState("");
+const EndInterviewModal = ({ show, onHide, peer, user, difficulty }) => {
+  const [rating, setRating] = useState(2.5)
   const [isFriend, setIsFriend] = useState(false);
+  const [token, setToken] = useState();
+  const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
 
   const handleSubmit = () => {
+    // return to homepage
+    console.log("Add friend: " + isFriend)
+    console.log("Allocated rating: " + rating)
 
-    //return to homepage
-    history.push("/home");
+    updateXp()
+    createFriend()
+    history.push("/home");    
   };
 
-  const addFriend = () => {
+  const addFriend = async () => {
     setIsFriend(true);
-    console.log(isFriend)
   }
 
-  const removeFriend = () => {
+  const removeFriend = async () => {
     setIsFriend(false);
-    console.log(isFriend)
+  }
+
+  const handleRatingChange = (e: number) => {
+    setRating(e)
+    console.log(e)
   }
 
   const createFriend = async () => {
 
-    var token; // to assign
-    var uname; // to assign
     if (isFriend) {
-      await fetch(USER_API_URL + `/user-friend/user2/${uname}`, {
+      await fetch(USER_API_URL + `/user-friend/user2/`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-type": "application/json; charset=utf-8",
           Authorization: "Bearer " + token,
         },
+        body: JSON.stringify({
+          friend_username: peer
+        })
       })
         .then(async (res) => {
           var result = await res.json();
@@ -56,6 +66,39 @@ const EndInterviewModal = ({ show, onHide }) => {
         }); 
     }
   }
+
+  const updateXp = async () => {
+      await fetch(MATCH_API_URL + `/matches/`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json; charset=utf-8",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+            peer: peer,
+            rating: rating,
+            difficulty: difficulty,
+            username: user
+          })
+      })
+        .then(async (res) => {
+          var result = await res.json();
+          if (res.status === 201) {
+            console.log("Friend added succesfully!")
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        }); 
+  }
+
+  useEffect(() => {
+    // Get params
+    const localToken = cookies.userInfo.token
+    setToken(localToken);
+  }, [rating, isFriend, cookies])
+  
   // return (
   //     <Modal
   //       show={show}
@@ -109,22 +152,29 @@ const EndInterviewModal = ({ show, onHide }) => {
           </div>
           <h5 className="mt-4 mb-3">{endInterviewMsg}</h5>
           <Form className="mt-2 mb-3">
-            <Form.Group
+            {/* <Form.Group
               // className="mb-2"
-              // controlId="exampleForm.ControlTextarea1"
-            >
+              controlId="group1"
+            > */}
+              <Form.Group className="mb-3" controlId="rating" style={{marginLeft: '-2px'}}>
               <Form.Label>Rate how well your peer has fared!</Form.Label>
               <br/>
-              <div className="mb-2" style={{marginLeft: '-2px'}}>
+              {/* <div className="mb-2" style={{marginLeft: '-2px'}}> */}
+              
               <Rating
                 fractions={2}
+                initialRating={rating}
                 onHover={(rate) => {
                   // check if rendered in DOM first
                   if (document.getElementById('label-quiet-onrate')) {
                     document.getElementById('label-quiet-onrate').innerHTML = String(rate) || '';
                   }
-                }}/>
-                </div>
+                }}
+                onChange={handleRatingChange}
+                />
+                </Form.Group>
+                {/* </div> */}
+                <Form.Group className="mb-3" controlId="friend" style={{marginLeft: '-2px'}}>
                 <Form.Label>Are you willing to add your fellow peer as <strong>friend</strong> to tackle questions together in the future?</Form.Label>
                 <br/>
                 <div key={`inline-radio`} className="mb-3">
@@ -145,7 +195,7 @@ const EndInterviewModal = ({ show, onHide }) => {
                     onClick={removeFriend}
                   />
                 </div>
-            </Form.Group>
+                </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
