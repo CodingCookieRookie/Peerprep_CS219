@@ -24,6 +24,15 @@ steps:
     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
 
+- name: gcr.io/cloud-builders/kubectl
+  id: Configure kubectl
+  args:
+    - cluster-info
+  env:
+    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
+    - KUBECONFIG=/workspace/.kube/config
+
 # # Deploy with Helm
 # - name: gcr.io/cs3219-team23-328712/helm
 #   args:
@@ -42,7 +51,7 @@ steps:
 
 # Deploy with Helm
 - name: gcr.io/cs3219-team23-328712/helm
-  args: ['helm', 'install', 'peerup', 'helm-deployment/']
+  args: ['install', 'peerup', 'helm-deployment/']
   env:
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
