@@ -18,7 +18,7 @@ steps:
   args: ['run', 'deploy', 'match', '--image', 'gcr.io/cs3219-team23-328712/match:$COMMIT_SHA', '--region', 'asia-east1']
 # Configure a kubectl workspace for this project
 - name: gcr.io/cloud-builders/kubectl
-  args: ['set', 'image', 'deployment/match', 'gcr.io/cs3219-team23-328712/match:latest']
+  args: ['set', 'image', 'deployment/match', 'match=gcr.io/cs3219-team23-328712/match:latest']
   env:
     - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
