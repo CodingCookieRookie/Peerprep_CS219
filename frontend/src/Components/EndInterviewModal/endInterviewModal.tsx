@@ -1,22 +1,35 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
 import { BoxArrowInRight } from "react-bootstrap-icons";
 import Rating from "react-rating";
 import { useHistory } from "react-router-dom";
 import "./endInterviewModal.css";
 import feedback from "../../assets/feedback.svg";
-import { MATCH_API_URL, USER_API_URL } from "../../api";
+import { MATCH_API_URL, USER_API_URL, MATCH_URL } from "../../api";
 import { useCookies } from "react-cookie";
+import io, { Socket } from "socket.io-client";
 
 const endInterviewMsg = `Congratulations, you have completed a PeerPrep interview session!
             Keep up the good work!`;
 
-const EndInterviewModal = ({ show, onHide, peer, user, difficulty }) => {
+const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty }) => {
   const [rating, setRating] = useState(2.5)
+  const [draftReview, setDraftReview] = useState("");
   const [isFriend, setIsFriend] = useState(false);
   const [token, setToken] = useState();
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
+
+  const [socket, setSocket] = useState<Socket>();
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    if (connected === false && sessionId) {
+      const sock = io(MATCH_URL);
+      setSocket(sock);
+      setConnected(true);
+    }
+  }, [connected, sessionId, socket, setSocket])
 
   const handleSubmit = () => {
     // return to homepage
@@ -26,6 +39,18 @@ const EndInterviewModal = ({ show, onHide, peer, user, difficulty }) => {
     updateXp()
     createFriend()
     history.push("/home");    
+    //signal to friend that current user has disconnected
+    socket.emit(`@disconnected`, 
+      { 
+        interviewId: sessionId,
+        user: cookies.userInfo.user.username
+      }
+    );
+    socket.disconnect();
+    setConnected(false);
+
+    //return to homepage
+    history.push("/home");
   };
 
   const addFriend = async () => {

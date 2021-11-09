@@ -3,6 +3,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 
+const http = require('http').createServer(app);
+
+const io = require('socket.io')(http, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  },
+});
+
 // use cors
 let cors = require('cors');
 
@@ -29,7 +38,7 @@ if (!dbUsername || !dbPassword) {
 }
 */
 
-const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "http://localhost:5001");
+const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "mongodb://localhost/users");
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
@@ -67,8 +76,8 @@ app.use("/api/user-friend", verifyToken, friendRouter);
 
 const port = process.env.PORT || 5001;
 
-app.listen(port, () =>
-  console.log(`Server listening to port ${port}`)
-);
+http.listen(port, () => {
+  console.log(`User ms listening to port ${port}`);
+})
 
 module.exports = app;

@@ -39,7 +39,7 @@ if (!dbUsername || !dbPassword) {
 }
 */
 
-const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "http://localhost:5005");
+const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "mongodb://localhost/questions");
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;

@@ -136,7 +136,7 @@ const Interview = (props: any) => {
                 End Session
               </Button>
             </div>
-            <EndInterviewModal show={show} onHide={handleClose} peer={peer} user={user} difficulty={question.difficulty} />
+            <EndInterviewModal sessionId={interviewId} show={show} onHide={handleClose} peer={peer} user={user} difficulty={question.difficulty} />
           </div>
           <div className="p-3 flex-shrink-2">
             <div className="d-flex justify-content-end ">
