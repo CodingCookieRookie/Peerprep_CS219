@@ -28,6 +28,8 @@ spec:
           name: question
           ports:
             - containerPort: 5005
-          resources: {}
+          resources: 
+            requests:
+              cpu: "100m" # need 1/10 of a core to run default
       restartPolicy: Always
 status: {}

@@ -28,6 +28,8 @@ spec:
           name: editor
           ports:
             - containerPort: 5003
-          resources: {}
+          resources: 
+            requests:
+                cpu: "100m" # need 1/10 of a core to run default
       restartPolicy: Always
 status: {}

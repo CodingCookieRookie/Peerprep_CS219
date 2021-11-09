@@ -26,18 +26,18 @@ steps:
     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
 
-- name: gcr.io/cs3219-team23-328712/helm
-  id: Deploy chart
-  args:
-    - upgrade
-    - -i
-    - peerprep
-    - ./backend/helm-deployment
-    # - -f
-    # - ./backend/helm-deployment/values.yaml
-  env:
-    - KUBECONFIG=/workspace/.kube/config
-    - TILLERLESS=true
+# - name: gcr.io/cs3219-team23-328712/helm
+#   id: Deploy chart
+#   args:
+#     - upgrade
+#     - -i
+#     - peerprep
+#     - ./backend/helm-deployment
+#     # - -f
+#     # - ./backend/helm-deployment/values.yaml
+#   env:
+#     - KUBECONFIG=/workspace/.kube/config
+#     - TILLERLESS=true
 
 # Set image of deployment match
 # - name: gcr.io/cloud-builders/kubectl
@@ -47,13 +47,13 @@ steps:
 #     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
 #     - KUBECONFIG=/workspace/.kube/config
 
-# Deploy with Helm
-# - name: gcr.io/cs3219-team23-328712/helm
-#   args: ['uninstall', 'peerprep']
-#   env:
-#     - KUBECONFIG=/workspace/.kube/config
-#     - TILLERLESS=false
-#     - TILLER_NAMESPACE=kube-system
+#Uninstall with Helm
+- name: gcr.io/cs3219-team23-328712/helm
+  args: ['uninstall', 'peerprep']
+  env:
+    - KUBECONFIG=/workspace/.kube/config
+    - TILLERLESS=false
+    - TILLER_NAMESPACE=kube-system
 
 # # Delete all svc in kubectl
 # - name: gcr.io/cloud-builders/kubectl
@@ -64,13 +64,13 @@ steps:
 #     - KUBECONFIG=/workspace/.kube/config
 
 
-# # Deploy with Helm
-# - name: gcr.io/cs3219-team23-328712/helm
-#   args: ['install', 'peerprep', './backend/helm-deployment']
-#   env:
-#     - KUBECONFIG=/workspace/.kube/config
-#     - TILLERLESS=false
-#     - TILLER_NAMESPACE=kube-system
+# Deploy with Helm
+- name: gcr.io/cs3219-team23-328712/helm
+  args: ['install', 'peerprep', './backend/helm-deployment']
+  env:
+    - KUBECONFIG=/workspace/.kube/config
+    - TILLERLESS=false
+    - TILLER_NAMESPACE=kube-system
 
 images:
 - gcr.io/cs3219-team23-328712/match:$COMMIT_SHA
