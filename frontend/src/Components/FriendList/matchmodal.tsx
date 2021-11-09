@@ -177,7 +177,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
 
   return (
     loading 
-        ? <LoadingModal show={loading} onHide={matchModalOnHide} /> 
+        ? <LoadingModal show={loading} onHide={matchModalOnHide} difficulty={"Random"}/> 
         :
     <>
         <Modal show={show} onHide={() => onHide()} >
