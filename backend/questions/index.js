@@ -54,6 +54,12 @@ else
   console.log("Db connected successfully")
 
 
+// Question endpoint status check
+app.get("/", (req, res) =>
+  res.status(200).json({ message: "Question microservice is running!" })
+);
+
+
 // Question API status check
 app.get("/api", (req, res) =>
   res.status(200).json({ message: "Question microservice is working!" })
