@@ -13,7 +13,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   const [loading, setLoading] = useState(false);
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
-  const [myUsername, setMyUsername] = useState();
+  const [myUsername, setMyUsername] = useState('');
   const [token, setToken] = useState();
 
   const [socket, setSocket] = useState<Socket>();
@@ -90,8 +90,8 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
   }, [socket, connected, myUsername, needsReset, cookies, history, setSocket, setConnected, username, declinedCallback, onHide, token]);
 
 
-  const fetchRandomQuestion = async (qnDifficulty: String) => {
-    const qnTitle = await fetch(QNS_API_URL + `/questions/difficulty/${qnDifficulty.toLowerCase()}`, {
+  const fetchRandomQuestion = async () => {
+    const qnTitle = await fetch(QNS_API_URL + `/random-question/`, {
       method: "GET",
       headers: API_HEADERS
     }).then(async (res) => {
@@ -109,7 +109,7 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
       console.log(`You want to match with ${username}!`);
 
       //fetch a random easy question
-      const qnTitle = await fetchRandomQuestion("Easy");
+      const qnTitle = await fetchRandomQuestion();
 
       console.log(`Question Title for match request = ${qnTitle}`);
 
