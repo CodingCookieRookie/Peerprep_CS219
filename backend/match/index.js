@@ -67,9 +67,6 @@ const io = require("socket.io")(http, {
 })
 
 io.on("connection", (socket) => {
-    // socket.on("send-username", username => {
-    //     io.emit("receive-username", "NAH USERNAME GIVE U " + username)
-    // })
     console.log(socket.id);
 });
 
