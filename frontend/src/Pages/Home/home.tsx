@@ -42,7 +42,7 @@ const Home = (props: any) => {
   const [sticker, setSticker] = useState({level: '', logo: '', color: ''});
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
-  
+  const [difficulty, setDifficulty] = useState('');
   const [matchModalShow, setMatchModalShow] = useState(false);
   const [targetMatchUsername, setTargetMatchUsername] = useState("");
 
@@ -348,7 +348,7 @@ const Home = (props: any) => {
   // }
 
   const navInterviewPage = async (qnDifficulty) => {
-
+    setDifficulty(qnDifficulty)
     setShow(true);
 
     // Get a random question and its information
@@ -455,7 +455,7 @@ const Home = (props: any) => {
         </section>
         {/* landing content */}
         <NotifyComponent maxNotify={ 1 } />  
-        <LoadingModal show={show} onHide={handleClose} />
+        <LoadingModal show={show} onHide={handleClose} difficulty={difficulty} />
         <RequestModal show={showPopupModal} onHide={requestModalOnHide} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
           <Col sm={7}>
