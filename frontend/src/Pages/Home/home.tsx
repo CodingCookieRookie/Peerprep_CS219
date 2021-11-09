@@ -211,6 +211,9 @@ const Home = (props: any) => {
   }
 
   const addTimeoutNotification = () => {
+    if (incomingRequestUsername !== undefined && incomingRequestUsername !== null && incomingRequestUsername !== "") {
+
+    
     NotifyHandler.add(
       "Timeout",         // Notification title
       "You did not accept the request within 30 seconds.",       // Message
@@ -232,6 +235,7 @@ const Home = (props: any) => {
       () => { },       // Callback on click
       () => { }        // Callback on time end
     )
+    } 
   }
 
   const onClickMatchFriend = (username: string) => {
@@ -333,7 +337,7 @@ const Home = (props: any) => {
         if (result.requester === incomingRequestUsername) {
           setIncomingRequestUsername(null);
           setIncomingRequestQnTitle(null);
-          addTimeoutNotification();
+          // addTimeoutNotification();
           setShowPopupModal(false);
         }
       });

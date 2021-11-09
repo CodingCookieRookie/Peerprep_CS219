@@ -150,17 +150,19 @@ const MatchModal = ({ show, onHide, username, declinedCallback }) => {
 
   const timeoutReset = async () => {
     //set timeout to 30 seconds, user needs to accept before 30 seconds
-     await new Promise((resolve) => setTimeout(resolve, 30000));
-     if (isAccepted === false) {
+     await new Promise((resolve) => setTimeout(resolve, 30000)).then(() => {
+       if (isAccepted === false) {
         socket.emit(`@incoming_request_timeout`, {
           requester: myUsername,
           selectedFriend: username
         });
-        declinedCallback();
         setLoading(false);
         setNeedsReset(true);
         onHide();
+        declinedCallback();
      }
+     });
+     
   }
 
   useEffect(() => {
