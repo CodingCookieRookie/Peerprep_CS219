@@ -14,7 +14,7 @@ services:
     image: editor
     build: ./editor
     ports:
-      - "5002:5002"
+      - "5003:5003"
   match:
       image: match
       build: ./match
