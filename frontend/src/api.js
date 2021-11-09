@@ -21,29 +21,29 @@ const PROD_MATCH_URL = "https://match-6i7ougacoq-de.a.run.app";
 
 
 
-// //* ========= EXPORTS =========== */
-// // API
-// export const USER_API_URL = PROD_API_URL || DEV_API_URL;
-// export const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
-// export const QNS_API_URL = PROD_QUESTIONS_API_URL || DEV_QUESTIONS_API_URL;
-
-
-// // Sockets
-// export const MATCH_URL = PROD_MATCH_URL || DEV_MATCH_URL;
-// export const MSG_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
-// export const EDITOR_URL = PROD_EDITOR_API_URL || DEV_EDITOR_API_URL;
-
-
+//* ========= EXPORTS =========== */
 // API
-export const USER_API_URL = DEV_API_URL;
-export const MATCH_API_URL = DEV_MATCH_API_URL;
-export const QNS_API_URL = DEV_QUESTIONS_API_URL;
+export const USER_API_URL = PROD_API_URL || DEV_API_URL;
+export const MATCH_API_URL = PROD_MATCH_API_URL || DEV_MATCH_API_URL;
+export const QNS_API_URL = PROD_QUESTIONS_API_URL || DEV_QUESTIONS_API_URL;
 
 
 // Sockets
-export const MATCH_URL = DEV_MATCH_URL;
-export const MSG_URL = DEV_MSG_API_URL;
-export const EDITOR_URL = DEV_EDITOR_API_URL;
+export const MATCH_URL = PROD_MATCH_URL || DEV_MATCH_URL;
+export const MSG_URL = PROD_MSG_API_URL || DEV_MSG_API_URL;
+export const EDITOR_URL = PROD_EDITOR_API_URL || DEV_EDITOR_API_URL;
+
+
+// // API
+// export const USER_API_URL = DEV_API_URL;
+// export const MATCH_API_URL = DEV_MATCH_API_URL;
+// export const QNS_API_URL = DEV_QUESTIONS_API_URL;
+
+
+// // Sockets
+// export const MATCH_URL = DEV_MATCH_URL;
+// export const MSG_URL = DEV_MSG_API_URL;
+// export const EDITOR_URL = DEV_EDITOR_API_URL;
 
 
 export var API_HEADERS = {
