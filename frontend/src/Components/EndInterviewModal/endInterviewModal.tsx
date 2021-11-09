@@ -12,7 +12,7 @@ import io, { Socket } from "socket.io-client";
 const endInterviewMsg = `Congratulations, you have completed a PeerPrep interview session!
             Keep up the good work!`;
 
-const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty }) => {
+const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty, friend }) => {
   const [rating, setRating] = useState(2.5)
   const [draftReview, setDraftReview] = useState("");
   const [isFriend, setIsFriend] = useState(false);
@@ -124,40 +124,6 @@ const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty }) 
     setToken(localToken);
   }, [rating, isFriend, cookies])
   
-  // return (
-  //     <Modal
-  //       show={show}
-  //       onHide={onHide}
-  //       // backdrop="static"
-  //       keyboard={false}
-  //       dialogClassName="modal-style"
-  //     >
-  //       <Modal.Header>
-  //         <Modal.Title>End Session</Modal.Title>
-  //       </Modal.Header>
-  //       <Modal.Body className="modal-body" style={{width: "400px", height: "150px"}}>
-  //         Congratulations, you have completed a PeerPrep interview session!
-  //         Do continue to practice with PeerPrep
-  //         and all the best for your technical interviews!
-  //         <Form>
-  //           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-  //             <Form.Label>Email address</Form.Label>
-  //             <Form.Control type="email" placeholder="name@example.com" />
-  //           </Form.Group>
-  //           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-  //             <Form.Label>Example textarea</Form.Label>
-  //             <Form.Control as="textarea" rows={3} />
-  //           </Form.Group>
-  //         </Form>
-  //       </Modal.Body>
-  //       <Modal.Footer>
-  //         <Button variant="primary" onClick={handleSubmit}>
-  //           <BoxArrowInRight className="mb-1 me-1" />
-  //           {" Submit "}
-  //         </Button>
-  //       </Modal.Footer>
-  //     </Modal>
-  // );
 
   return (
     <>
@@ -199,6 +165,8 @@ const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty }) 
                 />
                 </Form.Group>
                 {/* </div> */}
+                {
+                !friend ?
                 <Form.Group className="mb-3" controlId="friend" style={{marginLeft: '-2px'}}>
                 <Form.Label>Are you willing to add your fellow peer as <strong>friend</strong> to tackle questions together in the future?</Form.Label>
                 <br/>
@@ -221,6 +189,8 @@ const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty }) 
                   />
                 </div>
                 </Form.Group>
+                : <> </>
+                }
           </Form>
         </Modal.Body>
         <Modal.Footer>

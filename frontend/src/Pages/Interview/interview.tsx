@@ -15,7 +15,7 @@ import * as qns from "../../questions/question-easy";
 import "./interview.css";
 import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
 import knight from "../../assets/knight.svg";
-import { MATCH_API_URL, QNS_API_URL, API_HEADERS } from "../../api";
+import { MATCH_API_URL, QNS_API_URL, API_HEADERS, USER_API_URL } from "../../api";
 
 const Interview = (props: any) => {
   const [cookies] = useCookies(["userInfo"]);
@@ -27,6 +27,7 @@ const Interview = (props: any) => {
   const [question, setQuestion] = useState<any>(null);
   const [peer, setPeer] = useState("");
   const [user, setUser] = useState("");
+  const [isFriend, setIsFriend] = useState(false)
 
 
   useEffect(() => {
@@ -42,8 +43,9 @@ const Interview = (props: any) => {
     }
 
     console.log(peer)
+    checkFriend(cookies.userInfo.token, peer)
     
-  }, [setPeer, interviewId, cookies]);
+  }, [setPeer, interviewId, cookies, isFriend]);
 
   useEffect(() => {
     if (!isLoaded) {
@@ -94,6 +96,32 @@ const Interview = (props: any) => {
     }
   }
 
+  const checkFriend = async (token, peer) => {
+    console.log(peer)
+    await fetch(USER_API_URL + `/user-friend/${peer}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      }
+    }).then(async (res) => {
+      var result = await res.json();
+      console.log(result.data);
+      var status = result.data
+      if (status !== null) {
+        setIsFriend(true);
+      } else {
+        setIsFriend(false);
+      }
+      console.log("Friend status: " + isFriend)
+      return result.data;
+    }).catch((err) => {
+      console.log(err);
+      return null; // TODO: require error handling
+    });
+  }
+
   return (
     !isLoaded ? <Loading isRed={false} /> :
     <>
@@ -136,7 +164,15 @@ const Interview = (props: any) => {
                 End Session
               </Button>
             </div>
-            <EndInterviewModal sessionId={interviewId} show={show} onHide={handleClose} peer={peer} user={user} difficulty={question.difficulty} />
+            <EndInterviewModal 
+              sessionId={interviewId} 
+              show={show} 
+              onHide={handleClose} 
+              peer={peer} 
+              user={user} 
+              difficulty={question.difficulty} 
+              friend={isFriend}
+            />
           </div>
           <div className="p-3 flex-shrink-2">
             <div className="d-flex justify-content-end ">
