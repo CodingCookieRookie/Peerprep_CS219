@@ -30,6 +30,8 @@ spec:
             - containerPort: 5003
           resources: 
             requests:
-                cpu: "100m" # need 1/10 of a core to run default
+              cpu: "50m"
+            limits:
+              cpu: 200m
       restartPolicy: Always
 status: {}
