@@ -24,7 +24,7 @@ spec:
         io.kompose.service: question
     spec:
       containers:
-        - image: gcr.io/cs3219-team23-328712/question:latest
+        - image: gcr.io/cs3219-team23-328712/question
           name: question
           ports:
             - containerPort: 5005
