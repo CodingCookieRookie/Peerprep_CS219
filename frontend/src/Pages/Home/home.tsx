@@ -42,7 +42,7 @@ const Home = (props: any) => {
   const [sticker, setSticker] = useState({level: '', logo: '', color: ''});
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
-  
+  const [difficulty, setDifficulty] = useState('');
   const [matchModalShow, setMatchModalShow] = useState(false);
   const [targetMatchUsername, setTargetMatchUsername] = useState("");
 
@@ -53,23 +53,20 @@ const Home = (props: any) => {
 
   const history = useHistory();
 
-  friendData = [
-      {
-        friend_username: "Test"
-      },
-      {
-        friend_username: "Le Pioche"
-      },
-      {
-        friend_username: "El Matador"
-      },
-      {
-        friend_username: "El Nino"
-      },
-      {
-        friend_username: "user1"
-      }
-  ]
+  // friendData = [
+  //     {
+  //       friend_username: "Test"
+  //     },
+  //     {
+  //       friend_username: "Le Pioche"
+  //     },
+  //     {
+  //       friend_username: "El Matador"
+  //     },
+  //     {
+  //       friend_username: "El Nino"
+  //     }
+  // ]
   
 
   const getPastMatchDetails = async (uname, token) => {
@@ -237,7 +234,7 @@ const Home = (props: any) => {
     )
   }
 
-  const onClickMatchFriend = (username: String) => {
+  const onClickMatchFriend = (username: string) => {
     console.log(`On click match friend with ${username}`);
     setTargetMatchUsername(username);
     setMatchModalShow(true);
@@ -285,7 +282,7 @@ const Home = (props: any) => {
       setToken(localToken);
       getUserMatchDetails();
       getPastMatchDetails(uname, localToken);
-
+      getFriends(localToken);
     }
   }, [cookies.userInfo, history, token, username]);
 
@@ -333,8 +330,8 @@ const Home = (props: any) => {
       socket.on(`${username}@incoming_request_timeout`, (result) => {
         console.log(`Incoming request has timedout... ${result.requester}  : ${incomingRequestUsername}`);
         if (result.requester === incomingRequestUsername) {
-          setIncomingRequestUsername();
-          setIncomingRequestQnTitle();
+          setIncomingRequestUsername(null);
+          setIncomingRequestQnTitle(null);
           addTimeoutNotification();
           setShowPopupModal(false);
         }
@@ -351,7 +348,7 @@ const Home = (props: any) => {
   // }
 
   const navInterviewPage = async (qnDifficulty) => {
-
+    setDifficulty(qnDifficulty)
     setShow(true);
 
     // Get a random question and its information
@@ -439,8 +436,8 @@ const Home = (props: any) => {
 
   const requestModalOnHide = () => {
     console.log("Declined... requestModalOnHide called");
-    setIncomingRequestUsername();
-    setIncomingRequestQnTitle();
+    setIncomingRequestUsername(null);
+    setIncomingRequestQnTitle(null);
     setNeedsReset(true);
     setShowPopupModal(false);
   }
@@ -458,7 +455,7 @@ const Home = (props: any) => {
         </section>
         {/* landing content */}
         <NotifyComponent maxNotify={ 1 } />  
-        <LoadingModal show={show} onHide={handleClose} />
+        <LoadingModal show={show} onHide={handleClose} difficulty={difficulty} />
         <RequestModal show={showPopupModal} onHide={requestModalOnHide} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
           <Col sm={7}>

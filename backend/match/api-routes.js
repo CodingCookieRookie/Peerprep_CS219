@@ -23,5 +23,8 @@ router.route('/matches/match')
 router.route('/matches/match/:username')
     .get(matchController.getCurrentUserMatch)
 
+// router.route('/matches/update-xp/')
+//     .post(matchController.update_xp)
+
 // Export API routes
 module.exports = router;

@@ -1,8 +1,23 @@
 const e = require('express');
 
-Match = require('./matchModel');
+const Match = require('./matchModel');
 
 const diff = 100;
+
+// Assign XP randomised by difficulty level
+const assignXp = (difficulty, rating) => {
+    var xp = 0;
+    if (difficulty === "Easy") {
+        xp = rating * 20 + Math.floor((Math.random() * 30) + 1)
+    } else if (difficulty === "Medium") {
+        xp = rating * 30 + Math.floor((Math.random() * 40) + 1)
+    } else {
+        xp = rating * 50 + Math.floor((Math.random() * 50) + 1)
+    }
+    return xp;
+}
+
+
 // Find individual match only
 exports.getCurrentUserMatch = function (req, res) {
     Match.findOne({username: req.params.username}, function (err, currentUser) {
@@ -294,6 +309,11 @@ exports.update = function (req, res, socket) {
 // Should be called before finding match / done with interview
 // Existing match acts as a second layer to questionDifficulty (If have existing match then will not match)
 exports.delete = function (req, res) {
+
+    const difficulty = req.body.difficulty;
+    const rating = req.body.rating;
+    const peerMatched = req.body.peer;
+
     Match.findOne({username: req.body.username}, function (err, match) { 
         if (!match || err) {
             res.json({
@@ -304,6 +324,29 @@ exports.delete = function (req, res) {
         } else {
             match.questionTitle = null;
             match.questionDifficulty = null;   //prevent auto matching when exit interview
+
+            // To update xp of peer matched too from ratings
+            if (rating && difficulty) {
+                Match.findOne({ username: peerMatched }, (err, peer) => {
+                    if (!peer || err) {
+                        res.status(400).json({
+                            message: "Save error on updating peer: " + err.message,
+                        });
+                    } else {
+                        console.log(peer)
+                        peer.xp += assignXp(difficulty, rating)
+                        console.log(peer.xp)
+                        peer.save((err) => {
+                            if (err) {
+                                return res.status(400).json({
+                                    message: "Save error on deleting match: " + err.message,
+                                });
+                            } 
+                        })
+                    }
+                })
+            }
+
             match.match = null;
             match.save(function (err) {
                 if (err) {
@@ -322,6 +365,49 @@ exports.delete = function (req, res) {
        
     });
 };
+// exports.update_xp = async (req, res) => {
+
+//     const difficulty = req.body.difficulty;
+//     const rating = req.body.rating;
+//     const match = req.body.peer;
+
+//     if (!difficulty) {
+//         return res.status(400).json({
+//             message: "Missing question difficulty."
+//         });
+//     }
+
+//     if (!rating) {
+//         return res.status(400).json({
+//             message: "Missing peer rating."
+//         });
+//     }
+    
+//     console.log(match);
+
+//     Match.findOne({ username: match }, (err, peer) => {
+//         if (!peer || err) {
+//             res.status(400).json({
+//                 message: "Save error on updating peer: " + err.message,
+//             });
+//         } else {
+//             console.log(peer)
+//             peer.xp += assignXp(difficulty, rating)
+//             console.log(peer.xp)
+//             peer.save((err) => {
+//                 if (err) {
+//                     return res.status(400).json({
+//                         message: "Save error on deleting match: " + err.message,
+//                     });
+//                 } else {
+//                     return res.status(200).json({  // any res.json call should end the call
+//                         status: "Success",
+//                         message: 'Updated xp successfully.',
+//                     });
+//                 }
+//             })
+//         }
+//     })
 
 // exports.matchFriend = function (req, res, socket) {
 //     const qnTitle = req.body.qnTitle;
