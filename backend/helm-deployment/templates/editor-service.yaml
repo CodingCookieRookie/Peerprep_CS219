@@ -10,10 +10,11 @@ metadata:
   name: editor
 spec:
   ports:
-    - name: "5002"
-      port: 5002
-      targetPort: 5002
+    - name: "5003"
+      port: 5003
+      targetPort: 5003
   selector:
     io.kompose.service: editor
+  type: LoadBalancer
 status:
   loadBalancer: {}
