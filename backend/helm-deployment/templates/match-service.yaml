@@ -10,11 +10,11 @@ metadata:
   name: match
 spec:
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+    - name: "5004"
+      port: 5004
+      targetPort: 5004
   selector:
     io.kompose.service: match
   type: ClusterIP
-status:
-  loadBalancer: {}
+# status:
+#   loadBalancer: {}
