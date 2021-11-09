@@ -20,18 +20,6 @@ const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty, fr
   const [token, setToken] = useState();
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
-  const [cookies] = useCookies(["userInfo"]);
-
-  const [socket, setSocket] = useState<Socket>();
-  const [connected, setConnected] = useState(false);
-
-  useEffect(() => {
-    if (connected === false && sessionId) {
-      const sock = io(MATCH_URL);
-      setSocket(sock);
-      setConnected(true);
-    }
-  }, [connected, sessionId, socket, setSocket])
 
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
