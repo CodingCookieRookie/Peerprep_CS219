@@ -12,6 +12,7 @@ import io, { Socket } from "socket.io-client";
 const endInterviewMsg = `Congratulations, you have completed a PeerPrep interview session!
             Keep up the good work!`;
 
+
 const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty, friend }) => {
   const [rating, setRating] = useState(2.5)
   const [draftReview, setDraftReview] = useState("");
@@ -19,6 +20,18 @@ const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty, fr
   const [token, setToken] = useState();
   const [cookies] = useCookies(["userInfo"]);
   const history = useHistory();
+  const [cookies] = useCookies(["userInfo"]);
+
+  const [socket, setSocket] = useState<Socket>();
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    if (connected === false && sessionId) {
+      const sock = io(MATCH_URL);
+      setSocket(sock);
+      setConnected(true);
+    }
+  }, [connected, sessionId, socket, setSocket])
 
   const [socket, setSocket] = useState<Socket>();
   const [connected, setConnected] = useState(false);
@@ -39,6 +52,16 @@ const EndInterviewModal = ({ sessionId, show, onHide, peer, user, difficulty, fr
     updateXp()
     createFriend()
     history.push("/home");    
+    //signal to friend that current user has disconnected
+    socket.emit(`@disconnected`, 
+      { 
+        interviewId: sessionId,
+        user: cookies.userInfo.user.username
+      }
+    );
+    socket.disconnect();
+    setConnected(false);
+
     //signal to friend that current user has disconnected
     socket.emit(`@disconnected`, 
       { 
