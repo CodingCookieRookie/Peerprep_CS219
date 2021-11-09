@@ -8,18 +8,18 @@ steps:
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA', './backend/editor']
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/editor', './backend/editor']
 
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA']
+  args: ['push', 'gcr.io/cs3219-team23-328712/editor']
 
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'editor', '--image', 'gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA', '--region', 'asia-east1']
+  args: ['run', 'deploy', 'editor', '--image', 'gcr.io/cs3219-team23-328712/editor', '--region', 'asia-east1']
 
 images:
-- gcr.io/cs3219-team23-328712/editor:$COMMIT_SHA
+- gcr.io/cs3219-team23-328712/editor
 options:
   logging: CLOUD_LOGGING_ONLY
