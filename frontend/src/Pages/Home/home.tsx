@@ -235,6 +235,7 @@ const Home = (props: any) => {
   }
 
   const onClickMatchFriend = (username: string) => {
+    setDifficulty('Random')
     console.log(`On click match friend with ${username}`);
     setTargetMatchUsername(username);
     setMatchModalShow(true);
@@ -307,7 +308,7 @@ const Home = (props: any) => {
       setSocket(sock);
       setConnected(true);
     }
-  }, [socket, connected, username, history]);
+  }, [socket, connected, username, history, difficulty]);
 
   useEffect(() => {
     if (connected && needsReset) {
@@ -322,7 +323,7 @@ const Home = (props: any) => {
       setNeedsReset(false);
     }
   }, [connected, needsReset, socket, username, incomingRequestUsername,
-      setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal]);
+      setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal, difficulty]);
 
 
   useEffect(() => {
@@ -338,7 +339,7 @@ const Home = (props: any) => {
       });
       setSocket(socket);
     }
-  }, [incomingRequestUsername, username, socket])
+  }, [incomingRequestUsername, username, socket, difficulty])
   
 
   // const renderStickers = (xp) => {
