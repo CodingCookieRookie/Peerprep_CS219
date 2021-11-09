@@ -29,7 +29,7 @@ describe("Registration unit tests", () => {
                 result.body.data.email.should.equal(users[0].email);
                 done();
             });
-    }).timeout(5000);
+    }).timeout(20000);
 
     it('Fail to create a account due to missing fields', (done) => {
         chai.request(app)
