@@ -22,6 +22,20 @@ spec:
             name: users
             port: 
               number: 5001  
+      - path: /api/auth/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: users
+            port: 
+              number: 5001    
+      - path: /api/user-friend/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: users
+            port: 
+              number: 5001                               
       - path: /api/message/*
         pathType: ImplementationSpecific
         backend:
@@ -50,5 +64,12 @@ spec:
             name: question
             port: 
               number: 5005 
+      - path: /api/random-question/
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: question
+            port: 
+              number: 5005               
 
 {{- end }}
