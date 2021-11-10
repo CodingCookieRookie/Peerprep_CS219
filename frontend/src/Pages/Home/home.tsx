@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card, Button, ListGroup } from "react-bootstrap";
-import { Cursor, PersonSquare } from "react-bootstrap-icons";
+import { Cursor, Person } from "react-bootstrap-icons";
 import LoadingModal from "../../Components/LoadingModal/loadingmodal";
 import { USER_API_URL, MATCH_API_URL, MATCH_URL, QNS_API_URL, API_HEADERS } from "../../api";
 import SelectInput from "@material-ui/core/Select/SelectInput";
@@ -13,8 +13,17 @@ import io, { Socket } from "socket.io-client";
 import { userInfo } from "os";
 import { stringify } from "querystring";
 import { FriendList } from "../../Components/FriendList/friendlist";
+import MatchModal from "../../Components/FriendList/matchmodal";
+import RequestModal from "../../Components/FriendList/requestmodal";
 import { createUniqueName } from "typescript";
 import EndInterviewModal from "../../Components/EndInterviewModal/endInterviewModal";
+import { NotifyHandler, NotifyComponent } from 'react-notification-component';
+import beginner_knight from "../../assets/beginner_knight.svg";
+import decent_knight from "../../assets/decent_knight.svg";
+import pro_knight from "../../assets/pro_knight.svg";
+import { Chip } from "@material-ui/core";
+
+
 
 const API_URL = USER_API_URL;
 
@@ -30,101 +39,61 @@ const Home = (props: any) => {
   const [cookies] = useCookies(["userInfo"]);
   const [token, setToken] = useState("");
   const [xp, setXp] = useState("");
+  const [sticker, setSticker] = useState({level: '', logo: '', color: ''});
   const [isOnline, setIsOnline] = useState(false);
   const [pastMatches, setPastMatches] = useState([]);
+  const [difficulty, setDifficulty] = useState('');
+  const [matchModalShow, setMatchModalShow] = useState(false);
+  const [targetMatchUsername, setTargetMatchUsername] = useState("");
+
+  const [showPopupModal, setShowPopupModal] = useState(false);
+  const [incomingRequestUsername, setIncomingRequestUsername] = useState();
+  const [incomingRequestQnTitle, setIncomingRequestQnTitle] = useState();
+  const [needsReset, setNeedsReset] = useState(true);
 
   const history = useHistory();
 
-  friendData = [
-      {
-        friend_username: "Test"
-      },
-      {
-        friend_username: "Le Pioche"
-      },
-      {
-        friend_username: "El Matador"
-      },
-      {
-        friend_username: "El Nino"
-      }
-  ]
+  // friendData = [
+  //     {
+  //       friend_username: "Test"
+  //     },
+  //     {
+  //       friend_username: "Le Pioche"
+  //     },
+  //     {
+  //       friend_username: "El Matador"
+  //     },
+  //     {
+  //       friend_username: "El Nino"
+  //     }
+  // ]
   
 
-  useEffect(() => {
-    const userInfo = cookies.userInfo;
-    // No record of session login
-    if (!userInfo) {
-      history.push("/");
-    } else {
-      // console.log(userInfo.token)
-      // getFriends(userInfo.token);
-
-      // Set name
-      const data = userInfo.user.username;
-      setUsername(data);
-      setToken(userInfo.token);
-      getPastMatchDetails();
-    }
-  }, [cookies.userInfo, history]);
-
-  // connect to match socket
-  useEffect(() => {
-    if (connected === false && username) {
-      const sock = io(MATCH_URL);
-      sock.on(`match-found-${username}`, (result) => {
-        const matchedUsername = result.match;
-        const questionTitle = result.questionTitle;
-        console.log(`YOU ARE MATCHED WITH ... ${matchedUsername} !!!`);
-        var sessionId = "";
-        if (matchedUsername < username) {
-          sessionId = matchedUsername + "-" + username;
-        } else {
-          sessionId = username + "-" + matchedUsername;
+  const getPastMatchDetails = async (uname, token) => {
+    // const uname = cookies.userInfo.user.username;
+    await fetch(USER_API_URL + `/user/profile/${uname}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then(async (res) => {
+        var result = await res.json();
+        var data = result.data;
+        if (res.status === 200) {
+          setPastMatches(data.interviews)
+          console.log(result.message)
         }
-        console.log("SESSION ID IS: " + sessionId);
-        history.push(`/interview/${sessionId}/${questionTitle}`);
-        updateUserProfile(matchedUsername, questionTitle)
-        sock.disconnect();
-      });
-      setSocket(sock);
-      setConnected(true);
-    }
-  }, [socket, connected, username, history]);
-
-  const getPastMatchDetails = async () => {
-    if (cookies.userInfo) {
-      const uname = cookies.userInfo.user.username;
-      await fetch(USER_API_URL + `/user/profile/${uname}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json; charset=utf-8",
-          Authorization: "Bearer " + token,
-        },
       })
-        .then(async (res) => {
-          var result = await res.json();
-          var data = result.data;
-          if (res.status === 200) {
-            setPastMatches(data.interviews)
-            console.log(data)
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      }
-  }
-
-  // get user's match details
-  useEffect(() => {
-    getUserMatchDetails();
-    getPastMatchDetails();
-  });
+      .catch((err) => {
+        console.log(err);
+      });
+  }  
 
   const getUserMatchDetails = async () => {
-    if (cookies.userInfo) {
+    
     const uname = cookies.userInfo.user.username;
     await fetch(MATCH_API_URL + `/matches/match/${uname}`, {
       method: "GET",
@@ -139,11 +108,12 @@ const Home = (props: any) => {
         var data = result.data;
         setXp(data.xp);
         setIsOnline(data.isOnline);
+        setSticker(handleSticker(data.xp))
+        console.log(result.message);
       })
       .catch((err) => {
         console.log(err);
       });
-    }
   };
 
   const updateUserProfile = async (matchedUsername, questionTitle) => {
@@ -216,14 +186,174 @@ const Home = (props: any) => {
       });
   };
 
+  const addDeclinedNotification = () => {
+    NotifyHandler.add(
+      "Declined",         // Notification title
+      "The other party is busy at the moment.",       // Message
+      {
+        time: 2,                     // Time how much notification will be shown; default - 2
+        animationDelay: 0.3,         // Delay for notification animation; default - 0.3
+        animationTimeFunc: 'linear', // Animation func; default - 'linear'
+        position: 'RT',              // Position. Options - 'RT', 'RB', 'LT', 'LB'; default - 'RT'; ('RT' - Right Top, 'LB' - Left Bottom)
+        hide: true,                  // Hide after time (default - 2); default - true
+        progress: false               // Show progress line (timeline); default - true
+      },             // Settings
+      {
+        width: 220,                      // Notification width; default - 220
+        height: 54,                      // Notification height; default - 54
+        mainBackground: '#ff0000',       // Background color; default - '#16a085'
+        mainBackgroundHover: '#1abc9c',  // Background color on hover; default - '#1abc9c'
+        mainBackgroundHoverTime: 0.2, 
+      },             // Styles
+      () => { },       // Callback on click
+      () => { }        // Callback on time end
+    )
+  }
+
+  const addTimeoutNotification = () => {
+    if (incomingRequestUsername !== undefined && incomingRequestUsername !== null && incomingRequestUsername !== "") {
+
+    
+    NotifyHandler.add(
+      "Timeout",         // Notification title
+      "You did not accept the request within 30 seconds.",       // Message
+      {
+        time: 2,                     // Time how much notification will be shown; default - 2
+        animationDelay: 0.3,         // Delay for notification animation; default - 0.3
+        animationTimeFunc: 'linear', // Animation func; default - 'linear'
+        position: 'RT',              // Position. Options - 'RT', 'RB', 'LT', 'LB'; default - 'RT'; ('RT' - Right Top, 'LB' - Left Bottom)
+        hide: true,                  // Hide after time (default - 2); default - true
+        progress: false               // Show progress line (timeline); default - true
+      },             // Settings
+      {
+        width: 220,                      // Notification width; default - 220
+        height: 54,                      // Notification height; default - 54
+        mainBackground: '#ff0000',       // Background color; default - '#16a085'
+        mainBackgroundHover: '#1abc9c',  // Background color on hover; default - '#1abc9c'
+        mainBackgroundHoverTime: 0.2, 
+      },             // Styles
+      () => { },       // Callback on click
+      () => { }        // Callback on time end
+    )
+    } 
+  }
+
+  const onClickMatchFriend = (username: string) => {
+    setDifficulty('Random')
+    console.log(`On click match friend with ${username}`);
+    setTargetMatchUsername(username);
+    setMatchModalShow(true);
+  }
+
+  const handleSticker = (xp) => {
+    var level;
+    var logo;
+    var color;
+    if (xp < 2000) {
+      level = "Beginner"
+      logo = beginner_knight;
+      color = 'default';
+    } else if (xp < 20000) {
+      level = "Intermediate";
+      logo = decent_knight;
+      color = 'primary';
+    } else {
+      level = "Master"
+      logo = pro_knight
+      color = 'secondary';
+    }
+    return { level, logo, color }
+  }
+
   const difficultyData = [
     ["Easy", "success"],
     ["Medium", "primary"],
     ["Hard", "danger"],
   ];
 
-  const navInterviewPage = async (qnDifficulty) => {
+  useEffect(() => {
+    const userInfo = cookies.userInfo;
+    
+    // No record of session login
+    if (!userInfo) {
+      history.push("/");
+    } else {
 
+      // Get params
+      const uname = userInfo.user.username;
+      const localToken = userInfo.token
+
+      setUsername(uname);
+      setToken(localToken);
+      getUserMatchDetails();
+      getPastMatchDetails(uname, localToken);
+      getFriends(localToken);
+    }
+  }, [cookies.userInfo, history, token, username]);
+
+  // connect to match socket
+  useEffect(() => {
+    if (connected === false && username) {
+      const sock = io(MATCH_URL);
+      sock.on(`match-found-${username}`, (result) => {
+        const matchedUsername = result.match;
+        const questionTitle = result.questionTitle;
+        console.log(`YOU ARE MATCHED WITH ... ${matchedUsername} !!!`);
+        var sessionId = "";
+        if (matchedUsername < username) {
+          sessionId = matchedUsername + "-" + username;
+        } else {
+          sessionId = username + "-" + matchedUsername;
+        }
+        console.log("SESSION ID IS: " + sessionId);
+        history.push(`/interview/${sessionId}/${questionTitle}`);
+        updateUserProfile(matchedUsername, questionTitle)
+      });
+      setSocket(sock);
+      setConnected(true);
+    }
+  }, [socket, connected, username, history, difficulty]);
+
+  useEffect(() => {
+    if (connected && needsReset) {
+      socket.on(`${username}@incoming_request`, (result) => {
+        console.log("Received!" + result.requester);
+        //pop up modal to join interview
+        setIncomingRequestUsername(result.requester);
+        setIncomingRequestQnTitle(result.qnTitle);
+        setShowPopupModal(true);
+      })
+      setSocket(socket);
+      setNeedsReset(false);
+    }
+  }, [connected, needsReset, socket, username, incomingRequestUsername,
+      setIncomingRequestQnTitle, setIncomingRequestUsername, setShowPopupModal, difficulty]);
+
+
+  useEffect(() => {
+    if (incomingRequestUsername && incomingRequestUsername !== "") {
+      socket.on(`${username}@incoming_request_timeout`, (result) => {
+        console.log(`Incoming request has timedout... ${result.requester}  : ${incomingRequestUsername}`);
+        if (result.requester === incomingRequestUsername) {
+          setIncomingRequestUsername(null);
+          setIncomingRequestQnTitle(null);
+          // addTimeoutNotification();
+          setShowPopupModal(false);
+        }
+      });
+      setSocket(socket);
+    }
+  }, [incomingRequestUsername, username, socket, difficulty])
+  
+
+  // const renderStickers = (xp) => {
+  //   if (xp < levels[0]) {
+  //     return 
+  //   }
+  // }
+
+  const navInterviewPage = async (qnDifficulty) => {
+    setDifficulty(qnDifficulty)
     setShow(true);
 
     // Get a random question and its information
@@ -290,6 +420,9 @@ const Home = (props: any) => {
     
   };
 
+  const setColor = () => {
+    return sticker.level === "Beginner" ? "default" : sticker.level === "Intermediate" ? "primary" : "success"
+  }
   
 
   const handleCloseModal = () => {
@@ -300,6 +433,19 @@ const Home = (props: any) => {
     console.log("End session");
     setShowModal(true);
   };
+
+
+  const hideMatchModal = () => {
+    setMatchModalShow(false);
+  }
+
+  const requestModalOnHide = () => {
+    console.log("Declined... requestModalOnHide called");
+    setIncomingRequestUsername(null);
+    setIncomingRequestQnTitle(null);
+    setNeedsReset(true);
+    setShowPopupModal(false);
+  }
 
   return (
     <div className="">
@@ -313,28 +459,40 @@ const Home = (props: any) => {
           </h4>
         </section>
         {/* landing content */}
-        <LoadingModal show={show} onHide={handleClose} />
+        <NotifyComponent maxNotify={ 1 } />  
+        <LoadingModal show={show} onHide={handleClose} difficulty={difficulty} />
+        <RequestModal show={showPopupModal} onHide={requestModalOnHide} friend={incomingRequestUsername} qnTitle={incomingRequestQnTitle}/>
         <Row>
           <Col sm={7}>
             <Card className="mb-3 home-card">
               <Card.Body>
                 <Card.Title className="fs-4 mb-3"> User Profile</Card.Title>
+                <div className="d-flex">
+                <div className="me-5 pe-5 flex-fill bd-highlight">
                 <Card.Subtitle className="mt-2 mb-3 text-muted">
                   {username}
                 </Card.Subtitle>
                 <Card.Text>
                   <strong> Rank: </strong>
                 </Card.Text>
+                <Chip size="medium" className="mb-3" label={sticker.level} color='default' clickable icon={<Person style={{ marginLeft: '10px', marginBottom: '2px'}}/>}  />
                 <Card.Text>
                   <strong> XP: </strong>
                 </Card.Text>
                 <Card.Subtitle className="mt-2 mb-3 text-muted">
                   {xp}
                 </Card.Subtitle>
-                <Button variant="primary" onClick={onClickEndSession}>
-                  End Session
-                </Button>
-                <EndInterviewModal show={showModal} onHide={handleCloseModal} />
+                </div>
+                <div className="me-4" >
+                <img
+                    className="img-fluid"
+                    src={sticker.logo} 
+                    alt="logo"
+                    width={110}
+                    height={100}
+                  />
+                </div>
+                </div>
               </Card.Body>
             </Card>
             <PastMatch pastMatches={pastMatches}/>
@@ -374,12 +532,16 @@ const Home = (props: any) => {
                 </Card.Text>
               </Card.Body>
             </Card>
-            <FriendList friendList={friendData} />
+            <>
+            {targetMatchUsername && targetMatchUsername !== "" ? <MatchModal show={matchModalShow} onHide={hideMatchModal} username={targetMatchUsername} declinedCallback={addDeclinedNotification}/> : null}
+            </>
+            <FriendList friendList={friendData} onClickCallback={onClickMatchFriend}/>
           </Col>
         </Row>
       </div>
     </div>
   );
 };
+
 
 export default Home;

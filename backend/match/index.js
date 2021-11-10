@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 });
 
 // Connect to Mongoose and set connection variable
-const uri = `mongodb+srv://${dbUsername}:${dbPassword}@team23.77voc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || "mongodb://localhost/matches")
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 var db = mongoose.connection
 
@@ -67,6 +67,35 @@ const io = require("socket.io")(http, {
 })
 
 io.on("connection", (socket) => {
+    socket.on("incoming_request", request => {
+        const requester = request.requester;
+        const selectedFriend = request.selectedFriend;
+        const qnTitle = request.qnTitle;
+        console.log(`There is incoming request from ${requester} to ${selectedFriend}`);
+        io.emit(`${selectedFriend}@incoming_request`, {
+            requester: requester,
+            qnTitle: qnTitle
+        })
+    })
+    socket.on("@friend_match", response => {
+        const requester = response.requester;
+        io.emit(`${requester}@friend_match`, response);
+        // console.log(`Response received from receiver ${response.receiver} for requester ${response.requester}`);
+    })
+    socket.on("@incoming_request_timeout", request => {
+        const requester = request.requester;
+        const selectedFriend = request.selectedFriend;
+        // console.log(`${requester}'s request TIME OUT!`)
+        io.emit(`${selectedFriend}@incoming_request_timeout`, {
+            requester: requester,
+        })
+    })
+    socket.on("@disconnected", request => {
+        const interviewId = request.interviewId;
+        const userDisconnected = request.user;
+        console.log(`${userDisconnected} has disconnected from ${interviewId}`);
+        io.emit(`${interviewId}@disconnected`, {user: userDisconnected});
+    })
     console.log(socket.id);
 });
 
@@ -75,3 +104,7 @@ const matchController = require('./matchController');
 app.put("/api/matches", (req, res) => {
     matchController.update(req, res, io);
 })
+
+// app.put("/api/match_friend", (req, res) => {
+//     matchController.matchFriend(req, res, io);
+// })
