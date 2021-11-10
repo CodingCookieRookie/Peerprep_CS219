@@ -120,7 +120,7 @@ steps:
     - upgrade
     - -i
     - peerprep
-    - ./backend/helm-deployment
+    - ./kubernetes
     # - -f
     # - ./backend/helm-deployment/values.yaml
   env:
