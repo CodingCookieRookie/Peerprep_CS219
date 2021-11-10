@@ -106,9 +106,9 @@ spec:
         app: message
     spec:
       containers:
-      - image: gcr.io/cs3219-team23-328712/message@sha256:59f6638e64ed7bb21ba825572b4063474208a701c4a9447efd425675333cce81
+      - image: gcr.io/cs3219-team23-328712/message
         imagePullPolicy: IfNotPresent
-        name: message-sha256-1
+        name: message
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File

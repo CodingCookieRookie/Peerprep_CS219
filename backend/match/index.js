@@ -47,11 +47,8 @@ else
 var port = process.env.PORT || 5004;
 
 // Send message for default URL
-<<<<<<< HEAD
+
 app.get('/', (req, res) => res.send('Match Microservice is running.'));
-=======
-app.get('/', (req, res) => res.send('Match MS is running!'));
->>>>>>> 52d8c70668715bac146452761a4cdf7b7bdc0583
 
 // Use Api routes in the App
 app.use('/api', apiRoutes);
@@ -71,8 +68,6 @@ const io = require("socket.io")(http, {
 })
 
 io.on("connection", (socket) => {
-<<<<<<< HEAD
-=======
     socket.on("incoming_request", request => {
         const requester = request.requester;
         const selectedFriend = request.selectedFriend;
@@ -102,7 +97,6 @@ io.on("connection", (socket) => {
         console.log(`${userDisconnected} has disconnected from ${interviewId}`);
         io.emit(`${interviewId}@disconnected`, {user: userDisconnected});
     })
->>>>>>> 52d8c70668715bac146452761a4cdf7b7bdc0583
     console.log(socket.id);
 });
 
