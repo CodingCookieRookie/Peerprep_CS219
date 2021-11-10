@@ -1,0 +1,117 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/backends: '{"k8s1-ad716a6e-default-editor-service-5003-1719d9f2":"HEALTHY","k8s1-ad716a6e-default-match-service-5004-ef4994cd":"HEALTHY","k8s1-ad716a6e-default-message-service-5002-b07b4f88":"HEALTHY","k8s1-ad716a6e-default-questions-service-5005-87d3dda2":"HEALTHY","k8s1-ad716a6e-default-users-service-5001-a468e077":"HEALTHY","k8s1-ad716a6e-default-web-service-80-b6064fa1":"HEALTHY"}'
+    ingress.kubernetes.io/forwarding-rule: k8s2-fr-3xatbtja-default-peerprep-58he2sa5
+    ingress.kubernetes.io/target-proxy: k8s2-tp-3xatbtja-default-peerprep-58he2sa5
+    ingress.kubernetes.io/url-map: k8s2-um-3xatbtja-default-peerprep-58he2sa5
+  creationTimestamp: "2021-11-09T23:20:14Z"
+  finalizers:
+  - networking.gke.io/ingress-finalizer-V2
+  generation: 1
+  managedFields:
+  - apiVersion: extensions/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:backend:
+          .: {}
+          f:serviceName: {}
+          f:servicePort: {}
+        f:rules: {}
+    manager: GoogleCloudConsole
+    operation: Update
+    time: "2021-11-09T23:20:14Z"
+  - apiVersion: networking.k8s.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:ingress.kubernetes.io/backends: {}
+          f:ingress.kubernetes.io/forwarding-rule: {}
+          f:ingress.kubernetes.io/target-proxy: {}
+          f:ingress.kubernetes.io/url-map: {}
+        f:finalizers:
+          .: {}
+          v:"networking.gke.io/ingress-finalizer-V2": {}
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: glbc
+    operation: Update
+    time: "2021-11-09T23:23:52Z"
+  name: peerprep
+  namespace: default
+  resourceVersion: "86920"
+  uid: 7e172846-637e-48f4-9e31-e0e7f1bbd47c
+spec:
+  backend:
+    serviceName: web-service
+    servicePort: 80
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: match-service
+          servicePort: 5004
+        path: /api/matches/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: editor-service
+          servicePort: 5003
+        path: /api/editor/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: message-service
+          servicePort: 5002
+        path: /api/message/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: questions-service
+          servicePort: 5005
+        path: /api/questions/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: questions-service
+          servicePort: 5005
+        path: /api/random-question/
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: questions-service
+          servicePort: 5005
+        path: /api/questions/difficulty/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: match-service
+          servicePort: 5004
+        path: /api/matches/match/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: users-service
+          servicePort: 5001
+        path: /api/user/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: users-service
+          servicePort: 5001
+        path: /api/user/profile/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: users-service
+          servicePort: 5001
+        path: /api/user/profile/interview/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: users-service
+          servicePort: 5001
+        path: /api/auth/*
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: users-service
+          servicePort: 5001
+        path: /api/user-friend/*
+        pathType: ImplementationSpecific
+status:
+  loadBalancer: {}

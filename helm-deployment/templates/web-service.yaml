@@ -3,12 +3,12 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
-    cloud.google.com/neg-status: '{"network_endpoint_groups":{"5001":"k8s1-ad716a6e-default-users-service-5001-a468e077"},"zones":["asia-southeast1-a"]}'
-  creationTimestamp: "2021-11-09T23:05:59Z"
+    cloud.google.com/neg-status: '{"network_endpoint_groups":{"80":"k8s1-ad716a6e-default-web-service-80-b6064fa1"},"zones":["asia-southeast1-a"]}'
+  creationTimestamp: "2021-11-09T22:22:30Z"
   finalizers:
   - service.kubernetes.io/load-balancer-cleanup
   labels:
-    app: users
+    app: web
   managedFields:
   - apiVersion: v1
     fieldsType: FieldsV1
@@ -21,8 +21,21 @@ metadata:
         f:externalTrafficPolicy: {}
         f:ports:
           .: {}
-          k:{"port":5001,"protocol":"TCP"}:
+          k:{"port":80,"protocol":"TCP"}:
             .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":443,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":3000,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
             f:port: {}
             f:protocol: {}
             f:targetPort: {}
@@ -33,7 +46,7 @@ metadata:
         f:type: {}
     manager: GoogleCloudConsole
     operation: Update
-    time: "2021-11-09T23:05:58Z"
+    time: "2021-11-09T22:22:30Z"
   - apiVersion: v1
     fieldsType: FieldsV1
     fieldsV1:
@@ -46,7 +59,7 @@ metadata:
           f:ingress: {}
     manager: kube-controller-manager
     operation: Update
-    time: "2021-11-09T23:06:33Z"
+    time: "2021-11-09T22:23:14Z"
   - apiVersion: v1
     fieldsType: FieldsV1
     fieldsV1:
@@ -56,20 +69,30 @@ metadata:
     manager: glbc
     operation: Update
     time: "2021-11-09T23:20:14Z"
-  name: users-service
+  name: web-service
   namespace: default
-  resourceVersion: "82731"
-  uid: 08b37536-34e1-4265-a77c-6257b1f8185b
+  resourceVersion: "82733"
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 31598
-    port: 5001
+  - name: 80-to-443-tcp
+    nodePort: 31484
+    port: 80
     protocol: TCP
-    targetPort: 5001
+    targetPort: 443
+  - name: 3000-to-443-tcp
+    nodePort: 30072
+    port: 3000
+    protocol: TCP
+    targetPort: 443
+  - name: 443-to-443-tcp
+    nodePort: 32754
+    port: 443
+    protocol: TCP
+    targetPort: 443
   selector:
-    app: users
+    app: web
   sessionAffinity: None
-  type: NodePort
+  type: LoadBalancer
 status:
   loadBalancer: {}

@@ -50,13 +50,24 @@ We felt that the idea of PeerPrep was really an interesting one and that it can 
   $ ./install-all.sh
   ```
 5. In the `/frontend/src/api.js`, set all instances of production URLs to `null`. This is because we will be using the development URLs (localhost). Do also change the port number of your own microservices for the dev URLs.
-6. Use Docker-Compose to build all the microservices and frontend as container images.
+
+6. Use Docker-Compose
+Use Docker-Compose to build all the microservices and frontend as container images.
   ```bash
   $ docker-compose build
   ```
-7. Use Docker-Compose to spin up the containers.
+Use Docker-Compose to spin up the containers.
   ```bash
   $ docker-compose up -d
+  ```
+7. Otherwise you can run each each microservice and frontend separately by going to the folder and run `npm run dev`.
+  For example, if you want to run editor microservice,
+  ```bash
+  $ cd backend/editor && npm run dev
+  ```
+  If you want to run frontend,
+  ```bash
+  $ cd frontend && npm run start
   ```
 8. You can access your [http://localhost:3000](http://localhost:3000) and you will see the landing page.
 

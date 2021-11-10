@@ -64,7 +64,6 @@ const Landing = () => {
         <hr />
         <h2 className="landing-center">Details</h2>
         <div>
-          <QuestionImage image={image} />
           <Accordion className="p-4" flush>
             <Accordion.Item eventKey="0">
               <Accordion.Header>What do I gain out of this?</Accordion.Header>
