@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.22.0 (955b78124)
   creationTimestamp: null
   labels:
-    io.kompose.service: match
-  name: match
+    io.kompose.service: message
+  name: message
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: match
+      io.kompose.service: message
   strategy: {}
   template:
     metadata:
@@ -21,18 +21,16 @@ spec:
         kompose.version: 1.22.0 (955b78124)
       creationTimestamp: null
       labels:
-        io.kompose.service: match
+        io.kompose.service: message
     spec:
       containers:
-        - image: gcr.io/cs3219-team23-328712/match:latest
+        - image: gcr.io/cs3219-team23-328712/message:latest
           imagePullPolicy: Always
-          name: match
+          name: message
           ports:
-            - containerPort: 5004
+            - containerPort: 5002
           resources:
             requests:
-              cpu: "50m"
-            limits:
-              cpu: 200m
+              cpu: "100m"
       restartPolicy: Always
 status: {}
