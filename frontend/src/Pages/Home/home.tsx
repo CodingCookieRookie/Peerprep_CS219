@@ -150,8 +150,9 @@ const Home = (props: any) => {
       body: JSON.stringify({
         username: username,
         isOnline: isOnline,
-        wantsMatch: false,
         xp: xp,
+        questionDifficulty: "",
+        questionTitle: ""
       }),
     })
       .then(async (res) => {

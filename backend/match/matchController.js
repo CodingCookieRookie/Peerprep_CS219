@@ -123,6 +123,18 @@ exports.updateCurrentUserMatch = function (req, res) {
                     }
                 });
             } else {
+                if (req.body.questionTitle != null) {
+                    if (req.body.questionTitle == "") {
+                        req.body.questionTitle = null
+                    }
+                        currentUser.questionTitle = req.body.questionTitle;
+                }
+                 if (req.body.questionDifficulty != null) {
+                     if (req.body.questionDifficulty == "") {
+                         req.body.questionDifficulty = null;
+                     }
+                     currentUser.questionDifficulty = req.body.questionDifficulty;
+                 }
                 currentUser.save(function (err) {
                     if (err) {
                         res.status(400).json({
