@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.22.0 (955b78124)
   creationTimestamp: null
   labels:
-    io.kompose.service: editor
-  name: editor
+    io.kompose.service: users
+  name: users
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: editor
+      io.kompose.service: users
   strategy: {}
   template:
     metadata:
@@ -21,17 +21,19 @@ spec:
         kompose.version: 1.22.0 (955b78124)
       creationTimestamp: null
       labels:
-        io.kompose.service: editor
+        io.kompose.service: users
     spec:
       containers:
-        - image: gcr.io/cs3219-team23-328712/editor:latest
-          name: editor
+        - image: gcr.io/cs3219-team23-328712/users:latest
+          imagePullPolicy: Always
+          name: users
           ports:
-            - containerPort: 5003
-          resources: 
+            - containerPort: 5001
+          resources:
             requests:
               cpu: "50m"
             limits:
               cpu: 200m
       restartPolicy: Always
+      
 status: {}
