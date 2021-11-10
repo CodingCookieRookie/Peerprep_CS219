@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+    cloud.google.com/neg-status: '{"network_endpoint_groups":{"5005":"k8s1-ad716a6e-default-questions-service-5005-87d3dda2"},"zones":["asia-southeast1-a"]}'
+  creationTimestamp: "2021-11-09T22:18:46Z"
+  labels:
+    app: questions
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":5005,"protocol":"TCP"}:
+            .: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: GoogleCloudConsole
+    operation: Update
+    time: "2021-11-09T22:18:46Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:cloud.google.com/neg-status: {}
+    manager: glbc
+    operation: Update
+    time: "2021-11-09T23:20:14Z"
+  name: questions-service
+  namespace: default
+  resourceVersion: "82729"
+  uid: 7ab3529d-79c8-463f-a061-7a3972a12960
+spec:
+  clusterIP: 10.40.2.28
+  clusterIPs:
+  - 10.40.2.28
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 31893
+    port: 5005
+    protocol: TCP
+    targetPort: 5005
+  selector:
+    app: questions
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

@@ -4,9 +4,9 @@ const DEV_API_URL = "http://localhost:5001/api";
 const DEV_MATCH_API_URL = "http://localhost:5004/api";
 const DEV_QUESTIONS_API_URL = "http://localhost:5005/api";
 // PROD
-const PROD_API_URL = "https://users-6i7ougacoq-de.a.run.app/api";
-const PROD_MATCH_API_URL = "https://match-6i7ougacoq-de.a.run.app/api";
-const PROD_QUESTIONS_API_URL = "https://question-6i7ougacoq-de.a.run.app/api"
+const PROD_API_URL = "http://www.peerpreplegends.com/api";
+const PROD_MATCH_API_URL = "http://www.peerpreplegends.com/api";
+const PROD_QUESTIONS_API_URL = "http://www.peerpreplegends.com/api"
 
 
 /* ========== SOCKETS =========== */
