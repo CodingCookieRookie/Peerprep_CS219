@@ -9,7 +9,7 @@
 #     io.kompose.service: question
 #   name: question
 # spec:
-#   replicas: 1
+#   replicas: 2
 #   selector:
 #     matchLabels:
 #       io.kompose.service: question
