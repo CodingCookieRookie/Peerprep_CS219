@@ -13,21 +13,21 @@ steps:
     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
     - KUBECONFIG=/workspace/.kube/config
 
-#Uninstall with Helm
-# - name: gcr.io/cs3219-team23-328712/helm
-#   args: ['uninstall', 'peerprep']
-#   env:
-#     - KUBECONFIG=/workspace/.kube/config
-#     - TILLERLESS=false
-#     - TILLER_NAMESPACE=kube-system
+Uninstall with Helm
+- name: gcr.io/cs3219-team23-328712/helm
+  args: ['uninstall', 'peerprep']
+  env:
+    - KUBECONFIG=/workspace/.kube/config
+    - TILLERLESS=false
+    - TILLER_NAMESPACE=kube-system
 
-# # Delete all svc in kubectl
-# - name: gcr.io/cloud-builders/kubectl
-#   args: ['delete', 'svc', '--all']
-#   env:
-#     - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
-#     - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
-#     - KUBECONFIG=/workspace/.kube/config
+# Delete all svc in kubectl
+- name: gcr.io/cloud-builders/kubectl
+  args: ['delete', 'svc', '--all']
+  env:
+    - CLOUDSDK_COMPUTE_REGION=asia-southeast1-a
+    - CLOUDSDK_CONTAINER_CLUSTER=peerup-cluster
+    - KUBECONFIG=/workspace/.kube/config
 
 
 #Deploy with Helm
