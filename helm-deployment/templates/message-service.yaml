@@ -46,9 +46,6 @@ metadata:
   resourceVersion: "82725"
   uid: be294be8-7715-4251-b50d-77e13287f24e
 spec:
-  clusterIP: 10.40.2.144
-  clusterIPs:
-  - 10.40.2.144
   externalTrafficPolicy: Cluster
   ports:
   - nodePort: 31401
