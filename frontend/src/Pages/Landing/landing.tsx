@@ -68,13 +68,12 @@ const Landing = () => {
             <Accordion.Item eventKey="0">
               <Accordion.Header>What do I gain out of this?</Accordion.Header>
               <Accordion.Body>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                With Peerprep, you are match with like-minded users to practise
+                technical interview questions together. You can make use of this
+                platform to learn from one another and sharpen your skills
+                before you interview with your dream company. Our platform
+                provides a rich question bank for you to choose, with different
+                difficulty levels ranging from easy to hard!
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
@@ -82,13 +81,11 @@ const Landing = () => {
                 How is the pair matching done?
               </Accordion.Header>
               <Accordion.Body>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Matching is done using a <i>xp</i> point system. We will try to
+                match you with a user with <i>xp</i> points that are close
+                to yours. This way, you are likely to be matched with somone
+                that has an equal skillset, and thus maximising the opportunity
+                to learn from each other!
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
