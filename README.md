@@ -1,6 +1,9 @@
 # CS3219 Project - PeerPrep (By Team G23)
 
-Website hosted at [link](https://web-6i7ougacoq-de.a.run.app/)
+Website hosted at [web.peerpreplegends.com](web.peerpreplegends.com/).
+QA hosted at [link](http://webdev.peerpreplegends.com)
+Development serverless container on Cloud Run [link](https://web-6i7ougacoq-de.a.run.app/).
+
 ## Introduction
 We will be embarking on the project Peerprep, a peer support system where users are engaged with collaborative whiteboard-style programming to practice for technical interviews. The app is expected to handle collaborative whiteboard-style programming. With IPP, everyone can code together on the same file at the same time. You can share with anyone, view edited code in real time, chat and comment for
 discussions. The app also supports some basic features as well e.g., user authentication and save and retrieve relevant data. Questions will be taken from leetcode (free questions), we will keep the sample size of our questions small as we are in the minimal viable product stage. The questions will be categorized based on difficulty (e.g easy, medium, hard).
@@ -71,3 +74,6 @@ Use Docker-Compose to spin up the containers.
   ```
 8. You can access your [http://localhost:3000](http://localhost:3000) and you will see the landing page.
 
+
+
+Read more on our [backend README](https://github.com/CS3219-SE-Principles-and-Patterns/cs3219-project-ay2122-2122-s1-g23/blob/main/backend/README.md) and [frontend README](https://github.com/CS3219-SE-Principles-and-Patterns/cs3219-project-ay2122-2122-s1-g23/blob/main/frontend/README.md).
