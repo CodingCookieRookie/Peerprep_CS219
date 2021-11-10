@@ -17,7 +17,7 @@ const http = require('http').createServer(app);
 const mongoose = require("mongoose");
 const Editor = require("./models/editorModel");
 
-const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || 'http://localhost:5004');
+const uri = process.env.CLOUD_DATABASE_URL || (process.env.LOCAL_DATABASE_URL || 'mongodb://localhost/editors');
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 

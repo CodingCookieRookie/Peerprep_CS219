@@ -11,6 +11,10 @@ router
     .delete(friendController.delete)
 
 router
+    .route("/:friend_username")
+    .get(friendController.view)
+
+router
     .route("/user2/")
     .post(friendController.new_by_username)
 

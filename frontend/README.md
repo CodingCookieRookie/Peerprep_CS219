@@ -1,46 +1,76 @@
-# Getting Started with Create React App
+# PeerPrep User Frontend
+We are using [React.ts](https://www.typescriptlang.org/docs/handbook/react.html), a TypeScript library for building user interfaces, for our frontend.
+[React.ts](https://www.typescriptlang.org/docs/handbook/react.html) is very similar to [React.js](https://reactjs.org/).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Alternatively, you can look up on `README-React.md`, the default README file for React apps.
 
-## Available Scripts
+The only difference between React.ts and React.js is the language used, where React.ts aims to build applications **declaratively** with components. 
 
-In the project directory, you can run:
+### Why choose react?
+React is easy to learn and has many rich user interfaces. This smoothen the learning curves from starters and enables faster developments.
+React is also the second most popular Frontend Development library among developers and has a strong community that provides support.
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Build Setup
+For a detailed explanation of how things work, check out the [documentation](https://reactjs.org/).
+```bash
+# install dependencies
+$ npm install
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# serve with hot reload at [http://localhost:3000](http://localhost:3000)
+$ npm start
+```
 
-### `yarn test`
+## Main structure of PeerPrep User Frontend
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Our main bulk of code is within the `src` folder and we focus on these 2 folders
+- Pages 
+- Components
 
-### `yarn build`
+We are using [React Bootstrap](https://github.com/react-bootstrap/react-bootstrap) as our UI framework.
+It is a very powerful and easy to style framework. You can read more about React Bootstrap Components in the [documentation](https://react-bootstrap.github.io/).
+We also made use of [Material UI](https://mui.com/) components for certain fancy components.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `Pages`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This directory contains different folders, each containing the `.tsx` and `.css` file.
+The `.tsx` file represents the page component rendered with the styling based in the `.css` files.
+Each directory will represent a Page on its own, consisting of the component and its styling sheet.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `Components`
 
-### `yarn eject`
+This directory contains different folders, each containing a set of `.tsx` and `.css` file, similarly to Pages directory.
+Each folder represents a set of reusable components, such as Popup Modals, Loading Screen and so on.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Ideally, we try not to overcrowd the page. We will separate each component of the page into its own TypeScript file along with the CSS styling file.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+If in doubt, we highly recommend just create a component for each part of your page and import it into your page.
+This makes your code cleaner and easier to read.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Should you need a different file structure and wish to explore more, you can check out more in the FAQ-structure [documentation](https://reactjs.org/docs/faq-structure.html).
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Others
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### `assets`
+
+The assets directory contains your uncompiled assets such as images, gifs or icons.
+
+More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+
+### `public`
+
+This directory contains the HTML file so you can tweak it.
+For example, to set the page title. The `<script>` tag with the compiled code will be added to it automatically during the build process
+
+
+More information about the usage of public folder in [documentation](https://create-react-app.dev/docs/using-the-public-folder/).
+
+### `build`
+
+This directory contains what we build when we run `npm run build`.
+This creates the production build files stored in this directory.
+
+More information about the usage of production build folder in  [documentation](https://create-react-app.dev/docs/production-build/).

@@ -43,7 +43,10 @@ var dummyPastMatches = [
 
 const PastMatch = (props: {pastMatches}) => {
 
-  const convertDateFormat = (date) => new Date(date).toLocaleDateString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'});
+  const convertDateFormat = (date) => {
+    var localDate = new Date(date);
+    return localDate.toDateString() + " " + localDate.toTimeString().slice(0, -35);
+  };
   
   return (
     // <div >
