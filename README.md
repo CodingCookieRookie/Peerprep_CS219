@@ -1,6 +1,6 @@
 # CS3219 Project - PeerPrep (By Team G23)
 
-Website hosted at [web.peerpreplegends.com](web.peerpreplegends.com/).
+Website hosted at [https://web.peerpreplegends.com](https://web.peerpreplegends.com/).
 QA hosted at [link](http://webdev.peerpreplegends.com)
 Development serverless container on Cloud Run [link](https://web-6i7ougacoq-de.a.run.app/).
 
