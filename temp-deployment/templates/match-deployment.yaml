@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: match
   name: match
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       io.kompose.service: match
@@ -33,6 +33,6 @@ spec:
             requests:
               cpu: "50m"
             limits:
-              cpu: 200m
+              cpu: 100m
       restartPolicy: Always
 status: {}
