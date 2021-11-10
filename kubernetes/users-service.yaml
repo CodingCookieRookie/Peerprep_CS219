@@ -73,8 +73,6 @@ spec:
   selector:
     app: users
   sessionAffinity: None
-  type: LoadBalancer
+  type: NodePort
 status:
-  loadBalancer:
-    ingress:
-    - ip: 34.124.153.244
+  loadBalancer: {}
