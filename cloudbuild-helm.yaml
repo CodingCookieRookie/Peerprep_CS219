@@ -1,8 +1,108 @@
 # cloudbuild.yaml for Helm Deployment
 timeout: 2000s
 steps:
+##################### Editor #########################
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/editor', './backend/editor']
 
-##################### Helm Deployment #########################
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/editor']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'editor', '--image', 'gcr.io/cs3219-team23-328712/editor', '--region', 'asia-east1']
+
+##################### Match #########################
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/match', './backend/match']
+
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/match']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'match', '--image', 'gcr.io/cs3219-team23-328712/match', '--region', 'asia-east1']
+
+##################### Message #########################
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/message', './backend/message']
+
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/message']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'message', '--image', 'gcr.io/cs3219-team23-328712/message', '--region', 'asia-east1']
+
+##################### Question #########################
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/question', './backend/questions']
+
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/question']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'question', '--image', 'gcr.io/cs3219-team23-328712/question', '--region', 'asia-east1']
+
+##################### Users #########################
+# Install
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+  dir: 'backend/users'
+
+# Build
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build', '--if-present']
+  dir: 'backend/users'
+
+# Test
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'test']
+  env: ['CLOUD_DATABASE_URL=mongodb+srv://usersms-dev:1234@team23.77voc.mongodb.net/development?retryWrites=true&w=majority', 'DEV_ACCESS_TOKEN_SECRET=21c9aa63fb5ae198d6aa7e03e8bc82ed576716ffdd782056db9312e54bb15450ef79909df9c75ae1f922dcd55341ce107eeb86c252728ec3ea716cfc642107a1']
+  dir: 'backend/users'
+
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/users', './backend/users']
+
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/users']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'users', '--image', 'gcr.io/cs3219-team23-328712/users', '--region', 'asia-east1']
+
+##################### Web #########################
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cs3219-team23-328712/web', './frontend']
+
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cs3219-team23-328712/web']
+
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'web', '--image', 'gcr.io/cs3219-team23-328712/web', '--region', 'asia-east1']
+
+
+##################### Helm Deployment ##########################
 # Configure kubernetes
 - name: gcr.io/cloud-builders/kubectl
   id: Configure kubectl
@@ -37,6 +137,17 @@ steps:
     - KUBECONFIG=/workspace/.kube/config
     - TILLERLESS=false
     - TILLER_NAMESPACE=kube-system
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+- gcr.io/cs3219-team23-328712/editor
+- gcr.io/cs3219-team23-328712/match
+- gcr.io/cs3219-team23-328712/message
+- gcr.io/cs3219-team23-328712/question
+- gcr.io/cs3219-team23-328712/users
+- gcr.io/cs3219-team23-328712/web
 
 options:
   logging: CLOUD_LOGGING_ONLY
