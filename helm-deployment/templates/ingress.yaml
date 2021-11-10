@@ -15,11 +15,40 @@ spec:
   rules:      
   - http:
       paths:
+      - path: /api/user/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: users
+            port: 
+              number: 5001  
+      - path: /api/message/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: message
+            port: 
+              number: 5002
+      - path: /api/editor/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: editor
+            port: 
+              number: 5003
       - path: /api/matches/*
         pathType: ImplementationSpecific
         backend:
           service:
             name: match
             port: 
-              number: 5004  
+              number: 5004
+      - path: /api/questions/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: questions
+            port: 
+              number: 5005 
+
 {{- end }}
