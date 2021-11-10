@@ -213,7 +213,7 @@ exports.new = function (req, res) {
 
 // Before match -> Should call to delete match first -> Call match update to find match
 // Because match updates always try to find someone without a match
-// Only works for unique username due to findOne
+// Only works for unique username due to findOne.
 // *NOTE THIS FUNCTION SHOULD BE USED ONLY FOR MATCH BUTTON*, individual user update should use updateCurrentUserMatch
 exports.update = function (req, res, socket) {
     // req should be current user's match details -> update current user's match to another suitable user with similar xp

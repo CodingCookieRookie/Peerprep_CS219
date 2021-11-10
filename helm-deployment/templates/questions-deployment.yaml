@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: question
+  name: question
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: question
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: question
+    spec:
+      containers:
+        - env:
+          - name: CLOUD_DATABASE_URL
+            value: mongodb+srv://team23:3219@team23.77voc.mongodb.net/question?retryWrites=true&w=majority
+          image: gcr.io/cs3219-team23-328712/question:latest
+          name: question
+          ports:
+            - containerPort: 5005
+          resources: 
+            requests:
+              cpu: "25m"
+            limits:
+              cpu: 100m
+      restartPolicy: Always
+status: {}

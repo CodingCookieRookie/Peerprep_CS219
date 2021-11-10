@@ -1,0 +1,75 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+{{- with .Values.ingress.annotations }}
+  annotations:
+    ingress.kubernetes.io/backends: '{"k8s1-ad716a6e-default-editor-service-5003-1719d9f2":"HEALTHY","k8s1-ad716a6e-default-match-service-5004-ef4994cd":"HEALTHY","k8s1-ad716a6e-default-message-service-5002-b07b4f88":"HEALTHY","k8s1-ad716a6e-default-questions-service-5005-87d3dda2":"HEALTHY","k8s1-ad716a6e-default-users-service-5001-a468e077":"HEALTHY","k8s1-ad716a6e-default-web-service-80-b6064fa1":"HEALTHY"}'
+    ingress.kubernetes.io/forwarding-rule: k8s2-fr-3xatbtja-default-peerprep-58he2sa5
+    ingress.kubernetes.io/target-proxy: k8s2-tp-3xatbtja-default-peerprep-58he2sa5
+    ingress.kubernetes.io/url-map: k8s2-um-3xatbtja-default-peerprep-58he2sa5
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  rules:      
+  - http:
+      paths:
+      - path: /api/user/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: users
+            port: 
+              number: 5001  
+      - path: /api/auth/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: users
+            port: 
+              number: 5001    
+      - path: /api/user-friend/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: users
+            port: 
+              number: 5001                               
+      - path: /api/message/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: message
+            port: 
+              number: 5002
+      - path: /api/editor/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: editor
+            port: 
+              number: 5003
+      - path: /api/matches/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: match
+            port: 
+              number: 5004
+      - path: /api/questions/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: question
+            port: 
+              number: 5005 
+      - path: /api/random-question/
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: question
+            port: 
+              number: 5005               
+
+{{- end }}

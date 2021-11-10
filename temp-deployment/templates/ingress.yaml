@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+{{- with .Values.ingress.annotations }}
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  rules:      
+  - http:
+      paths:
+      - path: /match
+        pathType: Prefix
+        backend:
+          service:
+            name: match
+            port: 
+              number: 5004
+      - path: /nginx-1
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-1-service
+            port:
+              number: 80              
+{{- end }}
