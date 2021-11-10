@@ -30,7 +30,7 @@ spec:
             - containerPort: 5003
           resources: 
             requests:
-              cpu: "25m"
+              cpu: "20m"
             limits:
               cpu: 100m
       restartPolicy: Always

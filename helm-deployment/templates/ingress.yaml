@@ -47,7 +47,7 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: questions
+            name: question
             port: 
               number: 5005 
 
