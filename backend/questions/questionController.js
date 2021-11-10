@@ -67,6 +67,31 @@ exports.level = (req, res) => {
         });
 };
 
+// GET (get 1 random question)
+exports.random = (req, res) => {
+    const currentCount = 15;
+    const rand = Math.floor(Math.random() * currentCount)
+
+    Question
+        .find({})
+        .skip(rand)
+        .exec((err, qns) => {
+            if (err) {
+                return res.status(500).json({
+                    message: err.message,
+                });
+            }
+            if (qns == null || !qns.length) {
+                // Question can't be fetched
+                return res.status(404).json({ message: "Cannot find any question!" });
+            }
+            return res.json({
+                message: "Random question: " + qns[0].title + " retrieved successfully!",
+                data: qns[0],
+            });
+        });
+};
+
 // POST (Create new question)
 exports.new = async function (req, res) {
     Question.findOne({ title: req.body.title }, (err, qns) => {

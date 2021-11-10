@@ -37,6 +37,33 @@ exports.index = function (req, res) {
     })
 };
 
+// GET (Get a friend of a user)
+exports.view = function (req, res) {
+
+    const userId = getUserId(req.headers['authorization']);
+
+    Friend.find({ user_id: userId }, (err, friends) => {
+        if (err) {
+            return res.status(500).json({
+                message: err.message,
+            });
+        }
+
+        var friend = friends.filter((item) => item.friend_username === req.params.friend_username);
+
+        if (friend.length == 0) {
+            return res.status(200).json({
+                message: "No actual friend present.",
+                data: null
+            })
+        }
+        return res.status(200).json({
+            message: "Friend retrieved successfully.",
+            data: friend
+        })
+    })
+};
+
 // POST (Create new friend for a user with friend_id as param)
 exports.new = async (req, res) => {
 

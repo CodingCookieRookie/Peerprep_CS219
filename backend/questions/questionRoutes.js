@@ -16,6 +16,10 @@ router
     .delete(questionController.delete);
 
 router
+    .route("/random-question/")
+    .get(questionController.random)
+
+router
     .route("/questions/difficulty/:level")
     .get(questionController.level)
 
