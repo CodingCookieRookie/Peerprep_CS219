@@ -25,10 +25,15 @@ spec:
     spec:
       containers:
         - image: gcr.io/cs3219-team23-328712/users:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           name: users
           ports:
             - containerPort: 5001
-          resources: {}
+          resources:
+            requests:
+              cpu: "100m" # need 1/10 of a core to run
+              # You must specify requests for CPU to autoscale
+              # based on CPU utilization
       restartPolicy: Always
+      
 status: {}
