@@ -85,6 +85,4 @@ spec:
         path: /
         pathType: ImplementationSpecific
 status:
-  loadBalancer:
-    ingress:
-    - ip: 34.117.105.64
+  loadBalancer: {}

@@ -72,7 +72,6 @@ metadata:
   name: web-service
   namespace: default
   resourceVersion: "82733"
-  uid: 36592128-b08c-420c-9204-6d3d9e2e2480
 spec:
   clusterIP: 10.40.9.235
   clusterIPs:
@@ -99,6 +98,4 @@ spec:
   sessionAffinity: None
   type: LoadBalancer
 status:
-  loadBalancer:
-    ingress:
-    - ip: 34.124.181.145
+  loadBalancer: {}
