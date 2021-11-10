@@ -4,7 +4,6 @@ metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
     cloud.google.com/neg-status: '{"network_endpoint_groups":{"5004":"k8s1-ad716a6e-default-match-service-5004-ef4994cd"},"zones":["asia-southeast1-a"]}'
-  creationTimestamp: "2021-11-09T22:19:36Z"
   labels:
     app: match
   managedFields:
@@ -31,7 +30,6 @@ metadata:
         f:type: {}
     manager: GoogleCloudConsole
     operation: Update
-    time: "2021-11-09T22:19:36Z"
   - apiVersion: v1
     fieldsType: FieldsV1
     fieldsV1:
@@ -40,7 +38,6 @@ metadata:
           f:cloud.google.com/neg-status: {}
     manager: glbc
     operation: Update
-    time: "2021-11-09T23:20:14Z"
   name: match-service
   namespace: default
   resourceVersion: "82735"
