@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+    cloud.google.com/neg-status: '{"network_endpoint_groups":{"5002":"k8s1-ad716a6e-default-message-service-5002-b07b4f88"},"zones":["asia-southeast1-a"]}'
+  creationTimestamp: "2021-11-09T22:20:15Z"
+  labels:
+    app: message
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":5002,"protocol":"TCP"}:
+            .: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: GoogleCloudConsole
+    operation: Update
+    time: "2021-11-09T22:20:15Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:cloud.google.com/neg-status: {}
+    manager: glbc
+    operation: Update
+    time: "2021-11-09T23:20:14Z"
+  name: message-service
+  namespace: default
+  resourceVersion: "82725"
+  uid: be294be8-7715-4251-b50d-77e13287f24e
+spec:
+  clusterIP: 10.40.2.144
+  clusterIPs:
+  - 10.40.2.144
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 31401
+    port: 5002
+    protocol: TCP
+    targetPort: 5002
+  selector:
+    app: message
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
