@@ -102,7 +102,7 @@ steps:
   args: ['run', 'deploy', 'web', '--image', 'gcr.io/cs3219-team23-328712/web', '--region', 'asia-east1']
 
 
-##################### Helm Deployment #########################
+##################### Helm Deployment ##########################
 # Configure kubernetes
 - name: gcr.io/cloud-builders/kubectl
   id: Configure kubectl
