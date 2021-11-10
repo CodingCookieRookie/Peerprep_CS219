@@ -114,4 +114,6 @@ spec:
         path: /api/user-friend/*
         pathType: ImplementationSpecific
 status:
-  loadBalancer: {}
+  loadBalancer:
+    ingress:
+    - ip: 34.117.105.64

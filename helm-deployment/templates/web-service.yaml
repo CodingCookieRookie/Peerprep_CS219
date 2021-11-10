@@ -73,6 +73,9 @@ metadata:
   namespace: default
   resourceVersion: "82733"
 spec:
+  clusterIP: 10.40.9.235
+  clusterIPs:
+  - 10.40.9.235
   externalTrafficPolicy: Cluster
   ports:
   - name: 80-to-443-tcp
