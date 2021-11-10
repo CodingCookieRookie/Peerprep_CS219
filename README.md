@@ -52,11 +52,11 @@ We felt that the idea of PeerPrep was really an interesting one and that it can 
 5. In the `/frontend/src/api.js`, set all instances of production URLs to `null`. This is because we will be using the development URLs (localhost). Do also change the port number of your own microservices for the dev URLs.
 
 6. Use Docker-Compose
-6.1 Use Docker-Compose to build all the microservices and frontend as container images.
+Use Docker-Compose to build all the microservices and frontend as container images.
   ```bash
   $ docker-compose build
   ```
-6.2 Use Docker-Compose to spin up the containers.
+Use Docker-Compose to spin up the containers.
   ```bash
   $ docker-compose up -d
   ```
